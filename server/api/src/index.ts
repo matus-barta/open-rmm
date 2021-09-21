@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { Router } from 'express';
 import mongoose from 'mongoose';
 
+import avRouter from '../routes/av.route';
+
 // initialize configuration
 dotenv.config();
 
@@ -26,6 +28,9 @@ db.once('open', () => {
 
 // define a route handler for the default home page
 app.get('/', (req, res) => res.send("❤️ Hello World! ❤️"));
+
+//define routes
+routes.use('/api/av', avRouter);
 
 app.listen(PORT, () => {
     console.log(`⚡️ : Server is running at http://localhost:${PORT}`);
