@@ -21,7 +21,7 @@ mongoose.connect(db_uri);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, '❌ : Connection error:'));
 db.once('open', () => {
-    console.log('🔥 : MongoDB database connection established successfully');
+    console.log('🍃 : MongoDB database connection established successfully');
 });
 
 // define a route handler for the default home page
