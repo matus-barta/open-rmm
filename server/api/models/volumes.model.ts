@@ -7,7 +7,8 @@ export const VolumesSchema = new mongoose.Schema({
     HealthStatus: { type: String, required: true },
     SizeRemaining: { type: Number, required: true },
     Size: { type: Number, required: true },
-    DriveName: { type: String, required: false }
+    DriveName: { type: String, required: false },
+    UniqueID: { type: String, required: true }
 });
 
 const Volumes = mongoose.model('Volumes', VolumesSchema);

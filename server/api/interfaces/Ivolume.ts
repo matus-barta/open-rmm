@@ -6,6 +6,7 @@ interface Ivolume {
     SizeRemaining: Number;
     Size: Number;
     DriveName: String;
+    UniqueID: String;
 }
 
 export default Ivolume;
