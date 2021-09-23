@@ -1,9 +1,12 @@
 import { Router } from 'express';
 import express from 'express';
+import fs from 'fs';
+
+import Volumes from '../models/volumes.model';
+
 import Ivolume from '../interfaces/Ivolume';
 import Idrive from '../interfaces/Idrive';
-import fs from 'fs';
-import Volumes from '../models/volumes.model';
+import IvolumeName from '../interfaces/IvolumeName';
 
 const volumesRouter = Router();
 
@@ -28,12 +31,20 @@ volumesRouter.post('/', express.json(), (req, res) => {
         }
         const timeNow = Date.now();
         const I_Drives = jsonBody as Idrive[];
+        const I_VolumeNames = jsonBody as IvolumeName[];
 
         I_Drives.forEach(drive => {
             if (drive.DriveLetter != null) {
                 const I_Volume = drive as Ivolume;
                 I_Volume.Time = timeNow;
                 I_Volume.UUID = deviceUUID;
+                I_VolumeNames.forEach(volumeName => {
+                    if (volumeName.DeviceID != undefined) {
+                        if (volumeName.DeviceID.charAt(0) == drive.DriveLetter) {
+                            I_Volume.DriveName = volumeName.VolumeName;
+                        }
+                    }
+                });
 
                 const volumes_db = new Volumes(I_Volume);
                 volumes_db.save((err: any) => {
@@ -49,6 +60,7 @@ volumesRouter.post('/', express.json(), (req, res) => {
 
     } catch (error) {
         status = 500;
+        console.log(error);
     }
     return res.sendStatus(status);
 });

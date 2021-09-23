@@ -1,5 +1,3 @@
-import Idrive from "./Idrive";
-
 interface Ivolume {
     Time: Number;
     UUID: string;
@@ -7,6 +5,7 @@ interface Ivolume {
     HealthStatus: String;
     SizeRemaining: Number;
     Size: Number;
+    DriveName: String;
 }
 
 export default Ivolume;
