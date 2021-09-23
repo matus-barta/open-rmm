@@ -1,21 +1,24 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { Router } from 'express';
 import mongoose from 'mongoose';
 
 import avRouter from '../routes/av.route';
+import volumesRouter from '../routes/volumes.route';
+import volumesNamesRouter from '../routes/volumesNames.route';
 
 // initialize configuration
 dotenv.config();
 
 const app = express();
 const routes = Router();
-const jsonParser = bodyParser.json();
 const PORT = process.env.PORT;
 
 app.use(routes);
-app.use(jsonParser);
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
 
 //db connection
 const db_uri = process.env.MONGO_DB as string;
@@ -31,6 +34,8 @@ app.get('/', (req, res) => res.send("❤️ Hello World! ❤️"));
 
 //define routes
 routes.use('/api/av', avRouter);
+routes.use('/api/volumes', volumesRouter);
+routes.use('/api/volumesNames', volumesNamesRouter);
 
 app.listen(PORT, () => {
     console.log(`⚡️ : Server is running at http://localhost:${PORT}`);

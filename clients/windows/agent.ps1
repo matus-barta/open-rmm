@@ -1,8 +1,26 @@
+$ApiUrl = "http://localhost:5005/api/"
+
+#Get UUID
+$UUID = (Get-WmiObject -class Win32_ComputerSystemProduct).UUID
+#$UUID_JSON = "{`"UUID`": `"$UUID`"}"
+Write-Host "Got UUID"
+
+function SendJsonData {
+    param (
+        $Route,
+        $DataJSON
+    )
+    Invoke-WebRequest -Uri ($ApiUrl + $Route) -Method POST -Body $DataJSON -Headers @{"Device-UUID" = $UUID } -ContentType "application/json"
+    Write-Host "Sent "$Route" status"
+}
 
 #Getting Volume information
 $AllVolumesJSON = Get-Volume | Where-Object { $_.drivetype -eq 'Fixed' } | Select-Object -Property DriveLetter, HealthStatus, SizeRemaining, Size | ConvertTo-Json
 $AllVolumesNamesJSON = Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object { $_.drivetype -eq '3' } | Select-Object -Property DeviceID, VolumeName | ConvertTo-Json
-Write-Host "?? Got Drive information"
+Write-Host "Got Drive information"
+
+SendJsonData "volumes" $AllVolumesJSON
+SendJsonData "volumesNames" $AllVolumesNamesJSON
 
 #Getting AV Status
 $AV = Get-WmiObject -Namespace root\SecurityCenter2 -Class AntiVirusProduct 
@@ -23,7 +41,9 @@ switch ($AV.productState) {
 }
 $AVName = $AV.displayname
 $AVStatusJSON = "{`"AVName`": `"$AVName`" ,`"UpdateStatus`": `"$UpdateStatus`" ,`"RealTimeProtectionStatus`": `"$RealTimeProtectionStatus`"}"
-Write-Host "?? Got AV status"
+Write-Host "Got AV status"
+$AVStatusJSON
+SendJsonData "AV" $AVStatusJSON
 
 #Get Pending Reboot
 
@@ -46,30 +66,25 @@ function Test-PendingReboot {
 }
 $PendingReboot = Test-PendingReboot
 $PendingRebootJSON = "{`"PendingReboot`": `"$PendingReboot`"}"
-Write-Host "?? Got Pending updates"
+Write-Host "Got Pending updates"
 
 #Get computer name
 $ComputerNameJSON = "{`"ComputerName`": `"$env:computername`"}"
-Write-Host "?? Got Computer Name"
+Write-Host "Got Computer Name"
 
 #Windows version
 $OSVersionJSON = Get-ComputerInfo | Select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer | ConvertTo-Json
-Write-Host "?? Got Windows Version"
+Write-Host "Got Windows Version"
 
 #Last boot time
 $LastBootTimeJSON = Get-CimInstance -ClassName Win32_OperatingSystem | Select LastBootUpTime | ConvertTo-JSON
-Write-Host "?? Got Last Bootime"
-
-#Get UUID
-$UUID = (Get-WmiObject -class Win32_ComputerSystemProduct).UUID
-$UUID_JSON = "{`"UUID`": `"$UUID`"}"
-Write-Host "?? Got UUID"
+Write-Host "Got Last Bootime"
 
 #Check windows updates
-$UpdateSession = New-Object -ComObject Microsoft.Update.Session
-$UpdateSearcher = $UpdateSession.CreateupdateSearcher()
-$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0").Updates)
-$UpdatesJSON = $Updates | Select-Object Title | ConvertTo-Json
-Write-Host "?? Got Missing Patches"
+#$UpdateSession = New-Object -ComObject Microsoft.Update.Session
+#$UpdateSearcher = $UpdateSession.CreateupdateSearcher()
+#$Updates = @($UpdateSearcher.Search("IsHidden=0 and IsInstalled=0").Updates)
+#$UpdatesJSON = $Updates | Select-Object Title | ConvertTo-Json
+#Write-Host "Got Missing Patches"
 
-Write-Host "Done! ??????"
+Write-Host "Done!"
