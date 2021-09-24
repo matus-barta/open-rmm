@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import avRouter from '../routes/av.route';
 import volumesRouter from '../routes/volumes.route';
+import systemInfoRouter from '../routes/systemInfo.route';
 
 // initialize configuration
 dotenv.config();
@@ -34,6 +35,7 @@ app.get('/', (req, res) => res.send("❤️ Hello World! ❤️"));
 //define routes
 routes.use('/api/av', avRouter);
 routes.use('/api/volumes', volumesRouter);
+routes.use('/api/systemInfo', systemInfoRouter);
 
 app.listen(PORT, () => {
     console.log(`⚡️ : Server is running at http://localhost:${PORT}`);

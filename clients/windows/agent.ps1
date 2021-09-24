@@ -46,7 +46,6 @@ $AVStatusJSON
 SendJsonData "AV" $AVStatusJSON
 
 #Get Pending Reboot
-
 #Adapted from https://gist.github.com/altrive/5329377
 #Based on <http://gallery.technet.microsoft.com/scriptcenter/Get-PendingReboot-Query-bdb79542>
 function Test-PendingReboot {
@@ -65,20 +64,18 @@ function Test-PendingReboot {
     return $false
 }
 $PendingReboot = Test-PendingReboot
-$PendingRebootJSON = "{`"PendingReboot`": `"$PendingReboot`"}"
-Write-Host "Got Pending updates"
-
-#Get computer name
-$ComputerNameJSON = "{`"ComputerName`": `"$env:computername`"}"
-Write-Host "Got Computer Name"
-
-#Windows version
-$OSVersionJSON = Get-ComputerInfo | Select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer | ConvertTo-Json
-Write-Host "Got Windows Version"
-
-#Last boot time
 $LastBootTimeJSON = Get-CimInstance -ClassName Win32_OperatingSystem | Select LastBootUpTime | ConvertTo-JSON
-Write-Host "Got Last Bootime"
+$OSVersionJSON = Get-ComputerInfo | Select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer | ConvertTo-Json
+Write-Host "Got Pending Reboot, Computer Name, Last Bootime, Windows Version"
+
+$LastBootTime = $LastBootTimeJSON.Substring(1, $LastBootTimeJSON.Length - 2)
+$OSVersion = $OSVersionJSON.Substring(1, $OSVersionJSON.Length - 2)
+
+$SystemInfoJSON = "{`n    `"PendingReboot`": `"$PendingReboot`",`n    `"ComputerName`": `"$env:computername`","
+$SystemInfo2 = $LastBootTime + "," + $OSVersion + "}"
+$SystemInfoJSON = $SystemInfoJSON + $SystemInfo2
+
+SendJsonData "systemInfo" $SystemInfoJSON
 
 #Check windows updates
 #$UpdateSession = New-Object -ComObject Microsoft.Update.Session
