@@ -3,6 +3,7 @@ import express from 'express';
 import fs from 'fs';
 
 import IsystemInfo from '../interfaces/IsystemInfo';
+import SystemInfo from '../models/systemInfo.model';
 
 
 
@@ -29,10 +30,27 @@ systemInfoRouter.post('/', express.json(), (req, res) => {
         }
         const timeNow = Date.now();
         const systemInfo = jsonBody as IsystemInfo;
+        systemInfo.LastBootUpTime = systemInfo.LastBootUpTime.substring(6, systemInfo.LastBootUpTime.length - 2);
 
-        console.log(JSON.stringify(systemInfo));
+        const systemInfo_db = new SystemInfo({
+            UUID: deviceUUID,
+            Time: timeNow,
+            PendingReboot: systemInfo.PendingReboot.toLowerCase(),
+            ComputerName: systemInfo.ComputerName,
+            LastBootUpTime: new Date(parseInt(systemInfo.LastBootUpTime)),
+            OsVersion: systemInfo.WindowsVersion,
+            OsName: systemInfo.WindowsProductName,
+            KernelVersion: systemInfo.OsHardwareAbstractionLayer
+        });
 
-
+        systemInfo_db.save((err: any) => {
+            if (err) {
+                console.log(err);
+                status = 500;
+            } else {
+                status = 200;
+            }
+        });
     } catch (error) {
         status = 500;
         console.log(error);

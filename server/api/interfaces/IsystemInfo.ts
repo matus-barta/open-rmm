@@ -1,10 +1,10 @@
 interface IsystemInfo {
-    PendingReboot: Boolean;
-    ComputerName: String;
-    LastBootUpTime: Date;
-    WindowsProductName: String;
-    WindowsVersion: Number;
-    OsHardwareAbstractionLayer: String;
+    PendingReboot: string;
+    ComputerName: string;
+    LastBootUpTime: string;
+    WindowsProductName: string;
+    WindowsVersion: string;
+    OsHardwareAbstractionLayer: string;
 }
 
 export default IsystemInfo;

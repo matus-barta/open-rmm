@@ -1,12 +1,12 @@
 interface Ivolume {
-    Time: Number;
+    Time: number;
     UUID: string;
-    DriveLetter: String;
-    HealthStatus: String;
-    SizeRemaining: Number;
-    Size: Number;
-    DriveName: String;
-    UniqueID: String;
+    DriveLetter: string;
+    HealthStatus: string;
+    SizeRemaining: number;
+    Size: number;
+    DriveName: string;
+    UniqueID: string;
 }
 
 export default Ivolume;

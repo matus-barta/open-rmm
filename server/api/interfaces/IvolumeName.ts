@@ -1,6 +1,6 @@
 interface IvolumeName {
-    DeviceID: String;
-    VolumeName: String;
+    DeviceID: string;
+    VolumeName: string;
 }
 
 export default IvolumeName;
