@@ -54,7 +54,7 @@ function Test-PendingReboot {
     try { 
         $util = [wmiclass]"\\.\root\ccm\clientsdk:CCM_ClientUtilities"
         $status = $util.DetermineIfRebootPending()
-        if (($status -ne $null) -and $status.RebootPending) {
+        if (($null -ne $status) -and $status.RebootPending) {
             return $true
         }
     }
@@ -63,8 +63,8 @@ function Test-PendingReboot {
     return $false
 }
 $PendingReboot = Test-PendingReboot
-$LastBootTimeJSON = Get-CimInstance -ClassName Win32_OperatingSystem | Select LastBootUpTime | ConvertTo-JSON
-$OSVersionJSON = Get-ComputerInfo | Select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer | ConvertTo-Json
+$LastBootTimeJSON = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object LastBootUpTime | ConvertTo-JSON
+$OSVersionJSON = Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer | ConvertTo-Json
 Write-Host "Got Pending Reboot, Computer Name, Last Bootime, Windows Version"
 
 $LastBootTime = $LastBootTimeJSON.Substring(1, $LastBootTimeJSON.Length - 2)
