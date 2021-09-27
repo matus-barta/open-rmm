@@ -1,12 +1,11 @@
 <script lang="ts">
-    import Nav from "src/components/nav.svelte";
+	import '/src/styles.postcss';
+	import Nav from '/src/components/nav.svelte';
+	import Footer from '/src/components/footer.svelte';
 </script>
 
-<Nav></Nav>
-
-
-<style>
-    @tailwind base;
-    @tailwind components;
-    @tailwind utilities;
-</style>
+<div class="flex flex-col flex-grow h-screen">
+	<Nav />
+	<div class="p-4 sm:flex-col h-full flex-grow overflow-auto"><slot /></div>
+	<Footer />
+</div>
