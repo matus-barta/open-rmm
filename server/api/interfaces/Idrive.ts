@@ -1,8 +1,8 @@
 interface Idrive {
-    DriveLetter: String;
-    HealthStatus: String;
-    SizeRemaining: Number;
-    Size: Number;
-    UniqueID: String;
+	DriveLetter: string;
+	HealthStatus: string;
+	SizeRemaining: number;
+	Size: number;
+	UniqueID: string;
 }
 export default Idrive;
