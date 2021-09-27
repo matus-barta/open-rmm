@@ -1,13 +1,19 @@
-<script lang="ts">
+<script>
 </script>
 
-<main>
-	<div class="fixed bg-gray-600 w-screen h-12">Static top</div>
-	<div />
-</main>
+<main>Test</main>
 
-<style global>
-	@tailwind base;
-	@tailwind components;
-	@tailwind utilities;
+<style>
+  main {
+    text-align: center;
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 </style>
