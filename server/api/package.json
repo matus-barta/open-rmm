@@ -2,7 +2,7 @@
   "name": "open_rmm",
   "version": "0.0.1",
   "description": "Server for Open_RMM",
-  "main": "build/index.js",
+  "main": "build/src/index.js",
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
