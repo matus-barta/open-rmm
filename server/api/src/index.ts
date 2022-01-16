@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { Router } from 'express';
-import mongoose from 'mongoose';
 import log from './logger';
+import dbConnect from './db/connect';
 
 import avRouter from '../routes/av.route';
 import volumesRouter from '../routes/volumes.route';
@@ -13,24 +13,17 @@ dotenv.config();
 
 const app = express();
 const routes = Router();
-const PORT = process.env.PORT || 5005;
+
+const port = Number(process.env.PORT ?? 5005);
+const host = process.env.HOST ?? 'localhost';
 
 app.use(routes);
 app.use(express.json());
 app.use(
 	express.urlencoded({
-		extended: true
+		extended: true //is it needed?
 	})
 );
-
-//db connection
-const db_uri = process.env.MONGO_DB as string;
-mongoose.connect(db_uri);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, '❌ : Connection error:'));
-db.once('open', () => {
-	log.info('🍃 : MongoDB database connection established successfully');
-});
 
 // define a route handler for the default home page
 app.get('/', (req, res) => res.send('❤️ Hello World! ❤️'));
@@ -40,7 +33,10 @@ routes.use('/api/av', avRouter);
 routes.use('/api/volumes', volumesRouter);
 routes.use('/api/systemInfo', systemInfoRouter);
 
-app.listen(PORT, () => {
-	log.info(`⚡️ : Server is running at http://localhost:${PORT}`);
+app.listen(port, host, () => {
+	log.info(`⚡️ : Server is running at http://${host}:${port}`);
+	dbConnect(); //connect to the db
 });
-app.on('error', console.error.bind(console, '❌ : Server error:'));
+app.on('error', (error) => {
+	log.error('❌ : Server error:', error);
+});
