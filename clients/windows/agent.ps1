@@ -1,4 +1,4 @@
-$ApiUrl = "http://localhost:5005/api/"
+$ApiUrl = "http://192.168.1.10:5005/api/" #TODO: need some more clever way to set dev and prod address
 
 #Get UUID
 $UUID = (Get-WmiObject -class Win32_ComputerSystemProduct).UUID
