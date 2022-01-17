@@ -1,0 +1,29 @@
+import mongoose from 'mongoose';
+
+export interface SystemInfoDocument extends mongoose.Document {
+	UUID: string;
+	PendingReboot: boolean;
+	ComputerName: string;
+	LastBootUpTime: string;
+	OsVersion: string;
+	OsName: string;
+	KernelVersion: string;
+}
+
+export const SystemInfoSchema = new mongoose.Schema(
+	{
+		UUID: { type: String, required: true },
+		PendingReboot: { type: Boolean },
+		ComputerName: { type: String, required: true },
+		LastBootUpTime: { type: String, required: true },
+		OsVersion: { type: String, required: true },
+		OsName: { type: String, required: true },
+		KernelVersion: { type: String, required: true }
+	},
+	{
+		timestamps: true
+	}
+);
+
+const SystemInfoModel = mongoose.model<SystemInfoDocument>('SystemInfo', SystemInfoSchema);
+export default SystemInfoModel;

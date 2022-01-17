@@ -13,16 +13,6 @@ const port = Number(process.env.PORT ?? 5005);
 const host = process.env.HOST ?? 'localhost';
 
 app.use(express.json());
-app.use(
-	express.urlencoded({
-		extended: true //is it needed?
-	})
-);
-
-//define routes
-//routes.use('/api/av', avRouter);
-//routes.use('/api/volumes', volumesRouter);
-//routes.use('/api/systemInfo', systemInfoRouter);
 
 app.listen(port, host, () => {
 	log.info(`⚡️ : Server is running at http://${host}:${port}`);
