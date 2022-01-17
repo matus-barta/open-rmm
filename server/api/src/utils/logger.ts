@@ -2,7 +2,7 @@ import logger from 'pino';
 import dayjs from 'dayjs';
 
 const log = logger({
-	prettyPrint: true,
+	prettyPrint: true, //TODO: Fix this deprecated issue
 	base: {
 		pid: false
 	},
