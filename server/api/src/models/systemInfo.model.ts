@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import { ComputerDocument } from './computer.model';
 
 export interface SystemInfoDocument extends mongoose.Document {
-	UUID: string;
+	Computer: ComputerDocument['UUID'];
 	PendingReboot: boolean;
 	ComputerName: string;
 	LastBootUpTime: string;
@@ -12,7 +13,7 @@ export interface SystemInfoDocument extends mongoose.Document {
 
 export const SystemInfoSchema = new mongoose.Schema(
 	{
-		UUID: { type: String, required: true },
+		Computer: { type: mongoose.Types.ObjectId, ref: 'Computer', required: true },
 		PendingReboot: { type: Boolean },
 		ComputerName: { type: String, required: true },
 		LastBootUpTime: { type: String, required: true },
