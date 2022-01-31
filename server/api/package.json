@@ -31,6 +31,7 @@
     "start": "node .",
     "build": "npx tsc",
     "watch": "tsnd --respawn ./src/index.ts",
+    "dev": "npm run watch",
     "lint": "prettier . && eslint . --ext .ts"
   },
   "author": "Matus Barta",
