@@ -18,13 +18,8 @@ export default function (app: Express) {
 
 	//add computer during client installation
 	//well should pass uuid in url but...
-	//TODO: fix for correct PUT method passing UUID in URL (maybe)
-	app.put(
-		'/api/computer/',
-		checkAuthUUID,
-		validateResource(updateComputerSchema),
-		updateComputerHandler
-	);
+	//TODO: fix for correct PUT method passing OneTimeKey in URL (maybe)
+	app.put('/api/computer/', validateResource(updateComputerSchema), updateComputerHandler);
 
 	//add new record to systemInfo
 	app.post(

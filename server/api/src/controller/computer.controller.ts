@@ -28,11 +28,16 @@ export async function updateComputerHandler(
 	let status = 200;
 
 	try {
+		//TODO: Add check if it is already added
 		const computer = await updateComputer(
 			{ OneTimeKey: req.body.OneTimeKey },
-			{ UUID: req.body.UUID }
+			{ UUID: req.body.UUID, IsAdded: true }
 		);
-		return res.send(computer);
+
+		log.info(computer);
+		if (!computer) {
+			status = 400;
+		}
 	} catch (error) {
 		status = 400;
 		log.error(error);
