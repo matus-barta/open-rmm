@@ -5,6 +5,7 @@ export interface ComputerDocument extends mongoose.Document {
 	OneTimeKey: string;
 	OrgUnit: string;
 	IsAdded: boolean;
+	IsAllowed: boolean;
 }
 
 export const ComputerSchema = new mongoose.Schema(
@@ -12,7 +13,8 @@ export const ComputerSchema = new mongoose.Schema(
 		UUID: { type: String, unique: true },
 		OneTimeKey: { type: String, required: true, unique: true },
 		OrgUnit: { type: String, required: true },
-		IsAdded: { type: Boolean, default: false }
+		IsAdded: { type: Boolean, default: false },
+		IsAllowed: { type: Boolean, default: true }
 	},
 	{
 		timestamps: true

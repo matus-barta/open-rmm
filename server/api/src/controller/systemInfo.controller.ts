@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateSystemInfoInput } from '../schema/systemInfo.schema';
-import { createSystemInfo } from '../service/systemInfo.service';
+//import { createSystemInfo } from '../service/systemInfo.service';
 import log from '../utils/logger';
 
 export async function createSystemInfoHandler(
@@ -9,17 +9,12 @@ export async function createSystemInfoHandler(
 	res: Response
 ) {
 	let status = 200;
-	const deviceUUID = req.header('Device-UUID') as string;
-	if (deviceUUID == '' || deviceUUID == undefined) {
-		status = 403;
-		return res.sendStatus(status);
-	}
 
-	log.info('➡️  : Received systemInfo from ' + deviceUUID);
+	log.info('➡️  : Received systemInfo from ');
 
 	try {
-		const systemInfo = await createSystemInfo(req.body);
-		return res.send(systemInfo);
+		/*const systemInfo = await createSystemInfo(req.body);
+		return res.send(systemInfo);*/
 	} catch (error) {
 		status = 500;
 		log.error(error);
