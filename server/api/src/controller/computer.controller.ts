@@ -11,8 +11,8 @@ export async function createComputerHandler(
 	let status = 200;
 
 	try {
-		//const computer = await createComputer(req.body);
-		//return res.send(computer);
+		const computer = await createComputer(req.body.OrgUnit);
+		return res.send(computer);
 	} catch (error) {
 		status = 500;
 		log.error(error);
