@@ -13,7 +13,7 @@ export interface SystemInfoDocument extends mongoose.Document {
 
 export const SystemInfoSchema = new mongoose.Schema(
 	{
-		Computer: { type: mongoose.Types.ObjectId, ref: 'Computer', required: true },
+		Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
 		PendingReboot: { type: Boolean },
 		ComputerName: { type: String, required: true },
 		LastBootUpTime: { type: String, required: true },

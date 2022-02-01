@@ -13,7 +13,7 @@ export interface VolumeDocument extends mongoose.Document {
 
 export const VolumeSchema = new mongoose.Schema(
 	{
-		Computer: { type: mongoose.Types.ObjectId, ref: 'Computer', required: true },
+		Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
 		UniqueVolumeID: { type: String, required: true },
 		VolumeName: { type: String, required: true },
 		VolumeLetter: { type: String },
