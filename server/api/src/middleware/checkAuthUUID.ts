@@ -1,13 +1,12 @@
-import { get } from 'lodash';
 import { Request, Response, NextFunction } from 'express';
 import { findUUID } from '../service/computer.service';
 import log from '../utils/logger';
 
 const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const deviceUUID = get(req, 'Device-UUID', '');
-		if (!deviceUUID) {
-			log.warn(`Unauthenticated request ➡️ UUID: ${deviceUUID}, IP: ${req.ip}`);
+		const deviceUUID = req.header('Device-UUID') as string;
+		if (deviceUUID == '' || deviceUUID == undefined) {
+			log.warn(`Unauthenticated request ➡️ Missing UUID, IP: ${req.ip}`);
 			return res.status(403);
 		}
 

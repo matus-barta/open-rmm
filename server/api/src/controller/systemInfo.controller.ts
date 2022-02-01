@@ -10,11 +10,12 @@ export async function createSystemInfoHandler(
 ) {
 	let status = 200;
 
-	log.info('➡️  : Received systemInfo from ');
+	log.info(`➡️  : Received systemInfo from ${req.body.UUID}`);
 
 	try {
 		/*const systemInfo = await createSystemInfo(req.body);
 		return res.send(systemInfo);*/
+		return res.sendStatus(200);
 	} catch (error) {
 		status = 500;
 		log.error(error);
