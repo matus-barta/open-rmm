@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateSystemInfoInput } from '../schema/systemInfo.schema';
-//import { createSystemInfo } from '../service/systemInfo.service';
+import { createSystemInfo } from '../service/systemInfo.service';
 import log from '../utils/logger';
 
 export async function createSystemInfoHandler(
@@ -13,9 +13,16 @@ export async function createSystemInfoHandler(
 	log.info(`➡️  : Received systemInfo from ${req.body.UUID}`);
 
 	try {
-		/*const systemInfo = await createSystemInfo(req.body);
-		return res.send(systemInfo);*/
-		return res.sendStatus(200);
+		const systemInfo = await createSystemInfo({
+			Computer: req.body.UUID,
+			PendingReboot: req.body.PendingReboot,
+			ComputerName: req.body.ComputerName,
+			LastBootUpTime: req.body.LastBootUpTime,
+			OsVersion: req.body.OsVersion,
+			OsName: req.body.OsName,
+			KernelVersion: req.body.KernelVersion
+		});
+		return res.send(systemInfo);
 	} catch (error) {
 		status = 500;
 		log.error(error);
