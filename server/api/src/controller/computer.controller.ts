@@ -35,7 +35,6 @@ export async function updateComputerHandler(
 			{ UUID: req.body.UUID, IsAdded: true }
 		);
 
-		log.info(computer);
 		if (!computer) {
 			status = 400;
 		}
