@@ -17,7 +17,7 @@ import { createVolumeHandler } from './controller/volume.controller';
 export default function (app: Express) {
 	// define a route handler for the default home page
 	app.get('/', (req: Request, res: Response) => res.send('❤️ Hello World! ❤️'));
-	app.get('/api/healthcheck', (req: Request, res: Response) => res.sendStatus(200));
+	app.get('/api/healthcheck', (req: Request, res: Response) => res.send('{"Status": "OK"}'));
 
 	//creating computer from dashboard
 	//TODO: check if you can add computer
@@ -46,4 +46,6 @@ export default function (app: Express) {
 
 	//add new record to volume
 	app.post('/api/volume', checkAuthUUID, validateResource(createVolumeSchema), createVolumeHandler);
+
+	//TODO: Implement Win Update reporting
 }

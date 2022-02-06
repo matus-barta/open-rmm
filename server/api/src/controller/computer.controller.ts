@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { CreateComputerInput, UpdateComputerInput } from '../schema/computer.schema';
 import { createComputer, updateComputer } from '../service/computer.service';
 import log from '../utils/logger';
+import { omit } from 'lodash';
 
 export async function createComputerHandler(
 	// eslint-disable-next-line @typescript-eslint/ban-types
@@ -12,7 +13,7 @@ export async function createComputerHandler(
 
 	try {
 		const computer = await createComputer(req.body.OrgUnit);
-		return res.send(computer);
+		return res.send(omit(computer.toJSON(), 'IsAdded', 'IsAllowed'));
 	} catch (error) {
 		status = 500;
 		log.error(error);
