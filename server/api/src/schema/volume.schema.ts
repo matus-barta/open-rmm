@@ -4,7 +4,7 @@ export const createVolumeSchema = object({
 	body: object({
 		UUID: string({ required_error: 'UUID is missing' }).uuid(),
 		UniqueVolumeID: string({ required_error: 'UniqueVolumeID is missing' }),
-		VolumeName: string({ required_error: 'VolumeName is missing' }),
+		VolumeName: string(),
 		VolumeLetter: string(),
 		HealthStatus: string({ required_error: 'HealthStatus is missing' }),
 		SizeRemaining: number({ required_error: 'SizeRemaining is missing' }),

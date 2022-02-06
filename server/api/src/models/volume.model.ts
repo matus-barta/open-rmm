@@ -15,7 +15,7 @@ export const VolumeSchema = new mongoose.Schema(
 	{
 		Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
 		UniqueVolumeID: { type: String, required: true },
-		VolumeName: { type: String, required: true },
+		VolumeName: { type: String },
 		VolumeLetter: { type: String },
 		HealthStatus: { type: String, required: true },
 		SizeRemaining: { type: Number, required: true },
