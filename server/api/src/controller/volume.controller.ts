@@ -3,7 +3,7 @@ import log from '../utils/logger';
 import { CreateVolumeInput } from '../schema/volume.schema';
 import { createVolume } from '../service/volume.service';
 
-export async function createSystemInfoHandler(
+export async function createVolumeHandler(
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	req: Request<{}, {}, CreateVolumeInput['body']>,
 	res: Response

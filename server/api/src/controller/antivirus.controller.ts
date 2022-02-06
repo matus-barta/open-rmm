@@ -3,7 +3,7 @@ import log from '../utils/logger';
 import { CreateAntivirusInput } from '../schema/antivirus.schema';
 import { createAntivirus } from '../service/antivirus.service';
 
-export async function createSystemInfoHandler(
+export async function createAntivirusHandler(
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	req: Request<{}, {}, CreateAntivirusInput['body']>,
 	res: Response
