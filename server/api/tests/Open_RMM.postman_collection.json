@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "76b08553-b68c-4674-bdf1-b172292ace55",
+		"name": "Open_RMM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Utility",
+			"item": [
+				{
+					"name": "Default route",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HealthCheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"",
+									"pm.test(\"Status should be OK\", () =>{",
+									"    pm.expect(response.Status).to.eql(\"OK\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/api/healthcheck",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Computer Management",
+			"item": [
+				{
+					"name": "Create new Computer record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"const OrgUnit = pm.collectionVariables.get(\"OrgUnit\");",
+									"",
+									"pm.test(\"OrgUnit should be \" + OrgUnit, () =>{",
+									"    pm.expect(response.OrgUnit).to.eql(OrgUnit);",
+									"});",
+									"",
+									"pm.test(\"Should return OneTimeKey\", () =>{",
+									"    pm.expect(response.OneTimeKey).to.not.eql(\"\");",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"OneTimeKey\", response.OneTimeKey);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"OrgUnit\": \"{{OrgUnit}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/api/computer",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"computer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Computer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \n    \"UUID\": \"{{uuid}}\",\n    \"OneTimeKey\":\"{{OneTimeKey}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/api/computer",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"computer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "Add SystemInfo record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"UUID should equals\", ()=>{",
+									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Device-UUID",
+								"value": "{{uuid}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"PendingReboot\": true,\n    \"ComputerName\": \"WIN11\",\n    \"LastBootUpTime\": \"2022-01-16T23:49:53.008Z\",\n    \"OsVersion\": \"2009\",\n    \"OsName\": \"Windows 10 Pro\",\n    \"KernelVersion\": \"10.0.22000.1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/api/systemInfo",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"systemInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Antivirus record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"UUID should equals\", ()=>{",
+									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Device-UUID",
+								"value": "{{uuid}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"AVName\": \"Windows Defender\",\n    \"UpdateStatus\": \"Up to date\",\n    \"ProtectionStatus\": \"Enabled\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/api/antivirus",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"antivirus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Volume record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"UUID should equals\", ()=>{",
+									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Device-UUID",
+								"value": "{{uuid}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"UniqueVolumeID\": \"723e3dfe-8993-4af1-b77a-13e91d0e9bc2\",\n    \"VolumeName\": \"\",\n    \"VolumeLetter\": \"C\",\n    \"HealthStatus\": \"Healthy\",\n    \"SizeRemaining\": 10634166272,\n    \"Size\": 33601613824\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/api/volume",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"volume"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Wrong UUID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 403\", () =>{",
+									"    pm.expect(pm.response.code).to.eql(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Device-UUID",
+								"value": "asdf",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{uri}}/api/systemInfo",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"api",
+								"systemInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "OneTimeKey",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "OrgUnit",
+			"value": "Default",
+			"type": "string"
+		},
+		{
+			"key": "uuid",
+			"value": "6C3BCE32-EF1B-4AF0-ADAD-76D66CB5C7A0",
+			"type": "string"
+		},
+		{
+			"key": "uri",
+			"value": "localhost:5005",
+			"type": "string"
+		}
+	]
+}
