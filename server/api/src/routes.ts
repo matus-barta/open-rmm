@@ -3,9 +3,16 @@ import checkAuthUUID from './middleware/checkAuthUUID';
 import validateResource from './middleware/validateResource';
 
 import { createComputerHandler, updateComputerHandler } from './controller/computer.controller';
-import { createSystemInfoHandler } from './controller/systemInfo.controller';
 import { createComputerSchema, updateComputerSchema } from './schema/computer.schema';
+
+import { createSystemInfoHandler } from './controller/systemInfo.controller';
 import { createSystemInfoSchema } from './schema/systemInfo.schema';
+
+import { createAntivirusSchema } from './schema/antivirus.schema';
+import { createAntivirusHandler } from './controller/antivirus.controller';
+
+import { createVolumeSchema } from './schema/volume.schema';
+import { createVolumeHandler } from './controller/volume.controller';
 
 export default function (app: Express) {
 	// define a route handler for the default home page
@@ -28,4 +35,15 @@ export default function (app: Express) {
 		validateResource(createSystemInfoSchema),
 		createSystemInfoHandler
 	);
+
+	//add new record to antivirus
+	app.post(
+		'/api/antivirus',
+		checkAuthUUID,
+		validateResource(createAntivirusSchema),
+		createAntivirusHandler
+	);
+
+	//add new record to volume
+	app.post('/api/volume', checkAuthUUID, validateResource(createVolumeSchema), createVolumeHandler);
 }
