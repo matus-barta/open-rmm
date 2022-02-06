@@ -7,19 +7,19 @@ const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) =>
 		const deviceUUID = req.header('Device-UUID') as string;
 		if (deviceUUID == '' || deviceUUID == undefined) {
 			log.warn(`Unauthenticated request ➡️ Missing UUID, IP: ${req.ip}`);
-			return res.status(403);
+			return res.sendStatus(403);
 		}
 
 		const query = await findUUID({ UUID: deviceUUID, IsAllowed: true });
 		if (!query) {
 			log.warn(`Unauthenticated request ➡️ UUID: ${deviceUUID}, IP: ${req.ip}`);
-			return res.status(403);
+			return res.sendStatus(403);
 		}
 		return next();
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		log.error(e);
-		return res.status(400);
+		return res.sendStatus(400);
 	}
 };
 
