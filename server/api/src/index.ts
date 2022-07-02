@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 const port = Number(process.env.PORT ?? 5005);
-const host = process.env.HOST ?? 'localhost';
+const host = process.env.HOST ?? '0.0.0.0';
 
 app.use(express.json());
 

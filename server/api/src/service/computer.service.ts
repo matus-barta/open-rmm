@@ -6,7 +6,7 @@ import log from '../utils/logger';
 export async function createComputer(OrgUnit: string) {
 	try {
 		const OneTimeKey = nanoid(64); //generate unique one time key
-		log.warn(`Generated new OneTimeKey: ${OneTimeKey}`);
+		log.warn(` ⚠ : Generated new OneTimeKey: ${OneTimeKey}`);
 
 		return await ComputerModel.create({ OrgUnit, OneTimeKey });
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,6 +19,7 @@ export async function updateComputer(
 	query: FilterQuery<ComputerDocument>,
 	update: UpdateQuery<ComputerDocument>
 ) {
+	log.info(` ⚠ : Updated UUID`); //TODO: show UUID
 	return ComputerModel.updateOne(query, update);
 }
 

@@ -29,7 +29,7 @@ export async function updateComputerHandler(
 	let status = 200;
 
 	try {
-		//TODO: Add check if it is already added
+		//TODO: Add check if it's already added
 		const computer = await updateComputer(
 			{ OneTimeKey: req.body.OneTimeKey },
 			{ UUID: req.body.UUID, IsAdded: true }
