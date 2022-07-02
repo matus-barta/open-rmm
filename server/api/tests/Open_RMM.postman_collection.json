@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "76b08553-b68c-4674-bdf1-b172292ace55",
 		"name": "Open_RMM",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2033161"
 	},
 	"item": [
 		{
@@ -52,7 +53,7 @@
 									"const response = pm.response.json();",
 									"",
 									"pm.test(\"Status should be OK\", () =>{",
-									"    pm.expect(response.Status).to.eql(\"OK\");",
+									"    pm.expect(response).to.eql({ status: 'OK' });",
 									"});"
 								],
 								"type": "text/javascript"
@@ -175,154 +176,262 @@
 			"name": "Services",
 			"item": [
 				{
-					"name": "Add SystemInfo record",
-					"event": [
+					"name": "SystemInfo",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"UUID should equals\", ()=>{",
-									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Device-UUID",
-								"value": "{{uuid}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"PendingReboot\": true,\n    \"ComputerName\": \"WIN11\",\n    \"LastBootUpTime\": \"2022-01-16T23:49:53.008Z\",\n    \"OsVersion\": \"2009\",\n    \"OsName\": \"Windows 10 Pro\",\n    \"KernelVersion\": \"10.0.22000.1\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Add SystemInfo record",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"UUID should equals\", ()=>{",
+											"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{uri}}/api/systemInfo",
-							"host": [
-								"{{uri}}"
 							],
-							"path": [
-								"api",
-								"systemInfo"
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Device-UUID",
+										"value": "{{uuid}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"PendingReboot\": true,\n    \"ComputerName\": \"WIN11\",\n    \"LastBootUpTime\": \"2022-01-16T23:49:53.008Z\",\n    \"OsVersion\": \"2009\",\n    \"OsName\": \"Windows 10 Pro\",\n    \"KernelVersion\": \"10.0.22000.1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{uri}}/api/systemInfo",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"systemInfo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get SystemInfo list of latest",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const response = pm.response.body.json();",
+											"pm.test(\"Needs to return list of ids\", () => {",
+											"    //pm.expect(response.)",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "AuthToken",
+										"value": "{{AuthToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{uri}}/api/systemInfo?filter=latest",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"systemInfo"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "latest"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get SystemInfo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "AuthToken",
+										"value": "{{AuthToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{uri}}/api/systemInfo/{{id}}",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"systemInfo",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Add Antivirus record",
-					"event": [
+					"name": "Antivirus",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"UUID should equals\", ()=>{",
-									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Device-UUID",
-								"value": "{{uuid}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"AVName\": \"Windows Defender\",\n    \"UpdateStatus\": \"Up to date\",\n    \"ProtectionStatus\": \"Enabled\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Add Antivirus record",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"UUID should equals\", ()=>{",
+											"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{uri}}/api/antivirus",
-							"host": [
-								"{{uri}}"
 							],
-							"path": [
-								"api",
-								"antivirus"
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Device-UUID",
+										"value": "{{uuid}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"AVName\": \"Windows Defender\",\n    \"UpdateStatus\": \"Up to date\",\n    \"ProtectionStatus\": \"Enabled\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{uri}}/api/antivirus",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"antivirus"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Add Volume record",
-					"event": [
+					"name": "Volume",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"UUID should equals\", ()=>{",
-									"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Device-UUID",
-								"value": "{{uuid}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"UniqueVolumeID\": \"723e3dfe-8993-4af1-b77a-13e91d0e9bc2\",\n    \"VolumeName\": \"\",\n    \"VolumeLetter\": \"C\",\n    \"HealthStatus\": \"Healthy\",\n    \"SizeRemaining\": 10634166272,\n    \"Size\": 33601613824\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Add Volume record",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"UUID should equals\", ()=>{",
+											"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{uri}}/api/volume",
-							"host": [
-								"{{uri}}"
 							],
-							"path": [
-								"api",
-								"volume"
-							]
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Device-UUID",
+										"value": "{{uuid}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"UniqueVolumeID\": \"723e3dfe-8993-4af1-b77a-13e91d0e9bc2\",\n    \"VolumeName\": \"\",\n    \"VolumeLetter\": \"C\",\n    \"HealthStatus\": \"Healthy\",\n    \"SizeRemaining\": 10634166272,\n    \"Size\": 33601613824\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{uri}}/api/volume",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"volume"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "Wrong UUID",
@@ -403,6 +512,16 @@
 		{
 			"key": "uri",
 			"value": "localhost:5005",
+			"type": "string"
+		},
+		{
+			"key": "AuthToken",
+			"value": "+6=2Tq3N*ZSP+cH6ES9kjhP==@w?-Gb@q%??3yVfZE4C_=^#?!UW5&r+BW=w7wje",
+			"type": "string"
+		},
+		{
+			"key": "id",
+			"value": "",
 			"type": "string"
 		}
 	]
