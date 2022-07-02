@@ -6,13 +6,13 @@ const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) =>
 	try {
 		const deviceUUID = req.header('Device-UUID') as string;
 		if (deviceUUID == '' || deviceUUID == undefined) {
-			log.warn(`Unauthenticated request ➡️ Missing UUID, IP: ${req.ip}`);
+			log.warn(`➡️ : Unauthenticated request - missing UUID, IP: ${req.ip}`);
 			return res.sendStatus(403);
 		}
 
 		const query = await findUUID({ UUID: deviceUUID, IsAllowed: true });
 		if (!query) {
-			log.warn(`Unauthenticated request ➡️ UUID: ${deviceUUID}, IP: ${req.ip}`);
+			log.warn(`➡️ : Unauthenticated request - UUID: ${deviceUUID}, IP: ${req.ip}`);
 			return res.sendStatus(403);
 		}
 		return next();
