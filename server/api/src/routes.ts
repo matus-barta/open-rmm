@@ -14,6 +14,9 @@ import { createAntivirusHandler } from './controller/antivirus.controller';
 import { createVolumeSchema } from './schema/volume.schema';
 import { createVolumeHandler } from './controller/volume.controller';
 
+import { createUpdateSchema } from './schema/update.schema';
+import { createUpdateHandler } from './controller/update.controller';
+
 export default function (app: Express) {
 	// define a route handler for the default home page
 	app.get('/', (req: Request, res: Response) => res.send('❤️ Hello World! ❤️'));
@@ -48,4 +51,5 @@ export default function (app: Express) {
 	app.post('/api/volume', checkAuthUUID, validateResource(createVolumeSchema), createVolumeHandler);
 
 	//TODO: Implement Win Update reporting
+	app.post('/api/update', checkAuthUUID, validateResource(createUpdateSchema), createUpdateHandler);
 }

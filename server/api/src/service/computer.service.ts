@@ -19,7 +19,7 @@ export async function updateComputer(
 	query: FilterQuery<ComputerDocument>,
 	update: UpdateQuery<ComputerDocument>
 ) {
-	log.info(` ⚠ : Updated UUID`); //TODO: show UUID
+	log.info(` ⚠ : Updated UUID: ${update.UUID}`);
 	return ComputerModel.updateOne(query, update);
 }
 
