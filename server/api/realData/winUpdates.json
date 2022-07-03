@@ -1,3 +1,8 @@
-{
-    "Title":  "2022-01 Cumulative Update Preview for .NET Framework 3.5 and 4.8 for Windows 11 for x64 (KB5009469)"
-}
+[
+    {
+        "Title":  "Aktualizácia analytických nástrojov zabezpečenia pre Microsoft Defender Antivirus - KB2267602 (verzia 1.369.708.0)"
+    },
+    {
+        "Title":  "Advanced Micro Devices Inc. - SecurityDevices - 5.17.0.0"
+    }
+]
