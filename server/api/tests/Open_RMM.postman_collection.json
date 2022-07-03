@@ -434,6 +434,61 @@
 					]
 				},
 				{
+					"name": "Update",
+					"item": [
+						{
+							"name": "Add Update record",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"UUID should equals\", ()=>{",
+											"    pm.expect(pm.response.json().Computer).to.eql(pm.collectionVariables.get(\"uuid\"));",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Device-UUID",
+										"value": "{{uuid}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"UUID\": \"{{uuid}}\",\n    \"Titles\": [\n        \"Aktualizácia analytických nástrojov zabezpečenia pre Microsoft Defender Antivirus - KB2267602 (verzia 1.369.708.0)\",\n        \"Advanced Micro Devices Inc. - SecurityDevices - 5.17.0.0\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{uri}}/api/update",
+									"host": [
+										"{{uri}}"
+									],
+									"path": [
+										"api",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Wrong UUID",
 					"event": [
 						{
