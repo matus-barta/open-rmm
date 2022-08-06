@@ -1,0 +1,35 @@
+{
+  "name": "common-open_rmm",
+  "version": "0.0.1",
+  "description": "Common for Open_RMM",
+  "main": "build/src/index.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.3",
+    "@typescript-eslint/parser": "^5.30.3",
+    "eslint": "^8.19.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
+  },
+  "scripts": {
+    "start": "node .",
+    "build": "npx tsc",
+    "watch": "tsnd --respawn ./src/index.ts",
+    "dev": "npm run watch",
+    "lint": "prettier . && eslint . --ext .ts",
+    "test": "newman run ./tests/Open_RMM.postman_collection.json"
+  },
+  "author": "Matus Barta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matus-barta/Open_RMM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matus-barta/Open_RMM/issues"
+  },
+  "homepage": "https://github.com/matus-barta/Open_RMM#readme"
+}
