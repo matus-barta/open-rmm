@@ -9,3 +9,7 @@ export async function createSystemInfo(input: DocumentDefinition<SystemInfoDocum
 		throw new Error(e);
 	}
 }
+
+export async function getSystemInfo(UUID: string) {
+	return SystemInfoModel.findOne({ UUID: UUID });
+}

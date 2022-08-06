@@ -2,7 +2,11 @@ import { Express, Request, Response } from 'express';
 import checkAuthUUID from './middleware/checkAuthUUID';
 import validateResource from './middleware/validateResource';
 
-import { createComputerHandler, updateComputerHandler } from './controller/computer.controller';
+import {
+	createComputerHandler,
+	updateComputerHandler,
+	listComputersHandler
+} from './controller/computer.controller';
 import { createComputerSchema, updateComputerSchema } from './schema/computer.schema';
 
 import { createSystemInfoHandler } from './controller/systemInfo.controller';
@@ -27,9 +31,8 @@ export default function (app: Express) {
 	app.post('/api/computer/', validateResource(createComputerSchema), createComputerHandler);
 
 	//add computer during client installation
-	//well we should pass uuid in url but...
-	//TODO: fix for correct PUT method passing OneTimeKey in URL (maybe)
 	app.put('/api/computer/', validateResource(updateComputerSchema), updateComputerHandler);
+	app.get('/api/computer', listComputersHandler);
 
 	//add new record to systemInfo
 	app.post(
@@ -50,6 +53,6 @@ export default function (app: Express) {
 	//add new record to volume
 	app.post('/api/volume', checkAuthUUID, validateResource(createVolumeSchema), createVolumeHandler);
 
-	//TODO: Implement Win Update reporting
+	//Updates reporting
 	app.post('/api/update', checkAuthUUID, validateResource(createUpdateSchema), createUpdateHandler);
 }
