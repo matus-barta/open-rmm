@@ -6,6 +6,7 @@ export interface ComputerDocument extends mongoose.Document {
 	OrgUnit: string;
 	IsAdded: boolean;
 	IsAllowed: boolean;
+	updatedAt: string;
 }
 
 export const ComputerSchema = new mongoose.Schema(

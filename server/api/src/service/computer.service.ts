@@ -19,10 +19,18 @@ export async function updateComputer(
 	query: FilterQuery<ComputerDocument>,
 	update: UpdateQuery<ComputerDocument>
 ) {
-	log.info(` ⚠ : Updated UUID: ${update.UUID}`);
+	//log.info(` ⚠ : Updated UUID: ${update.UUID}`);
 	return ComputerModel.updateOne(query, update);
 }
 
 export async function findUUID(query: FilterQuery<ComputerDocument>) {
 	return ComputerModel.findOne(query).lean();
+}
+
+export async function listComputers() {
+	return ComputerModel.find();
+}
+
+export async function updateLastUpdate(query: FilterQuery<ComputerDocument>) {
+	return updateComputer(query, { updatedAt: Date.now() });
 }

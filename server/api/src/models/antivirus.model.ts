@@ -8,17 +8,12 @@ export interface AntivirusDocument extends mongoose.Document {
 	ProtectionStatus: string;
 }
 
-export const AntivirusSchema = new mongoose.Schema(
-	{
-		Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
-		AVname: { type: String, required: true },
-		UpdateStatus: { type: String, required: true },
-		ProtectionStatus: { type: String, required: true }
-	},
-	{
-		timestamps: true
-	}
-);
+export const AntivirusSchema = new mongoose.Schema({
+	Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
+	AVname: { type: String, required: true },
+	UpdateStatus: { type: String, required: true },
+	ProtectionStatus: { type: String, required: true }
+});
 
 const AntivirusModel = mongoose.model<AntivirusDocument>('Antivirus', AntivirusSchema);
 export default AntivirusModel;

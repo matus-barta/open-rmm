@@ -6,15 +6,10 @@ export interface UpdateDocument extends mongoose.Document {
 	Titles: string[];
 }
 
-export const UpdateSchema = new mongoose.Schema(
-	{
-		Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
-		Titles: [String]
-	},
-	{
-		timestamps: true
-	}
-);
+export const UpdateSchema = new mongoose.Schema({
+	Computer: { type: mongoose.Schema.Types.String, ref: 'Computer', required: true },
+	Titles: [String]
+});
 
 const UpdateModel = mongoose.model<UpdateDocument>('Update', UpdateSchema);
 export default UpdateModel;
