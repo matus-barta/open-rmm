@@ -54,9 +54,7 @@ export async function listComputersHandler(req: Request, res: Response) {
 		// eslint-disable-next-line prefer-const
 		let computers: { [UUID: string]: IComputer } = {};
 
-		log.info(listOfComputers);
-		//FIXME: This does not work... -_-
-		listOfComputers.forEach(async (element) => {
+		for (const element of listOfComputers) {
 			const systemInfo = await getSystemInfo(element.UUID);
 			computers[element.UUID] = {
 				OrgUnit: element.OrgUnit,
@@ -67,7 +65,7 @@ export async function listComputersHandler(req: Request, res: Response) {
 				OsName: systemInfo?.OsName,
 				LastUpdate: element.updatedAt
 			};
-		});
+		}
 
 		return res.send(JSON.stringify(computers));
 	} catch (error) {
