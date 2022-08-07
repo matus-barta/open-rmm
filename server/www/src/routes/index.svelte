@@ -1,8 +1,5 @@
 <svelte:head>
-	<title>Open RMM</title>
+	<title>Matus Barta | Anonymus09</title>
 </svelte:head>
 
-<div class="text-gray-50 bg-gray-700">
-	<h1>Welcome to Open RMM</h1>
-	<p>❤️ Hello World! ❤️</p>
-</div>
+<div class="bg-gray-700 rounded-xl shadow-md px-3 md:px-6 pt-6 pb-6 flex flex-col"></div>

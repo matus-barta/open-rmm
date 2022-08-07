@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	@apply bg-neutral-800;
+}
+a {
+	@apply text-emerald-500 hover:text-lime-300;
+}
+body {
+	@apply min-w-[450px];
+}
+h1 {
+	@apply text-2xl md:text-4xl font-bold pb-3 text-white tracking-tight;
+}
+h2 {
+	@apply tracking-tight font-bold text-white text-xl md:text-2xl mt-5;
+}
+h3 {
+	@apply tracking-tight text-sm text-slate-300;
+}
+h4 {
+	@apply tracking-tight text-slate-300 italic;
+}
+pre {
+	@apply bg-neutral-800 rounded-xl mx-8 p-4 border-l-4 border-cyan-500 text-sm;
+}
+p {
+	@apply mt-4 text-white;
+}
+
+ul {
+	@apply mt-4;
+}
+
+input {
+	@apply mt-1 w-full px-3 py-2 bg-gray-600 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+      disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
+      invalid:border-pink-500 invalid:text-pink-600
+      focus:invalid:border-pink-500 focus:invalid:ring-pink-500;
+}
+textarea {
+	@apply mt-1 w-full h-32 px-3 py-2 bg-gray-600 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+      focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
+      disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none;
+}
+
+button {
+	@apply px-6 py-2 text-base bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 focus:outline-none rounded-full;
+}

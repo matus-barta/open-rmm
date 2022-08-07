@@ -1,10 +1,17 @@
-<div class="flex flex-wrap content-center h-12 w-screen bg-green-400 text-gray-700">
-	<a class="link" href="/"><img class="w-7 h-7" src="/home_1.svg" alt="Home" /></a>
-	<a class="link" href="/about">About</a>
-</div>
-
-<style lang="postcss">
-	a.link {
-		@apply px-4 text-lg h-full py-2 hover:bg-green-300;
-	}
+<style>
+a {
+	@apply font-bold;
+}
 </style>
+
+<nav
+	class="bg-gray-700 backdrop-filter backdrop-blur-lg bg-opacity-30 w-screen border-b border-emerald-500 fixed min-w-[450px] z-10">
+	<div class="max-w-6xl mx-auto px-4">
+		<div class="flex items-center justify-between h-16">
+			<a href="/">
+				<img src="/media/logo.svg" class="w-12 h-12" alt="logo" />
+			</a>
+			<div class="flex space-x-4 text-white"></div>
+		</div>
+	</div>
+</nav>
