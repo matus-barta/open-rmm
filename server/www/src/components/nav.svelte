@@ -4,14 +4,16 @@ a {
 }
 </style>
 
-<nav
-	class="bg-gray-700 backdrop-filter backdrop-blur-lg bg-opacity-30 w-screen border-b border-emerald-500 fixed min-w-[450px] z-10">
-	<div class="max-w-6xl mx-auto px-4">
-		<div class="flex items-center justify-between h-16">
-			<a href="/">
-				<img src="/media/logo.svg" class="w-12 h-12" alt="logo" />
-			</a>
-			<div class="flex space-x-4 text-white"></div>
+<nav class="bg-gray-700 w-16 border-r border-purple-900 fixed h-screen left-0 top-0">
+	<div class="flex flex-col ">
+		<a href="/">
+			<img src="/media/computer.svg" class="fill-white bg-purple-900 p-2" alt="logo" />
+		</a>
+
+		<div class="flex flex-col">
+			<a class="bg-slate-400 p-3" href="/">One</a>
+			<a class="bg-slate-400 p-3" href="/">Two</a>
+			<a class="bg-slate-400 p-3" href="/">Three</a>
 		</div>
 	</div>
 </nav>
