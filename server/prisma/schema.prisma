@@ -9,3 +9,62 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Computer {
+  uuid       String       @id
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  oneTimeKey String       @unique
+  orgUnit    String
+  isAdded    Boolean      @default(false)
+  isAllowed  Boolean      @default(false)
+  SystemInfo SystemInfo[]
+  Update     Update[]
+  Antivirus  Antivirus[]
+  Volume     Volume[]
+}
+
+model SystemInfo {
+  id             Int      @id @default(autoincrement())
+  computer       Computer @relation(fields: [computerUuid], references: [uuid])
+  computerUuid   String
+  createdAt      DateTime @default(now())
+  pendingReboot  Boolean?
+  computerName   String
+  lastBootupTime String
+  osVersion      String
+  osName         String
+  kernelVersion  String
+}
+
+model Update {
+  id           Int      @id @default(autoincrement())
+  computer     Computer @relation(fields: [computerUuid], references: [uuid])
+  computerUuid String
+  createdAt    DateTime @default(now())
+  titles       String[]
+  count        Int
+}
+
+model Antivirus {
+  id               Int      @id @default(autoincrement())
+  computer         Computer @relation(fields: [computerUuid], references: [uuid])
+  computerUuid     String
+  createdAt        DateTime @default(now())
+  name             String
+  updateStatus     String
+  protectionStatus String
+}
+
+model Volume {
+  id            Int      @id @default(autoincrement())
+  computer      Computer @relation(fields: [computerUuid], references: [uuid])
+  computerUuid  String
+  createdAt     DateTime @default(now())
+  volumeId      String
+  volumeName    String?
+  volumeLetter  String?
+  healthStatus  String
+  sizeRemaining Int
+  size          Int
+}
