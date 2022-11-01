@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import prisma from '../db/prisma';
 import log from '../utils/logger';
 
 export async function createComputer(OrgUnit: string) {
@@ -6,7 +7,12 @@ export async function createComputer(OrgUnit: string) {
 		const OneTimeKey = nanoid(64); //generate unique one time key
 		log.warn(` ⚠ : Generated new OneTimeKey: ${OneTimeKey}`);
 
-		//return await ComputerModel.create({ OrgUnit, OneTimeKey });
+		return await prisma.computer.create({
+			data: {
+				OneTimeKey: OneTimeKey,
+				OrgUnit: OrgUnit
+			}
+		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (e: any) {
 		throw new Error(e);
