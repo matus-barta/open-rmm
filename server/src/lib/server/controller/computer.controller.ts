@@ -1,5 +1,5 @@
 import { createComputer, listComputers, updateComputer } from '../service/computer.service';
-import type { CreateComputerInput } from '$lib/schema/computer.schema';
+import type { CreateComputerInput, UpdateComputerInput } from '$lib/schema/computer.schema';
 import log from '../utils/logger';
 
 export async function createComputerHandler(computer: CreateComputerInput) {
@@ -15,23 +15,20 @@ export async function createComputerHandler(computer: CreateComputerInput) {
 	return new Response('Internal Server Error', { status });
 }
 
-export async function updateComputerHandler() {
+export async function updateComputerHandler(computer: UpdateComputerInput) {
 	let status = 200;
 
 	try {
 		//TODO: Add check if it's already added
-		/*const computer = await updateComputer(
-			{ OneTimeKey: req.body.OneTimeKey },
-			{ UUID: req.body.UUID, IsAdded: true }
-		);
-		if (!computer) {
+		const res = await updateComputer(computer.UUID, computer.OneTimeKey);
+		if (!res) {
 			status = 400;
-		}*/
+		}
 	} catch (error) {
-		status = 400;
+		status = 500;
 		log.error(error);
 	}
-	return; // res.sendStatus(status);
+	return new Response('Internal Server Error', { status });
 }
 
 export async function listComputersHandler() {

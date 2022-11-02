@@ -9,8 +9,8 @@ export async function createComputer(OrgUnit: string) {
 
 		return await prisma.computer.create({
 			data: {
-				OneTimeKey: OneTimeKey,
-				OrgUnit: OrgUnit
+				OneTimeKey,
+				OrgUnit
 			}
 		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,9 +19,17 @@ export async function createComputer(OrgUnit: string) {
 	}
 }
 
-export async function updateComputer() {
-	//log.info(` ⚠ : Updated UUID: ${update.UUID}`);
-	//return ComputerModel.updateOne(query, update);
+export async function updateComputer(Uuid: string, OneTimeKey: string) {
+	log.info(` ⚠ : Updated UUID: ${Uuid}`);
+	return await prisma.computer.update({
+		where: {
+			OneTimeKey
+		},
+		data: {
+			Uuid,
+			IsAdded: true
+		}
+	});
 }
 
 export async function findUUID() {
