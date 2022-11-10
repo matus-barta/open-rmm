@@ -1,16 +1,13 @@
 import {
 	createComputerHandler,
-	updateComputerHandler
+	updateComputerHandler,
+	listComputersHandler
 } from '$lib/server/controller/computer.controller';
-import { json } from '@sveltejs/kit';
 import { createComputerSchema, updateComputerSchema } from '$lib/schema/computer.schema';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
-	return json({
-		OneTimeKey: 'o1jjRUC5zyLBxL7bk3dbF_orsf0w0d4ypoMVRe0Sr6f4dp03nP1qsfgXvNtdBU0s',
-		OrgUnit: 'Default'
-	});
+	return listComputersHandler();
 };
 
 //creating computer from dashboard

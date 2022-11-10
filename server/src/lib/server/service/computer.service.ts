@@ -10,7 +10,20 @@ export async function createComputer(OrgUnit: string) {
 		return await prisma.computer.create({
 			data: {
 				OneTimeKey,
-				OrgUnit
+				ComputerOrgUnit: {
+					connectOrCreate: {
+						where: {
+							OrgUnitName: OrgUnit
+						},
+						create: {
+							OrgUnitName: OrgUnit
+						}
+					}
+				}
+			},
+			select: {
+				OneTimeKey: true,
+				OrgUnit: true
 			}
 		});
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,6 +41,11 @@ export async function updateComputer(Uuid: string, OneTimeKey: string) {
 		data: {
 			Uuid,
 			IsAdded: true
+		},
+		select: {
+			Uuid: true,
+			OneTimeKey: true,
+			IsAdded: true
 		}
 	});
 }
@@ -37,7 +55,38 @@ export async function findUUID() {
 }
 
 export async function listComputers() {
-	//return ComputerModel.find();
+	return await prisma.computer.findMany({
+		select: {
+			Uuid: true,
+			ComputerOrgUnit: true,
+			IsAdded: true,
+			IsAllowed: true,
+			CreatedAt: true
+		}
+	});
+}
+
+export async function listComputersFromOrgUnit(orgUnit: string) {
+	return await prisma.computer.findMany({
+		where: {
+			OrgUnit: orgUnit
+		},
+		select: {
+			Uuid: true,
+			IsAdded: true,
+			IsAllowed: true,
+			CreatedAt: true
+		}
+	});
+}
+
+export async function listOrgUnits() {
+	return await prisma.orgUnit.findMany({
+		select: {
+			Id: true,
+			OrgUnitName: true
+		}
+	});
 }
 
 export async function updateLastUpdate() {

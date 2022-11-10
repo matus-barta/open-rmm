@@ -4,10 +4,8 @@
 
 <svelte:head>
   <title>
-    Open RMM - Login
+    Open RMM
   </title>
 </svelte:head>
 
-
-<h1 class="text-3xl font-bold underline">Open RMM</h1>
-<p>Login Page</p>
+<p>redirect to login or dashboard if logged in</p>
