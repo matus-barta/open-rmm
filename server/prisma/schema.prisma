@@ -10,24 +10,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model OrgUnit {
+  Id          Int        @id @default(autoincrement())
+  OrgUnitName String     @unique
+  Computers   Computer[]
+}
+
 model Computer {
-  Id         Int          @id @default(autoincrement())
-  Uuid       String?      @unique
-  CreatedAt  DateTime     @default(now())
-  UpdatedAt  DateTime     @updatedAt
-  OneTimeKey String       @unique
-  OrgUnit    String
-  IsAdded    Boolean      @default(false)
-  IsAllowed  Boolean      @default(false)
-  SystemInfo SystemInfo[]
-  Update     Update[]
-  Antivirus  Antivirus[]
-  Volume     Volume[]
+  Id              Int          @id @default(autoincrement())
+  Uuid            String?      @unique
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
+  OneTimeKey      String       @unique
+  ComputerOrgUnit OrgUnit      @relation(fields: [OrgUnit], references: [OrgUnitName])
+  OrgUnit         String
+  IsAdded         Boolean      @default(false)
+  IsAllowed       Boolean      @default(false)
+  SystemInfos     SystemInfo[]
+  Updates         Update[]
+  Antiviruses     Antivirus[]
+  Volumes         Volume[]
 }
 
 model SystemInfo {
   Id             Int      @id @default(autoincrement())
-  Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  Computers      Computer @relation(fields: [ComputerUuid], references: [Uuid])
   ComputerUuid   String
   CreatedAt      DateTime @default(now())
   PendingReboot  Boolean?
@@ -49,7 +56,7 @@ model Update {
 
 model Antivirus {
   Id               Int      @id @default(autoincrement())
-  Computer         Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  Computers        Computer @relation(fields: [ComputerUuid], references: [Uuid])
   ComputerUuid     String
   CreatedAt        DateTime @default(now())
   Name             String
@@ -59,7 +66,7 @@ model Antivirus {
 
 model Volume {
   Id            Int      @id @default(autoincrement())
-  Computer      Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  Computers     Computer @relation(fields: [ComputerUuid], references: [Uuid])
   ComputerUuid  String
   CreatedAt     DateTime @default(now())
   VolumeId      String
