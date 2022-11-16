@@ -1,20 +1,23 @@
 <script lang="ts">
+    import Sidebar from '$lib/components/sidebar.svelte';
+    import Hidden from '$lib/components/hidden.svelte';
     import { page } from '$app/stores';
     import type { PageData } from "./$types"
     export let data: PageData;
+
+    let child: Hidden;
 </script>
 
 <svelte:head>
     <title>Open RMM - {$page.params.slug}</title>
 </svelte:head>
 
-
 <div class="h-full relative">
     <div class="flex flex-col w-full">
         <div class="bg-slate-500 h-12 w-full flex flex-row">
-            <button>Add computer</button>
-            <button>...</button>
-            <button>***</button>
+            <button on:click={child.show}>Add computer</button>
+            <button>Edit computer</button>
+            <button>Delete computer</button>
         </div>
         <span class="bg-zinc-700">
         {#each data.computers as computer}
@@ -27,17 +30,7 @@
         {/each}
         </span>
     </div>
-    <div class="flex flex-col justify-between w-80 bg-gray-600 px-4 absolute top-0 right-0 h-full">
-    <div class="flex flex-col">
-        <h2>Add Computer</h2>
-        <p>something</p>
-        <p>something</p>
-        <p>something</p>
-    </div>
-    <div class="flex flex-row justify-between py-4">
-        <button>Add</button>
-        <button>Cancel</button>
-    </div>
+    <Hidden bind:this={child} on:show={e => child.shown = e.detail}>
+        <Sidebar sidebarType={"add"}/>
+    </Hidden>
 </div>
-</div>
-
