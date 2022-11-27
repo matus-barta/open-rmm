@@ -1,7 +1,7 @@
-import type { LayoutLoad } from './$types';
 import type { ReadOrgUnitInput } from '$lib/schema/orgUnit.schema';
+import type { PageLoad } from './$types';
 
-export const load: LayoutLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch }) => {
 	const response = await fetch(`/api/orgunit`);
 
 	const orgUnits = (await response.json()) as ReadOrgUnitInput[];
@@ -9,4 +9,8 @@ export const load: LayoutLoad = async ({ fetch }) => {
 	return {
 		orgUnits
 	};
+};
+
+export const addComputer = (orgUnit: string) => {
+	orgUnit;
 };

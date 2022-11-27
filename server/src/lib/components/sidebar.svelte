@@ -1,7 +1,10 @@
 <script lang="ts">
     export let sidebarType: string;
+    import Select from 'svelte-select';
+    import { onMount } from 'svelte';
+    import type { ReadOrgUnitInput } from '$lib/schema/orgUnit.schema';
 
-    const data = {
+    const sidebarData = {
         AddComputer : {
             title : "Add computer",
             button: "Add"
@@ -15,32 +18,44 @@
             button: "Remove"
         }
     }
+    let orgUnits: ReadOrgUnitInput[];
+	let promise = fetch('/api/orgunit').then((x) => x.json());
 </script>
 
 <div class="flex flex-col justify-between w-80 bg-gray-600 px-4 absolute top-0 right-0 h-full drop-shadow-2xl">
     <div class="flex flex-col">
         <h2>
             {#if sidebarType == "add"}
-                {data.AddComputer.title}
+                {sidebarData.AddComputer.title}
             {/if}
             {#if sidebarType == "edit"}
-                {data.EditComputer.title}
+                {sidebarData.EditComputer.title}
             {/if}
             {#if sidebarType == "remove"}
-                {data.RemoveComputer.title}
+                {sidebarData.RemoveComputer.title}
             {/if}
         </h2>
+        {#await promise}
+        {:then data} 
+            <select>
+            {#each data as orgUnit}
+                <option>{orgUnit.OrgUnitName}</option>
+            {/each}
+        </select>
+        {:catch error}
+            {console.log(error)}
+        {/await}
     </div>
     <div class="flex flex-row justify-between py-4">
         <button>
             {#if sidebarType == "add"}
-                {data.AddComputer.button}
+                {sidebarData.AddComputer.button}
             {/if}
             {#if sidebarType == "edit"}
-                {data.EditComputer.button}
+                {sidebarData.EditComputer.button}
             {/if}
             {#if sidebarType == "remove"}
-                {data.RemoveComputer.button}
+                {sidebarData.RemoveComputer.button}
             {/if}
         </button>
         <button>Cancel</button>

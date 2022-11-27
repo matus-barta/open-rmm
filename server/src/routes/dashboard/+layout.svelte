@@ -18,10 +18,10 @@
       <a href="/dashboard/computers/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
         C
       </a>
-      <a href="/dashboard/settings/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
-        E
+      <a href="/dashboard/manage/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
+        M
       </a>
-      <a href="/dashboard/settings/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
+      <a href="/dashboard/users/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
         U
       </a>
     </div>
