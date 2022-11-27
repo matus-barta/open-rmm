@@ -1,14 +1,12 @@
 <script>
-		import { createEventDispatcher } from 'svelte';
-	
+	import { createEventDispatcher } from 'svelte';
     let shown = false;
+	let dispatch = createEventDispatcher();
 	
-		let dispatch = createEventDispatcher();
-	
-	  export function show() {
+	export function show() {
         shown = !shown;
-				dispatch('show', shown);
-		}
+		dispatch('show', shown);
+	}
 </script>
 
 <svelte:options accessors={true}/>
