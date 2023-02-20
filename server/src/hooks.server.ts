@@ -1,6 +1,11 @@
-import { sequence } from '@sveltejs/kit/hooks';
-import log from '$lib/server/sequences/logReq';
-import auth from '$lib/server/sequences/checkAuthUuid';
-import validation from '$lib/server/sequences/validate';
+import { createContext } from '$lib/trpc/context';
+import { router } from '$lib/trpc/router';
+import type { Handle } from '@sveltejs/kit';
+import { createTRPCHandle } from 'trpc-sveltekit';
 
-export const handle = sequence(log, auth, validation);
+export const handle: Handle = createTRPCHandle({
+	router,
+	createContext,
+	onError: ({ type, path, error }) =>
+		console.error(`Encountered error while trying to process ${type} @ ${path}:`, error)
+});
