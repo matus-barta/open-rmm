@@ -1,45 +1,49 @@
 <script lang="ts">
-  import "../../app.css";
-  //import type { LayoutData } from './$types';
+	import '../../app.css';
+	import IconLogo from '$lib/icons/IconLogo.svelte';
+	import IconSettings from '$lib/icons/IconSettings.svelte';
+	import IconScreen from '$lib/icons/IconScreen.svelte';
+	import NavPanelButton from '$lib/components/NavPanelButton.svelte';
+	import SearchBox from '$lib/components/SearchBox.svelte';
+	import UserInfo from '$lib/components/UserInfo.svelte';
+	import IconInventory from '$lib/icons/IconInventory.svelte';
+	import IconDoc from '$lib/icons/IconDoc.svelte';
+	//import type { LayoutData } from './$types';
 
-  //export let data: LayoutData;
+	//export let data: LayoutData;
+
+	const size = 30;
 </script>
+
+<div id="Main" class="flex flex-row h-screen">
+	<div id="NavPanel" class="flex flex-col justify-between bg-darkest-color">
+		<div class="flex flex-col w-16">
+			<a href="/dashboard" class="p-2">
+				<IconLogo size="48" />
+			</a>
+			<NavPanelButton link="/dashboard/rmm">
+				<IconScreen {size} />
+			</NavPanelButton>
+			<NavPanelButton link="/dashboard/inventory">
+				<IconInventory {size} />
+			</NavPanelButton>
+			<NavPanelButton link="/dashboard/docs">
+				<IconDoc {size} />
+			</NavPanelButton>
+		</div>
+		<NavPanelButton link="/dashboard/settings">
+			<IconSettings {size} />
+		</NavPanelButton>
+	</div>
+	<div id="MainContent" class="flex flex-col w-full">
+		<div id="TopPanel" class="flex flex-row w-full justify-between pl-1 h-12 bg-darkest-color">
+			<SearchBox />
+			<UserInfo />
+		</div>
+
+		<slot />
+	</div>
+</div>
 
 <style>
 </style>
-
-
-<div class="flex flex-row h-screen">
-  <div class="flex flex-col justify-between">
-    <div class="flex flex-col w-16">
-      <a href="/dashboard">
-        <img src="/media/logo.svg" class="p-2" alt="logo"/>
-      </a>
-      <a href="/dashboard/computers/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
-        C
-      </a>
-      <a href="/dashboard/manage/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
-        M
-      </a>
-      <a href="/dashboard/users/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
-        U
-      </a>
-    </div>
-    <a href="/dashboard/settings/" class="h-16 px-6 py-6 text-base hover:bg-grey-400">
-      S
-    </a>
-  </div>
-  <div class="flex flex-col w-full">
-    <div class="flex flex-row w-full h-16 bg-slate-700">
-      <div class="flex justify-center w-full">
-        <div class="bg-gray-400 rounded-3xl my-4 px-4 py-1 w-96">Search</div>
-      </div>
-      <div class="bg-gray-500 w-16 p-6">
-        U
-      </div>
-    </div>
-    <div class="h-full">
-      <slot />
-    </div>
-  </div>
-</div>
