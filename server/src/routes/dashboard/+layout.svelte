@@ -8,6 +8,7 @@
 	import UserInfo from '$lib/components/UserInfo.svelte';
 	import IconInventory from '$lib/icons/IconInventory.svelte';
 	import IconDoc from '$lib/icons/IconDoc.svelte';
+	import { defaultRoute } from '$lib/config';
 	//import type { LayoutData } from './$types';
 
 	//export let data: LayoutData;
@@ -21,7 +22,7 @@
 			<a href="/dashboard" class="p-2">
 				<IconLogo size="48" />
 			</a>
-			<NavPanelButton link="/dashboard/rmm">
+			<NavPanelButton link={defaultRoute}>
 				<IconScreen {size} />
 			</NavPanelButton>
 			<NavPanelButton link="/dashboard/inventory">
