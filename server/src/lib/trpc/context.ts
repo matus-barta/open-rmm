@@ -16,6 +16,8 @@ export async function createContext(event: RequestEvent) {
 	} catch {
 		return { userId: '' };
 	}*/
+
+	return {};
 }
 
 export type Context = inferAsyncReturnType<typeof createContext>;
