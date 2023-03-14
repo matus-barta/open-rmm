@@ -16,32 +16,32 @@
 	const size = 30;
 </script>
 
-<div id="Main" class="flex flex-row h-screen">
-	<div id="NavPanel" class="flex flex-col justify-between bg-darkest-color">
-		<div class="flex flex-col w-16">
-			<a href="/dashboard" class="p-2">
-				<IconLogo size="48" />
-			</a>
-			<NavPanelButton link={defaultRoute}>
-				<IconScreen {size} />
-			</NavPanelButton>
-			<NavPanelButton link="/dashboard/inventory">
-				<IconInventory {size} />
-			</NavPanelButton>
-			<NavPanelButton link="/dashboard/docs">
-				<IconDoc {size} />
-			</NavPanelButton>
-		</div>
-		<NavPanelButton link="/dashboard/settings">
-			<IconSettings {size} />
-		</NavPanelButton>
+<div id="Main" class="flex flex-col h-screen">
+	<div id="TopPanel" class="flex flex-row w-full justify-between h-12 bg-darkest-color">
+		<a href="/dashboard" class="py-1 px-[11px]">
+			<IconLogo size="42" />
+		</a>
+		<SearchBox />
+		<UserInfo />
 	</div>
-	<div id="MainContent" class="flex flex-col w-full">
-		<div id="TopPanel" class="flex flex-row w-full justify-between pl-1 h-12 bg-darkest-color">
-			<SearchBox />
-			<UserInfo />
-		</div>
 
+	<div id="MainContent" class="flex flex-row h-full">
+		<div id="NavPanel" class="flex flex-col justify-between bg-darkest-color">
+			<div class="flex flex-col w-16">
+				<NavPanelButton link={defaultRoute}>
+					<IconScreen {size} />
+				</NavPanelButton>
+				<NavPanelButton link="/dashboard/inventory">
+					<IconInventory {size} />
+				</NavPanelButton>
+				<NavPanelButton link="/dashboard/docs">
+					<IconDoc {size} />
+				</NavPanelButton>
+			</div>
+			<NavPanelButton link="/dashboard/settings">
+				<IconSettings {size} />
+			</NavPanelButton>
+		</div>
 		<slot />
 	</div>
 </div>
