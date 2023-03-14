@@ -28,17 +28,17 @@
 	<div id="MainContent" class="flex flex-row h-full">
 		<div id="NavPanel" class="flex flex-col justify-between bg-darkest-color">
 			<div class="flex flex-col w-16">
-				<NavPanelButton link={defaultRoute}>
+				<NavPanelButton link={defaultRoute} tooltip={'RMM'}>
 					<IconScreen {size} />
 				</NavPanelButton>
-				<NavPanelButton link="/dashboard/inventory">
+				<NavPanelButton link="/dashboard/inventory" tooltip={'Inventory'}>
 					<IconInventory {size} />
 				</NavPanelButton>
-				<NavPanelButton link="/dashboard/docs">
+				<NavPanelButton link="/dashboard/docs" tooltip={'Documentation'}>
 					<IconDoc {size} />
 				</NavPanelButton>
 			</div>
-			<NavPanelButton link="/dashboard/settings">
+			<NavPanelButton link="/dashboard/settings" tooltip={'Setting'}>
 				<IconSettings {size} />
 			</NavPanelButton>
 		</div>
