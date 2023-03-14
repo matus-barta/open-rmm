@@ -1,7 +1,10 @@
 import { t } from '$lib/trpc/t';
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
+import { orgUnits } from '$lib/trpc/routes/orgUnits';
 
-export const router = t.router({});
+export const router = t.router({
+	orgUnits
+});
 
 export type Router = typeof router;
 
