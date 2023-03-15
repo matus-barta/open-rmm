@@ -2,7 +2,7 @@
 	import IconAdd from '$lib/icons/IconAdd.svelte';
 	import SidebarOption from './SidebarOption.svelte';
 
-	type T = $$Generic<{ title: string; name: string }>; //TODO: make this goneric - need to update DB :-/
+	type T = $$Generic<{ title: string; name: string; count: number }>; //TODO: make this goneric - need to update DB :-/
 
 	export let options: T[];
 	export let add: { title: string; path: string };
@@ -13,7 +13,12 @@
 <div class="flex flex-col justify-between w-64 bg-dark-color">
 	<div class="flex flex-col">
 		{#each options as option}
-			<SidebarOption title={option.title} name={option.name} path="/dashboard/rmm/" />
+			<SidebarOption
+				title={option.title}
+				name={option.name}
+				path="/dashboard/rmm/"
+				count={option.count}
+			/>
 		{/each}
 	</div>
 	<div class="bg-darker-color h-11">

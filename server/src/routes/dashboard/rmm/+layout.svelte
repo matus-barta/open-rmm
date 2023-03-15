@@ -6,7 +6,8 @@
 
 	const orgUnits = data.orgUnits.map((orgUnit) => ({
 		title: orgUnit.OrgUnitName,
-		name: orgUnit.OrgUnitName
+		name: orgUnit.OrgUnitName,
+		count: orgUnit._count.Computers
 	}));
 </script>
 

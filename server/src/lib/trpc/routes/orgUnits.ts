@@ -6,7 +6,8 @@ export const orgUnits = t.router({
 	list: t.procedure.use(logger).query(() =>
 		prisma.orgUnit.findMany({
 			select: {
-				OrgUnitName: true
+				OrgUnitName: true,
+				_count: { select: { Computers: true } }
 			}
 		})
 	)
