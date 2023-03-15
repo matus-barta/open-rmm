@@ -1,5 +1,5 @@
 import { createSystemInfo } from '../service/systemInfo.service';
-import log from '../utils/logger';
+import log from '../../utils/logger';
 
 export async function createSystemInfoHandler() {
 	let status = 200;

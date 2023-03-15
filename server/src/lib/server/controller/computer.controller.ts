@@ -6,7 +6,7 @@ import {
 	listOrgUnits
 } from '../service/computer.service';
 import type { CreateComputerInput, UpdateComputerInput } from '$lib/schema/computer.schema';
-import log from '../utils/logger';
+import log from '../../utils/logger';
 
 export async function createComputerHandler(computer: CreateComputerInput) {
 	let status = 200;

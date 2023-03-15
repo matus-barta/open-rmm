@@ -1,6 +1,6 @@
 import { boolean, object, string } from 'zod';
 import type { TypeOf } from 'zod';
-import isIsoDate from '$lib/server/utils/isoDate';
+import isIsoDate from '$lib/utils/isoDate';
 
 //for adding computer to the DB so it can be validated during client installation
 export const createComputerSchema = object({

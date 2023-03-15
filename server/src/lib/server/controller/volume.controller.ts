@@ -1,4 +1,4 @@
-import log from '../utils/logger';
+import log from '../../utils/logger';
 import { createVolume } from '../service/volume.service';
 
 export async function createVolumeHandler() {

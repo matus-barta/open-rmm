@@ -1,6 +1,6 @@
 import { object, string, boolean } from 'zod';
 import type { TypeOf } from 'zod';
-import isIsoDate from '$lib/server/utils/isoDate';
+import isIsoDate from '$lib/utils/isoDate';
 
 export const createSystemInfoSchema = object({
 	UUID: string({ required_error: 'UUID is missing' }).uuid(),

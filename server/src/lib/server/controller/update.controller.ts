@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import log from '../utils/logger';
+import log from '../../utils/logger';
 
 import { createUpdate } from '../service/update.service';
 
