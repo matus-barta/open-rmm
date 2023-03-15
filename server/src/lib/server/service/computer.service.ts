@@ -79,16 +79,3 @@ export async function listComputersFromOrgUnit(orgUnit: string) {
 		}
 	});
 }
-
-export async function listOrgUnits() {
-	return await prisma.orgUnit.findMany({
-		select: {
-			Id: true,
-			OrgUnitName: true
-		}
-	});
-}
-
-export async function updateLastUpdate() {
-	//return updateComputer(query, { updatedAt: Date.now() });
-}
