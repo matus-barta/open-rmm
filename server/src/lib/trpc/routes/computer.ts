@@ -17,7 +17,16 @@ export const computers = t.router({
 					Uuid: true,
 					CreatedAt: true,
 					IsAdded: true,
-					IsAllowed: true
+					IsAllowed: true,
+					SystemInfos: {
+						select: {
+							ComputerName: true,
+							PendingReboot: true,
+							LastBootupTime: true,
+							OsName: true,
+							Type: true
+						}
+					}
 				}
 			})
 		)
