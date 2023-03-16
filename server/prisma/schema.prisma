@@ -39,6 +39,7 @@ model SystemInfo {
   CreatedAt      DateTime @default(now())
   PendingReboot  Boolean?
   ComputerName   String
+  Type           String
   LastBootupTime String
   OsVersion      String
   OsName         String
