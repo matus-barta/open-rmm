@@ -17,7 +17,10 @@ module.exports = {
 
         'grey-color': '#95979f',
         'grey-color-lighter': '#b8bac0',
-        'grey-color-more-lighter': '#f3f5f6'
+        'grey-color-more-lighter': '#f3f5f6',
+
+        'red': '#f84f79',
+        'green': '#34d15c'
       }
     },
   },
