@@ -53,29 +53,3 @@ export async function updateComputer(Uuid: string, OneTimeKey: string) {
 export async function findUUID() {
 	//return ComputerModel.findOne(query).lean();
 }
-
-export async function listComputers() {
-	return await prisma.computer.findMany({
-		select: {
-			Uuid: true,
-			ComputerOrgUnit: true,
-			IsAdded: true,
-			IsAllowed: true,
-			CreatedAt: true
-		}
-	});
-}
-
-export async function listComputersFromOrgUnit(orgUnit: string) {
-	return await prisma.computer.findMany({
-		where: {
-			OrgUnit: orgUnit
-		},
-		select: {
-			Uuid: true,
-			IsAdded: true,
-			IsAllowed: true,
-			CreatedAt: true
-		}
-	});
-}
