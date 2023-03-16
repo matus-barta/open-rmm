@@ -2,12 +2,10 @@
 	import IconAdd from '$lib/icons/IconAdd.svelte';
 	import SidebarOption from './SidebarOption.svelte';
 
-	type T = $$Generic<{ title: string; name: string; count: number }>; //TODO: make this goneric - need to update DB :-/
+	type T = $$Generic<{ title: string; name: string; count: number }>;
 
 	export let options: T[];
 	export let add: { title: string; path: string };
-
-	//TODO: bo able have selected options
 </script>
 
 <div class="flex flex-col justify-between w-64 bg-dark-color">
