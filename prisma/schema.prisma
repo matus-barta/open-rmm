@@ -11,9 +11,10 @@ datasource db {
 }
 
 model OrgUnit {
-  Id          Int        @id @default(autoincrement())
-  OrgUnitName String     @unique
-  Computers   Computer[]
+  Id           Int        @id @default(autoincrement())
+  OrgUnitName  String     @unique
+  OrgUnitTitle String?
+  Computers    Computer[]
 }
 
 model Computer {
