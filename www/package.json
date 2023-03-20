@@ -15,7 +15,6 @@
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.37",
-		"@prisma/client": "^4.11.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@trpc/client": "^10.15.0",
@@ -46,7 +45,8 @@
 		"tslib": "^2.5.0",
 		"typescript": "^4.9.5",
 		"unplugin-icons": "^0.15.3",
-		"zod": "^3.21.4"
+		"zod": "^3.21.4",
+		"prisma-client": "file:../prisma"
 	},
 	"type": "module"
 }

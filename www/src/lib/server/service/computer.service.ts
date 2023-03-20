@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import prisma from '../db/prisma';
+import prisma from 'prisma-client';
 import log from '../../utils/logger';
 
 export async function createComputer(OrgUnit: string) {

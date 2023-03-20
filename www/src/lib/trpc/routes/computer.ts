@@ -1,4 +1,4 @@
-import prisma from '$lib/server/db/prisma';
+import prisma from 'prisma-client';
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
