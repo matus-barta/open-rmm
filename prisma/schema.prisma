@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OrgUnit {
+  Id          Int        @id @default(autoincrement())
+  OrgUnitName String     @unique
+  Computers   Computer[]
+}
+
+model Computer {
+  Id              Int          @id @default(autoincrement())
+  Uuid            String?      @unique
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
+  OneTimeKey      String       @unique
+  ComputerOrgUnit OrgUnit      @relation(fields: [OrgUnit], references: [OrgUnitName])
+  OrgUnit         String
+  IsAdded         Boolean      @default(false)
+  IsAllowed       Boolean      @default(false)
+  SystemInfos     SystemInfo[]
+  Updates         Update[]
+  Antiviruses     Antivirus[]
+  Volumes         Volume[]
+}
+
+model SystemInfo {
+  Id             Int      @id @default(autoincrement())
+  Computers      Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  ComputerUuid   String
+  CreatedAt      DateTime @default(now())
+  PendingReboot  Boolean?
+  ComputerName   String
+  Type           String
+  LastBootupTime String
+  OsVersion      String
+  OsName         String
+  KernelVersion  String
+}
+
+model Update {
+  Id           Int      @id @default(autoincrement())
+  Computer     Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  ComputerUuid String
+  CreatedAt    DateTime @default(now())
+  Titles       String[]
+  Count        Int
+}
+
+model Antivirus {
+  Id               Int      @id @default(autoincrement())
+  Computers        Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  ComputerUuid     String
+  CreatedAt        DateTime @default(now())
+  Name             String
+  UpdateStatus     String
+  ProtectionStatus String
+}
+
+model Volume {
+  Id            Int      @id @default(autoincrement())
+  Computers     Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  ComputerUuid  String
+  CreatedAt     DateTime @default(now())
+  VolumeId      String
+  VolumeName    String?
+  VolumeLetter  String?
+  HealthStatus  String
+  SizeRemaining Int
+  Size          Int
+}
