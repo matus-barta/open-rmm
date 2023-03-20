@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./"
 }
 
 datasource db {
@@ -13,7 +14,7 @@ datasource db {
 model OrgUnit {
   Id           Int        @id @default(autoincrement())
   OrgUnitName  String     @unique
-  OrgUnitTitle String?
+  OrgUnitTitle String
   Computers    Computer[]
 }
 
