@@ -7,7 +7,7 @@
 </script>
 
 {#if type?.toLowerCase().includes('physical')}
-	<div class="checkmark text-grey-color-more-lighter">
+	<div class="checkmark">
 		<svg width={size} height={size} viewBox="0 0 640 512"
 			><path
 				fill="currentColor"
@@ -59,6 +59,6 @@
 
 <style>
 	.checkmark {
-		@apply flex justify-center p-[1px];
+		@apply flex justify-center p-[1px]  text-grey-color;
 	}
 </style>
