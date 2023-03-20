@@ -2,7 +2,7 @@
 	import '../../app.css';
 	import IconLogo from '$lib/icons/IconLogo.svelte';
 	import IconSettings from '$lib/icons/IconSettings.svelte';
-	import IconScreen from '$lib/icons/IconScreen.svelte';
+	import IconRMM from '$lib/icons/IconRMM.svelte';
 	import NavPanelButton from '$lib/components/NavPanelButton.svelte';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import UserInfo from '$lib/components/UserInfo.svelte';
@@ -29,7 +29,7 @@
 		<div id="NavPanel" class="flex flex-col justify-between bg-darkest-color">
 			<div class="flex flex-col w-16">
 				<NavPanelButton link={defaultRoute} tooltip={'RMM'}>
-					<IconScreen {size} />
+					<IconRMM {size} />
 				</NavPanelButton>
 				<NavPanelButton link="/dashboard/inventory" tooltip={'Inventory'}>
 					<IconInventory {size} />
