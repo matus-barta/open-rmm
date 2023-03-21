@@ -10,7 +10,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
-    "prettier": "^2.8.5",
+    "prettier": "^2.8.6",
     "turbo": "latest"
   },
   "engines": {
