@@ -1,7 +1,7 @@
 {
-  "name": "my-turborepo",
-  "version": "0.0.0",
-  "private": true,
+  "name": "open-rmm",
+  "version": "0.0.1",
+  "private": false,
   "workspaces": [
     "apps/*",
     "packages/*"

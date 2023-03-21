@@ -7,8 +7,12 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^db:generate","^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "dependsOn": ["^db:generate", "^build"],
+      "outputs": [".svelte-kit/**", "dist/**", "build/**"],
+      "inputs": [
+        "src/**/*.{html,js,svelte,svx,ts}",
+        "../../packages/components/**/*.{html,js,svelte,svx,ts}"
+      ]
     },
     "lint": {
       "outputs": []
