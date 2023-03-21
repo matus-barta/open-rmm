@@ -1,5 +1,5 @@
 {
-	"name": "open_rmm",
+	"name": "server",
 	"version": "0.0.1",
 	"description": "Server for Open_RMM",
 	"main": "build/src/index.js",
@@ -17,7 +17,7 @@
 		"nanoid": "4.0.1",
 		"pino": "^8.11.0",
 		"pino-pretty": "^10.0.0",
-		"prisma-client": "file:../prisma",
+		"prisma": "^4.11.0",
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {
@@ -35,7 +35,8 @@
 		"supertest": "^6.3.3",
 		"ts-jest": "^29.0.5",
 		"ts-node-dev": "^2.0.0",
-		"typescript": "^5.0.2"
+		"typescript": "^5.0.2",
+		"database": "*"
 	},
 	"scripts": {
 		"start": "node .",

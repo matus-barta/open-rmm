@@ -2,18 +2,16 @@ import { Express, Request, Response } from 'express';
 import checkAuthUUID from './middleware/checkAuthUUID';
 import validateResource from './middleware/validateResource';
 
+import { computerSchema } from './schema/computer.schema';
+import { addComputer } from './routes/computer';
+
 export default function (app: Express) {
 	// define a route handler for the default home page
 	app.get('/', (req: Request, res: Response) => res.send('❤️ Hello World! ❤️'));
-	app.get('/api/healthcheck', (req: Request, res: Response) => res.send('{"status": "OK"}'));
-
-	//creating computer from dashboard
-	//TODO: check for permissions to can add computer
-	//app.post('/api/computer/', validateResource(createComputerSchema), createComputerHandler);
+	app.get('/healthcheck', (req: Request, res: Response) => res.send({ status: 'OK' }));
 
 	//add computer during client installation
-	//app.put('/api/computer/', validateResource(updateComputerSchema), updateComputerHandler);
-	//app.get('/api/computer', listComputersHandler);
+	app.post('/computer', validateResource(computerSchema), addComputer);
 
 	//add new record to systemInfo
 	/*app.post(

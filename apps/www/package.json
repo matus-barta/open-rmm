@@ -1,7 +1,10 @@
 {
-	"name": "open-rmm",
+	"name": "www",
 	"version": "0.0.1",
 	"private": false,
+	"prisma": {
+		"schema": "../prisma/schema.prisma"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -15,6 +18,7 @@
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.37",
+		"@prisma/client": "^4.11.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
 		"@trpc/client": "^10.17.0",
@@ -46,7 +50,7 @@
 		"typescript": "^5.0.2",
 		"unplugin-icons": "^0.15.3",
 		"zod": "^3.21.4",
-		"prisma-client": "file:../prisma"
+		"database": "*"
 	},
 	"type": "module"
 }
