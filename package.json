@@ -2,15 +2,12 @@
   "name": "open-rmm",
   "version": "0.0.1",
   "private": false,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
     "prettier": "^2.8.5",
@@ -20,5 +17,5 @@
     "node": ">=14.0.0"
   },
   "dependencies": {},
-  "packageManager": "npm@9.4.0"
+  "packageManager": "pnpm@7.15.0"
 }

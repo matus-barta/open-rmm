@@ -36,14 +36,14 @@
 		"ts-jest": "^29.0.5",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "^5.0.2",
-		"database": "*"
+		"database": "workspace:*"
 	},
 	"scripts": {
 		"start": "node .",
-		"build": "npx tsc",
+		"build": "pnpx tsc",
 		"watch": "tsnd --respawn ./src/index.ts",
-		"dev": "npm run watch",
+		"dev": "pnpm run watch",
 		"lint": "prettier . && eslint . --ext .ts",
-		"ncu": "npx npm-check-updates"
+		"ncu": "pnpx npm-check-updates"
 	}
 }

@@ -8,7 +8,10 @@ const config: UserConfig = {
 		Icons({
 			compiler: 'svelte'
 		})
-	]
+	],
+	resolve: {
+		preserveSymlinks: true
+	}
 };
 
 export default config;

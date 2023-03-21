@@ -2,9 +2,6 @@
 	"name": "www",
 	"version": "0.0.1",
 	"private": false,
-	"prisma": {
-		"schema": "../prisma/schema.prisma"
-	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -14,16 +11,18 @@
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
 		"test": "newman run ./tests/Open_RMM.postman_collection.json",
-		"ncu": "npx npm-check-updates"
+		"ncu": "pnpx npm-check-updates"
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.37",
 		"@prisma/client": "^4.11.0",
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-node": "^1.2.0",
 		"@sveltejs/kit": "next",
 		"@trpc/client": "^10.17.0",
 		"@trpc/server": "^10.17.0",
 		"@types/lodash": "^4.14.191",
+		"@types/ws": "^8.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.56.0",
 		"@typescript-eslint/parser": "^5.56.0",
 		"autoprefixer": "^10.4.14",
@@ -49,6 +48,8 @@
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.2",
 		"unplugin-icons": "^0.15.3",
+		"vite": "^4.2.1",
+		"ws": "^8.12.0",
 		"zod": "^3.21.4",
 		"database": "workspace:*"
 	},
