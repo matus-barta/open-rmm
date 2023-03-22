@@ -31,17 +31,18 @@
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"jest": "^29.5.0",
+		"nodemon": "^2.0.21",
 		"prettier": "^2.8.6",
 		"supertest": "^6.3.3",
 		"ts-jest": "^29.0.5",
-		"ts-node-dev": "^2.0.0",
+		"ts-node": "^10.9.1",
 		"typescript": "^5.0.2",
 		"database": "*"
 	},
 	"scripts": {
 		"start": "node .",
 		"build": "pnpx tsc",
-		"watch": "tsnd --respawn ./src/index.ts",
+		"watch": "nodemon --watch './**/*.ts' --exec 'ts-node-esm' ./src/index.ts",
 		"dev": "pnpm run watch",
 		"lint": "prettier . && eslint . --ext .ts",
 		"ncu": "pnpx npm-check-updates"
