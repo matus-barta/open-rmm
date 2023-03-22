@@ -17,10 +17,24 @@ export async function addComputer(req: Request<{}, {}, ComputerInput['body']>, r
 		}
 	});
 
-	console.log(query);
-
-	if (query.length == 0) return res.send({ message: 'Forbidden' });
-	else return res.send(query);
+	if (query.length == 0) {
+		return res.send({ message: 'Forbidden' });
+	} else {
+		const query = await prisma.computer.update({
+			where: {
+				OneTimeKey: req.body.OneTimeKey
+			},
+			data: {
+				Uuid: req.body.UUID,
+				IsAdded: true
+			},
+			select: {
+				Uuid: true
+			}
+		});
+		if (query == null) return res.send({ message: 'Internal Error' });
+		else return res.send(query);
+	}
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
