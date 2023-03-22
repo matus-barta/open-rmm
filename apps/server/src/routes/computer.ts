@@ -5,22 +5,27 @@ import { prisma } from 'database';
 // eslint-disable-next-line @typescript-eslint/ban-types
 export async function addComputer(req: Request<{}, {}, ComputerInput['body']>, res: Response) {
 	console.log(req.body);
-	const query = prisma.computer.findFirst({
+
+	const query = await prisma.computer.findMany({
 		where: {
-			OneTimeKey: req.body.OneTimeKey
+			OneTimeKey: req.body.OneTimeKey,
+			IsAdded: false,
+			IsAllowed: true
 		},
-		include: {
-			_count: true
+		select: {
+			Uuid: true
 		}
 	});
 
-	return res.send(query);
+	console.log(query);
+
+	if (query.length == 0) return res.send({ message: 'Forbidden' });
+	else return res.send(query);
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export async function test(req: Request<{}, {}, {}>, res: Response) {
 	const query = await prisma.computer.findMany();
 
-	console.log(query);
 	return res.send(query);
 }
