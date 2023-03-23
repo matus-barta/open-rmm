@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#rust bs
+target
+Cargo.lock
+
 # dependencies
 node_modules
 .pnp
