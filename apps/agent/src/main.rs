@@ -1,3 +1,4 @@
+use async_fs;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, env};
 use uuid::Uuid;
@@ -10,12 +11,16 @@ struct UuidResponse {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let comms = Comms {
+        config: load_config().await?,
+    };
+
     let args: Vec<String> = env::args().collect();
     if args.len() > 1 {
         if args[1].contains("--otk=") {
             let otk: Vec<_> = args[1].split('=').collect();
             if otk[1].len() == 64 {
-                register_computer(otk[1].to_string()).await?;
+                comms.register_computer(otk[1].to_string()).await?;
             } else {
                 println!("One Time key has to be 64 characters long!")
             }
@@ -32,27 +37,37 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn register_computer(otk: String) -> Result<(), Box<dyn std::error::Error>> {
-    let uuid = Uuid::new_v4();
-    save_uuid(uuid.to_string())?;
+struct Comms {
+    config: Config,
+}
 
-    let client = reqwest::Client::new();
+impl Comms {
+    pub async fn register_computer(&self, otk: String) -> Result<(), Box<dyn std::error::Error>> {
+        let uuid = Uuid::new_v4();
+        save_uuid(uuid.to_string()).await?;
 
-    let mut map = HashMap::new();
-    map.insert("UUID", uuid.to_string());
-    map.insert("OneTimeKey", otk);
+        let client = reqwest::Client::new();
 
-    let res_json = client
-        .post("http://localhost:5005/computer")
-        .json(&map)
-        .send()
-        .await?
-        .json::<UuidResponse>()
-        .await?;
+        let mut map = HashMap::new();
+        map.insert("UUID", uuid.to_string());
+        map.insert("OneTimeKey", otk);
 
-    println!("{:#?}", res_json);
+        let res_json = client
+            .post(self.config.url.clone())
+            .json(&map)
+            .send()
+            .await?
+            .json::<UuidResponse>()
+            .await?;
 
-    Ok(())
+        println!("{:#?}", res_json);
+
+        Ok(())
+    }
+
+    pub async fn report_system_info(&self) -> Result<(), Box<dyn std::error::Error>> {
+        Ok(())
+    }
 }
 
 fn usage_message() {
@@ -61,7 +76,19 @@ fn usage_message() {
             - \"--otk=<64 characters of generated One Time Key>: (without <>) will add computer to RMM\"");
 }
 
-fn save_uuid(uuid: String) -> std::io::Result<()> {
-    std::fs::write("uuid", uuid)?;
+async fn save_uuid(uuid: String) -> std::io::Result<()> {
+    async_fs::write("uuid", uuid).await?;
     Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Config {
+    url: String,
+}
+
+async fn load_config() -> std::io::Result<Config> {
+    let config_b = async_fs::read("config.json").await?;
+    let config: Config = serde_json::from_slice(&config_b)?;
+
+    Ok(config)
 }
