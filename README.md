@@ -2,14 +2,11 @@
 
 It's been **O** days since rewrite
 
-I don't know what I am doing xD
+I don't know what I am doing.
 
-"Simple" service for monitoring Windows and hopefully Linux computers.
+"Simple" service for monitoring Windows. Mac and Linux computers.
 
-## API
+## Toolchain dependencies
 
-### TODO
-
-## WWW
-
-### TODO
+- pnpm (node stuff)
+- cargo (rust)
