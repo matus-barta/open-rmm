@@ -36,10 +36,3 @@ export async function addComputer(req: Request<{}, {}, ComputerInput['body']>, r
 		else return res.send(query);
 	}
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function test(req: Request<{}, {}, {}>, res: Response) {
-	const query = await prisma.computer.findMany();
-
-	return res.send(query);
-}

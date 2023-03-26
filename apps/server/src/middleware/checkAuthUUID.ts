@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { findUUID } from '../service/computer.service';
+import { prisma } from 'database';
 import log from '../utils/logger';
 
 const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,8 +10,8 @@ const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) =>
 			return res.sendStatus(403);
 		}
 
-		const query = await findUUID({ UUID: deviceUUID, IsAllowed: true });
-		if (!query) {
+		const uuidExists = await checkUUID(deviceUUID);
+		if (!uuidExists) {
 			log.warn(`➡️ : Unauthenticated request - UUID: ${deviceUUID}, IP: ${req.ip}`);
 			return res.sendStatus(403);
 		}
@@ -22,5 +22,16 @@ const checkAuthUUID = async (req: Request, res: Response, next: NextFunction) =>
 		return res.sendStatus(400);
 	}
 };
+
+async function checkUUID(uuid: string) {
+	const query = await prisma.computer.findMany({
+		where: {
+			Uuid: uuid,
+			IsAllowed: true
+		}
+	});
+
+	return query.length > 0 && query.length < 2;
+}
 
 export default checkAuthUUID;

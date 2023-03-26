@@ -27,7 +27,11 @@ export const computers = t.router({
 							Type: true
 						}
 					}
-				}
+				},
+				orderBy: {
+					CreatedAt: 'desc'
+				},
+				take: 1
 			})
 		)
 });
