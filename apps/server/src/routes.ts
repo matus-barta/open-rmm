@@ -9,7 +9,9 @@ import { updateSystemInfo } from './routes/systemInfo';
 
 export default function (app: Express) {
 	// define a route handler for the default home page
-	app.get('/', (req: Request, res: Response) => res.send('❤️ Hello World! ❤️'));
+	app.get('/', (req: Request, res: Response) =>
+		res.send('<h1>❤️ Hello from Open RMM API server! ❤️</h1>')
+	);
 	app.get('/healthcheck', (req: Request, res: Response) => res.send({ status: 'OK' }));
 
 	//add computer during client installation

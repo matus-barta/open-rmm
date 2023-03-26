@@ -1,4 +1,4 @@
-import { boolean, date, object, string, TypeOf } from 'zod';
+import { boolean, object, string, TypeOf } from 'zod';
 import isIsoDate from '../utils/isoDate';
 
 export const systemInfoSchema = object({
