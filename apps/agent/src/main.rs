@@ -28,8 +28,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             usage_message()
         }
     } else if args.len() == 1 {
-        // do collection stuff
-        println!("collect stuff")
+        comms.report_system_info().await?;
     } else {
         usage_message()
     }
