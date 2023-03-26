@@ -2,6 +2,7 @@ use std::env;
 
 mod client;
 mod config;
+mod device_uuid;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

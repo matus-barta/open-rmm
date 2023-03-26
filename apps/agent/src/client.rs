@@ -1,9 +1,9 @@
-use async_fs;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::config::Config;
+use crate::device_uuid;
 
 pub struct Client {
     pub config: Config,
@@ -18,7 +18,7 @@ struct UuidResponse {
 impl Client {
     pub async fn register_computer(&self, otk: String) -> Result<(), Box<dyn std::error::Error>> {
         let uuid = Uuid::new_v4();
-        save_uuid(uuid.to_string()).await?;
+        device_uuid::save_uuid(uuid.to_string()).await?;
 
         let client = reqwest::Client::new();
 
@@ -27,7 +27,7 @@ impl Client {
         map.insert("OneTimeKey", otk);
 
         let res_json = client
-            .post(self.config.url.clone())
+            .post(self.config.url.clone() + "/computer")
             .json(&map)
             .send()
             .await?
@@ -40,11 +40,13 @@ impl Client {
     }
 
     pub async fn report_system_info(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let uuid = device_uuid::load_uuid().await?;
+
+        let mut map = HashMap::new();
+        map.insert("UUID", uuid);
+        //map.insert();
+
+        hostname::get()?;
         Ok(())
     }
-}
-
-async fn save_uuid(uuid: String) -> std::io::Result<()> {
-    async_fs::write("uuid", uuid).await?;
-    Ok(())
 }
