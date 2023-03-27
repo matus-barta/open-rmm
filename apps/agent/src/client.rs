@@ -1,3 +1,4 @@
+use chrono::{DateTime, NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use sysinfo::{System, SystemExt};
@@ -5,6 +6,8 @@ use uuid::Uuid;
 
 use crate::config::Config;
 use crate::device_uuid;
+
+mod pending_reboot;
 
 pub struct Client {
     pub config: Config,
@@ -47,12 +50,19 @@ impl Client {
         let mut map = HashMap::new();
 
         map.insert("UUID", device_uuid::load_uuid().await?);
-        map.insert("PendingReboot", "false".to_owned()); //TODO:
+        map.insert(
+            "PendingReboot",
+            pending_reboot::is_reboot_pending().to_string(),
+        );
         map.insert(
             "ComputerName",
             sys.host_name().unwrap_or_else(|| "<unknown>".to_owned()),
         );
-        map.insert("LastBootUpTime", sys.boot_time().to_string()); //TODO: convert to ISO time
+        map.insert(
+            "LastBootUpTime",
+            convert_unix_timestamp_to_iso(sys.boot_time()),
+        );
+        map.insert("Uptime", sys.uptime().to_string());
         map.insert(
             "OsVersion",
             sys.os_version().unwrap_or_else(|| "<unknown>".to_owned()),
@@ -130,4 +140,11 @@ fn parse_version(s: &str) -> Option<(u64, u64, u64)> {
     }
 
     Some((major, minor, patch))
+}
+
+fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
+    let naive_date_time =
+        NaiveDateTime::from_timestamp_millis(timestamp as i64).unwrap_or_default();
+    let date_time = DateTime::<Utc>::from_utc(naive_date_time, Utc);
+    return date_time.to_rfc3339();
 }
