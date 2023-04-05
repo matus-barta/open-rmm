@@ -9,6 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "preinstall": "npx only-allow pnpm",
     "server:dev": "turbo run dev --filter=!www --filter=!agent",
+    "www:dev": "turbo run dev --filter=!agent",
     "agent:dev": "turbo run dev --filter=!www"
   },
   "devDependencies": {
