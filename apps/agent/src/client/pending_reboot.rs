@@ -1,27 +1,55 @@
-use std::process::{Command, Stdio};
-
 pub fn is_reboot_pending() -> bool {
     #[cfg(target_os = "macos")]
     {
+        /*
         let output = Command::new("softwareupdate")
-            //.arg("Hello world")
-            //.arg("/Library/Updates/index.plist")
-            //.arg("InstallAtLogout")
-            //.stdout(Stdio::piped())
-            .spawn()
-            .expect("command failed to start");
+                   //.arg("Hello world")
+                   //.arg("/Library/Updates/index.plist")
+                   //.arg("InstallAtLogout")
+                   //.stdout(Stdio::piped())
+                   .spawn()
+                   .expect("command failed to start");
 
-        match output.wait_with_output() {
-            Ok(output) => println!(
-                "stdout: {} naaah",
-                String::from_utf8_lossy(output.stdout.as_slice())
-            ),
+               match output.wait_with_output() {
+                   Ok(output) => println!(
+                       "stdout: {} naaah",
+                       String::from_utf8_lossy(output.stdout.as_slice())
+                   ),
+                   Err(e) => {
+                       println!("{}", e.to_string());
+                       return false;
+                   }
+               }
+        */
+        return false; //FIXME: look at this in future for now macos in not critical to reboot, and does not have standard check for reboot
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        use powershell_script;
+
+        let pending_reboot_pwsh = include_str!("../scripts/pwsh/pending_reboot.ps1");
+        match powershell_script::run(create_shortcut) {
+            Ok(output) => {
+                println!("{}", output);
+            }
             Err(e) => {
-                println!("{}", e.to_string());
-                return false;
+                println!("Error: {}", e);
             }
         }
-
         return false;
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        use run_script;
+
+        let pending_reboot_sh = !include_str!("../scripts/bash/pending_reboot.sh");
+
+        let (code, output, error) = run_script::run_script!(pending_reboot_sh).unwrap();
+
+        println!("Exit Code: {}", code);
+        println!("Output: {}", output);
+        println!("Error: {}", error);
     }
 }

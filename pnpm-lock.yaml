@@ -10,6 +10,9 @@ importers:
       prettier: 2.8.6
       turbo: 1.8.5
 
+  apps/agent:
+    specifiers: {}
+
   apps/server:
     specifiers:
       '@types/express': ^4.17.17
