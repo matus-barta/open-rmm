@@ -85,8 +85,6 @@ impl Client {
         );
         map.insert("Type", detect_system_type::detect_system_type().to_string());
 
-        println!("{}", detect_system_type::detect_system_type());
-
         Ok(())
     }
 }
