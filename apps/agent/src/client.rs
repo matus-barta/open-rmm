@@ -50,7 +50,12 @@ impl Client {
 
         let mut map = HashMap::new();
 
-        map.insert("UUID", device_uuid::load_uuid().await?);
+        map.insert(
+            "UUID",
+            device_uuid::load_uuid()
+                .await
+                .expect("UUID is missing, did you register this device?"),
+        );
         map.insert(
             "PendingReboot",
             pending_reboot::is_reboot_pending().to_string(),
