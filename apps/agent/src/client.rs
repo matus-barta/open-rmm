@@ -5,6 +5,7 @@ use uuid::Uuid;
 
 use crate::config::Config;
 
+mod detect_system_type;
 mod device_uuid;
 mod os_version_name;
 mod pending_reboot;
@@ -82,7 +83,9 @@ impl Client {
             sys.kernel_version()
                 .unwrap_or_else(|| "<unknown>".to_owned()),
         );
-        map.insert("Type", "<unknown>".to_owned()); //TODO:
+        map.insert("Type", detect_system_type::detect_system_type().to_string());
+
+        println!("{}", detect_system_type::detect_system_type());
 
         Ok(())
     }
