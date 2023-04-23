@@ -26,12 +26,18 @@ pub fn is_reboot_pending() -> bool {
 
     #[cfg(target_os = "windows")]
     {
-        use powershell_script;
-
         let pending_reboot_pwsh = include_str!("../scripts/pwsh/pending_reboot.ps1");
-        match powershell_script::run(create_shortcut) {
+        match powershell_script::run(pending_reboot_pwsh) {
             Ok(output) => {
-                println!("{}", output);
+                let result = match &output.to_string() as &str {
+                    "True" => true,
+                    "true" => true,
+                    "False" => false,
+                    "false" => false,
+                    _ => false,
+                };
+
+                return result;
             }
             Err(e) => {
                 println!("Error: {}", e);

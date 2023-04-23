@@ -16,3 +16,5 @@ function Test-PendingReboot {
         
     return $false
 }
+
+Test-PendingReboot

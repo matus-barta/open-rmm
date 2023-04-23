@@ -78,10 +78,8 @@ impl Client {
         );
         map.insert("Type", "<unknown>".to_owned()); //TODO:
 
-        println!(
-            "{}",
-            process_os_name(sys.long_os_version(), sys.os_version())
-        );
+        println!("{}", pending_reboot::is_reboot_pending());
+
         Ok(())
     }
 }
@@ -117,11 +115,11 @@ fn get_macos_version_name(major: u64, minor: u64) -> String {
 fn process_os_name(long_os_version: Option<String>, os_version: Option<String>) -> String {
     let os_name = long_os_version.unwrap_or_else(|| "<unknown>".to_owned()); //MacOS 13.2.1
 
-    let sys_os_ver = os_version.unwrap_or_else(|| "<unknown>".to_owned()); //13.2.1
-    let version = parse_version(&sys_os_ver).unwrap_or_else(|| (0, 0, 0)); //13.2.1
-    let codename = get_macos_version_name(version.0, version.1); //Ventura
-
     if os_name.contains("MacOS") {
+        let sys_os_ver = os_version.unwrap_or_else(|| "<unknown>".to_owned()); //13.2.1
+        let version = parse_version(&sys_os_ver).unwrap_or_else(|| (0, 0, 0)); //13.2.1
+        let codename = get_macos_version_name(version.0, version.1); //Ventura
+
         format!("{}{}", os_name, codename)
     } else {
         os_name
