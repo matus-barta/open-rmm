@@ -17,7 +17,7 @@ chrono = "0.4.24"
 [target.'cfg(windows)'.dependencies]
 powershell_script = "1.1.0"
 
-[target.'cfg(linux)'.dependencies]
+[target.'cfg(unix)'.dependencies]
 run_script = "0.10.1"
 
 [dependencies.uuid]

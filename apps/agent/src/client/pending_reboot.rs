@@ -48,14 +48,18 @@ pub fn is_reboot_pending() -> bool {
 
     #[cfg(target_os = "linux")]
     {
-        use run_script;
+        let pending_reboot_sh = include_str!("../scripts/bash/pending_reboot.sh");
 
-        let pending_reboot_sh = !include_str!("../scripts/bash/pending_reboot.sh");
+        let (_code, output, _error) = run_script::run_script!(pending_reboot_sh).unwrap();
 
-        let (code, output, error) = run_script::run_script!(pending_reboot_sh).unwrap();
+        let result = match &output.to_string() as &str {
+            "True" => true,
+            "true" => true,
+            "False" => false,
+            "false" => false,
+            _ => false,
+        };
 
-        println!("Exit Code: {}", code);
-        println!("Output: {}", output);
-        println!("Error: {}", error);
+        return result;
     }
 }
