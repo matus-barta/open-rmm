@@ -29,10 +29,8 @@ pub fn is_reboot_pending() -> bool {
         let pending_reboot_pwsh = include_str!("../scripts/pwsh/pending_reboot.ps1");
         match powershell_script::run(pending_reboot_pwsh) {
             Ok(output) => {
-                let result = match &output.to_string() as &str {
-                    "True" => true,
+                let result = match &output.to_string().to_lowercase() as &str {
                     "true" => true,
-                    "False" => false,
                     "false" => false,
                     _ => false,
                 };
@@ -52,10 +50,8 @@ pub fn is_reboot_pending() -> bool {
 
         let (_code, output, _error) = run_script::run_script!(pending_reboot_sh).unwrap();
 
-        let result = match &output.to_string() as &str {
-            "True" => true,
+        let result = match &output.to_string().to_lowercase() as &str {
             "true" => true,
-            "False" => false,
             "false" => false,
             _ => false,
         };
