@@ -85,6 +85,8 @@ impl Client {
         );
         map.insert("Type", detect_system_type::detect_system_type().to_string());
 
+        //TODO: send data to server
+
         Ok(())
     }
 }

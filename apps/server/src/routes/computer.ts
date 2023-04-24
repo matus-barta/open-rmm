@@ -6,6 +6,7 @@ import { prisma } from 'database';
 export async function addComputer(req: Request<{}, {}, ComputerInput['body']>, res: Response) {
 	console.log(req.body);
 
+	//check if otk exists and is not added and is allowed - return uuid
 	const query = await prisma.computer.findMany({
 		where: {
 			OneTimeKey: req.body.OneTimeKey,
@@ -17,10 +18,12 @@ export async function addComputer(req: Request<{}, {}, ComputerInput['body']>, r
 		}
 	});
 
+	//if query is 0 otk is not valid
 	if (query.length == 0) {
 		return res.send({ message: 'Forbidden' });
 	} else {
 		const query = await prisma.computer.update({
+			//add UUID to valid otk
 			where: {
 				OneTimeKey: req.body.OneTimeKey
 			},

@@ -9,6 +9,7 @@ export async function updateSystemInfo(
 ) {
 	const sysInfo = req.body;
 
+	//update computer based on UUID
 	const query = await prisma.computer.update({
 		where: {
 			Uuid: sysInfo.UUID
