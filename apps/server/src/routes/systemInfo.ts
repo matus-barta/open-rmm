@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { SystemInfoInput } from '../schema/systemInfo.schema';
 import { prisma } from 'database';
+import log from '../utils/logger';
 
 export async function updateSystemInfo(
 	// eslint-disable-next-line @typescript-eslint/ban-types
@@ -8,6 +9,8 @@ export async function updateSystemInfo(
 	res: Response
 ) {
 	const sysInfo = req.body;
+
+	log.info(`System info update from: ${sysInfo.UUID}`);
 
 	//update computer based on UUID
 	const query = await prisma.computer.update({
@@ -23,7 +26,7 @@ export async function updateSystemInfo(
 					Type: sysInfo.Type,
 					OsName: sysInfo.OsName,
 					OsVersion: sysInfo.OsVersion,
-					PendingReboot: sysInfo.PendingReboot
+					PendingReboot: sysInfo.PendingReboot.toLowerCase() == 'true'
 				}
 			}
 		},
