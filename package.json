@@ -14,11 +14,10 @@
   },
   "devDependencies": {
     "prettier": "^2.8.6",
-    "turbo": "latest"
+    "turbo": "^1.9.3"
   },
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {},
   "packageManager": "pnpm@7.15.0"
 }
