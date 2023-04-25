@@ -32,7 +32,8 @@ impl Client {
 
         let res_json =
             send_post_req_with_uuid_res(&map, self.config.url.clone() + "/computer", false).await?;
-        println!("{:#?}", res_json);
+
+        println!("Sent Computer registration - Response:\n{:#?}", res_json);
 
         Ok(())
     }
@@ -46,9 +47,7 @@ impl Client {
             send_post_req_with_uuid_res(&map, self.config.url.clone() + "/systeminfo", true)
                 .await?;
 
-        println!("{:#?}", res_json);
-
-        //TODO: send data to server
+        println!("Sent System info report - Response:\n{:#?}", res_json);
 
         Ok(())
     }

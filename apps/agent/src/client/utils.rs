@@ -1,8 +1,9 @@
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::{DateTime, SecondsFormat, Utc};
+use std::time::{Duration, UNIX_EPOCH};
 
 pub fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
-    let naive_date_time =
-        NaiveDateTime::from_timestamp_millis(timestamp as i64).unwrap_or_default();
-    let date_time = DateTime::<Utc>::from_utc(naive_date_time, Utc);
-    return date_time.to_rfc3339();
+    let d = UNIX_EPOCH + Duration::from_secs(timestamp);
+
+    let date_time = DateTime::<Utc>::from(d);
+    return date_time.to_rfc3339_opts(SecondsFormat::Millis, true);
 }
