@@ -26,6 +26,9 @@ export async function updateSystemInfo(
 					PendingReboot: sysInfo.PendingReboot
 				}
 			}
+		},
+		select: {
+			Uuid: true
 		}
 	});
 
