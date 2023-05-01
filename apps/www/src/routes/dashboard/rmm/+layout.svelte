@@ -5,7 +5,7 @@
 	export let data: LayoutData;
 
 	const orgUnits = data.orgUnits.map((orgUnit) => ({
-		title: orgUnit.OrgUnitName,
+		title: orgUnit.OrgUnitTitle,
 		name: orgUnit.OrgUnitName,
 		count: orgUnit._count.Computers
 	}));
