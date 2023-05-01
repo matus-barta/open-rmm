@@ -18,16 +18,16 @@ model OrgUnit {
 }
 
 model Computer {
-  Id              Int          @id @default(autoincrement())
-  Uuid            String?      @unique
-  CreatedAt       DateTime     @default(now())
-  UpdatedAt       DateTime     @updatedAt
-  OneTimeKey      String       @unique
-  ComputerOrgUnit OrgUnit      @relation(fields: [OrgUnit], references: [OrgUnitName])
+  Id              Int         @id @default(autoincrement())
+  Uuid            String?     @unique
+  CreatedAt       DateTime    @default(now())
+  UpdatedAt       DateTime    @updatedAt
+  OneTimeKey      String      @unique
+  ComputerOrgUnit OrgUnit     @relation(fields: [OrgUnit], references: [OrgUnitName])
   OrgUnit         String
-  IsAdded         Boolean      @default(false)
-  IsAllowed       Boolean      @default(false)
-  SystemInfos     SystemInfo[]
+  IsAdded         Boolean     @default(false)
+  IsAllowed       Boolean     @default(false)
+  SystemInfo      SystemInfo?
   Updates         Update[]
   Antiviruses     Antivirus[]
   Volumes         Volume[]
@@ -35,12 +35,13 @@ model Computer {
 
 model SystemInfo {
   Id             Int      @id @default(autoincrement())
-  Computers      Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid   String
+  Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  ComputerUuid   String   @unique
   CreatedAt      DateTime @default(now())
+  UpdatedAt      DateTime @updatedAt
   PendingReboot  Boolean?
   ComputerName   String
-  Type           String
+  Type           String?
   LastBootupTime String
   OsVersion      String
   OsName         String
