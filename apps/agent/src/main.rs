@@ -6,7 +6,9 @@ mod config;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let client = client::Client {
-        config: config::load_config().await?,
+        config: config::load_config()
+            .await
+            .expect("Can't load config file!"),
     };
 
     let args: Vec<String> = env::args().collect();
