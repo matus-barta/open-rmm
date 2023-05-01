@@ -2,6 +2,8 @@ import { prisma } from 'database';
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
+import log from '$lib/utils/logger';
 
 export const computers = t.router({
 	list: t.procedure
@@ -18,7 +20,7 @@ export const computers = t.router({
 					CreatedAt: true,
 					IsAdded: true,
 					IsAllowed: true,
-					SystemInfos: {
+					SystemInfo: {
 						select: {
 							ComputerName: true,
 							PendingReboot: true,
@@ -27,11 +29,34 @@ export const computers = t.router({
 							Type: true
 						}
 					}
-				} /*,
-				orderBy: {
-					CreatedAt: 'desc'
+				}
+			})
+		),
+	createOtk: t.procedure
+		.use(logger)
+		.input(
+			z.object({
+				OrgUnit: z.string(),
+				IsAllowed: z.boolean().optional()
+			})
+		)
+		.query(({ input }) =>
+			prisma.computer.create({
+				data: {
+					OneTimeKey: generateOtk(),
+					OrgUnit: input.OrgUnit,
+					IsAllowed: input.IsAllowed
 				},
-				take: 1*/
+				select: {
+					OneTimeKey: true
+				}
 			})
 		)
 });
+
+function generateOtk() {
+	const OneTimeKey = nanoid(64); //generate unique one time key
+	log.warn(` ⚠ : Generated new OneTimeKey: ${OneTimeKey}`);
+
+	return OneTimeKey;
+}
