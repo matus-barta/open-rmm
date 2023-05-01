@@ -18,15 +18,26 @@ export async function updateSystemInfo(
 			Uuid: sysInfo.UUID
 		},
 		data: {
-			SystemInfos: {
-				create: {
-					ComputerName: sysInfo.ComputerName,
-					KernelVersion: sysInfo.KernelVersion,
-					LastBootupTime: sysInfo.LastBootUpTime,
-					Type: sysInfo.Type,
-					OsName: sysInfo.OsName,
-					OsVersion: sysInfo.OsVersion,
-					PendingReboot: sysInfo.PendingReboot.toLowerCase() == 'true'
+			SystemInfo: {
+				upsert: {
+					update: {
+						ComputerName: sysInfo.ComputerName,
+						KernelVersion: sysInfo.KernelVersion,
+						LastBootupTime: sysInfo.LastBootUpTime,
+						Type: sysInfo.Type,
+						OsName: sysInfo.OsName,
+						OsVersion: sysInfo.OsVersion,
+						PendingReboot: sysInfo.PendingReboot.toLowerCase() == 'true'
+					},
+					create: {
+						ComputerName: sysInfo.ComputerName,
+						KernelVersion: sysInfo.KernelVersion,
+						LastBootupTime: sysInfo.LastBootUpTime,
+						Type: sysInfo.Type,
+						OsName: sysInfo.OsName,
+						OsVersion: sysInfo.OsVersion,
+						PendingReboot: sysInfo.PendingReboot.toLowerCase() == 'true'
+					}
 				}
 			}
 		},
