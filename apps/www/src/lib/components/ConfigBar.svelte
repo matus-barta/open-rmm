@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch('close');
-	const refresh = () => dispatch('refresh');
+	const refresh = () => invalidateAll();
 
 	export let title: string;
 </script>
