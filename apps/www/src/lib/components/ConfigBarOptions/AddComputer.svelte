@@ -12,12 +12,6 @@
 			.OneTimeKey;
 	}
 
-	type OrgUnits = {
-		OrgUnitName: string;
-		OrgUnitTitle: string;
-		_count: { Computers: number };
-	}[];
-
 	let promise = getOrgUnits();
 	function getOrgUnits() {
 		return trpc($page).orgUnits.list.query();
