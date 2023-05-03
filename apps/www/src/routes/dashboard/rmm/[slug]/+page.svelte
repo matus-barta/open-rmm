@@ -1,15 +1,48 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import AddComputer from '$lib/components/AddComputer.svelte';
-	import BoolMark from '$lib/components/BoolMark.svelte';
+	import OsMark from '$lib/components/Marks/OsMark.svelte';
+	import TypeMark from '$lib/components/Marks/TypeMark.svelte';
+	import BoolMark from '$lib/components/Marks/BoolMark.svelte';
+
 	import ConfigBar from '$lib/components/ConfigBar.svelte';
-	import OsMark from '$lib/components/OsMark.svelte';
-	import TypeMark from '$lib/components/TypeMark.svelte';
+	import AddComputer from '$lib/components/ConfigBarOptions/AddComputer.svelte';
+	import ComputerInfo from '$lib/components/ConfigBarOptions/ComputerInfo.svelte';
+
 	import formatIsoDateTime from '$lib/utils/formatDateTime';
+
 	import type { PageData } from './$types';
+	import { page } from '$app/stores';
+	import { invalidateAll } from '$app/navigation';
+
 	export let data: PageData;
 
-	let configEnabled = false;
+	enum ConfigBarOptions {
+		AddComputer = 'Add Computer',
+		ComputerInfo = 'Computer Info'
+	}
+
+	type Computer = {
+		IsAllowed: boolean;
+		Uuid: string | null;
+		CreatedAt: string;
+		IsAdded: boolean;
+		SystemInfo: {
+			ComputerName: string | undefined;
+			PendingReboot: boolean | undefined | null;
+			LastBootupTime: string | undefined;
+			OsName: string | undefined;
+			Type: string | undefined | null;
+		} | null;
+	};
+
+	let _configEnabled = false;
+	let _configBarOption: ConfigBarOptions;
+	let _computer: Computer | undefined;
+
+	function showConfigBar(configBarOption: ConfigBarOptions, computer?: Computer) {
+		_configEnabled = true;
+		_configBarOption = configBarOption;
+		_computer = computer;
+	}
 </script>
 
 <svelte:head>
@@ -17,14 +50,20 @@
 </svelte:head>
 
 <div class="flex flex-col w-full pt-1 relative h-full">
-	{#if configEnabled}
+	{#if _configEnabled}
+		<!--TODO: implement this to the component itself-->
 		<ConfigBar
-			title="Add Computer"
+			title={_configBarOption}
 			on:close={() => {
-				configEnabled = false;
+				_configEnabled = false;
 			}}
 		>
-			<AddComputer />
+			{#if _configBarOption == ConfigBarOptions.AddComputer}
+				<AddComputer />
+			{:else if _configBarOption == ConfigBarOptions.ComputerInfo}
+				<ComputerInfo computer={_computer} />
+				<!--TODO: or just slap ID to it and load it in the component-->
+			{/if}
 		</ConfigBar>
 	{/if}
 
@@ -32,10 +71,10 @@
 		<button
 			class="button-ish"
 			on:click={() => {
-				configEnabled = true;
+				showConfigBar(ConfigBarOptions.AddComputer);
 			}}>Add Computer</button
 		>
-		<button class="button-ish">Refresh</button>
+		<button class="button-ish" on:click={invalidateAll}>Refresh</button>
 		<button class="button-ish">...</button>
 	</div>
 	<div class="w-full flex flex-col pt-5">
@@ -72,7 +111,24 @@
 			</thead>
 			<tbody class="text-xs">
 				{#each data.computers as computer}
-					<tr class="border-b border-dark-color-more-lighter font-light">
+					<tr
+						class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
+						on:click={() => {
+							showConfigBar(ConfigBarOptions.ComputerInfo, {
+								Uuid: computer.Uuid,
+								CreatedAt: computer.CreatedAt,
+								IsAdded: computer.IsAdded,
+								IsAllowed: computer.IsAllowed,
+								SystemInfo: {
+									ComputerName: computer.SystemInfo?.ComputerName,
+									LastBootupTime: computer.SystemInfo?.LastBootupTime,
+									OsName: computer.SystemInfo?.OsName,
+									PendingReboot: computer.SystemInfo?.PendingReboot,
+									Type: computer.SystemInfo?.Type
+								}
+							});
+						}}
+					>
 						<td>
 							{#if computer.SystemInfo != null}
 								<OsMark os={computer.SystemInfo.OsName} />
