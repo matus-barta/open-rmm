@@ -26,16 +26,16 @@
     "push": "prisma db push"
   },
   "dependencies": {
-    "@prisma/client": "^4.13.0"
+    "@prisma/client": "^4.16.0"
   },
   "devDependencies": {
     "config": "workspace:*",
-    "eslint": "^8.36.0",
-    "prisma": "^4.13.0",
-    "rimraf": "^4.4.0",
+    "eslint": "^8.43.0",
+    "prisma": "^4.16.0",
+    "rimraf": "^5.0.1",
     "tsconfig": "workspace:*",
-    "tsup": "^6.7.0",
-    "tsx": "^3.12.6",
-    "typescript": "^5.0.2"
+    "tsup": "^7.0.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.3"
   }
 }
