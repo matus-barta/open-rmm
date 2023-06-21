@@ -10,14 +10,16 @@
     "preinstall": "npx only-allow pnpm",
     "server:dev": "turbo run dev --filter=!www --filter=!agent",
     "www:dev": "turbo run dev --filter=!agent",
-    "agent:dev": "turbo run dev --filter=!www"
+    "agent:dev": "turbo run dev --filter=!www",
+    "update": "pnpx npm-check-updates -ws",
+    "upgrade": "pnpx npm-check-updates -ws -u"
   },
   "devDependencies": {
-    "prettier": "^2.8.6",
-    "turbo": "^1.9.3"
+    "prettier": "^2.8.8",
+    "turbo": "^1.10.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.16.0"
   },
-  "packageManager": "pnpm@7.15.0"
+  "packageManager": "pnpm@8.4.0"
 }
