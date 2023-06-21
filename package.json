@@ -12,7 +12,8 @@
     "www:dev": "turbo run dev --filter=!agent",
     "agent:dev": "turbo run dev --filter=!www",
     "update": "pnpx npm-check-updates -ws",
-    "upgrade": "pnpx npm-check-updates -ws -u"
+    "upgrade": "pnpx npm-check-updates -ws -u",
+    "update-turbo": "npx @turbo/codemod update"
   },
   "devDependencies": {
     "prettier": "^2.8.8",
