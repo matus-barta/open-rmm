@@ -1,19 +1,15 @@
-use axum::{response::IntoResponse, response::Response, routing::get, Json, Router};
-use serde::Serialize;
+use axum::response::{IntoResponse, Json, Response};
+use serde::{Deserialize, Serialize};
 
-pub fn routes() -> Router {
-    Router::new().route("/healthcheck", get(healthcheck))
+#[derive(Serialize, Deserialize, Debug)]
+struct Healthcheck {
+    status: String,
 }
 
-async fn healthcheck() -> Response {
+pub async fn healthcheck() -> Response {
     let healthcheck = Healthcheck {
         status: String::from("OK"),
     };
 
     Json(healthcheck).into_response()
-}
-
-#[derive(Serialize)]
-struct Healthcheck {
-    status: String,
 }
