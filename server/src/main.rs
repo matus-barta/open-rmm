@@ -1,5 +1,6 @@
 use std::net::SocketAddr;
 
+mod middleware;
 mod routes;
 
 #[tokio::main]
