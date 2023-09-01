@@ -1,4 +1,4 @@
-import { prisma } from 'database';
+import { Prisma, PrismaClient } from '@prisma/client'
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ export const computers = t.router({
 		.use(logger)
 		.input(z.string())
 		.query(({ input }) =>
-			prisma.computer.findMany({
+			PrismaClient.computer.findMany({
 				where: {
 					OrgUnit: input
 				},

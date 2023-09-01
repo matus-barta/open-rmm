@@ -1,4 +1,4 @@
-import { Prisma, prisma } from 'database';
+import { PrismaClient } from '@prisma/client'
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
@@ -6,7 +6,7 @@ import log from '$lib/utils/logger';
 
 export const orgUnits = t.router({
 	list: t.procedure.use(logger).query(() =>
-		prisma.orgUnit.findMany({
+		PrismaClient.orgUnit.findMany({
 			select: {
 				OrgUnitName: true,
 				OrgUnitTitle: true,

@@ -1,8 +1,8 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import type { UserConfig } from 'vite';
+import { defineConfig } from 'vite';
 import Icons from 'unplugin-icons/vite';
 
-const config: UserConfig = {
+export default defineConfig({
 	plugins: [
 		sveltekit(),
 		Icons({
@@ -12,6 +12,4 @@ const config: UserConfig = {
 	resolve: {
 		preserveSymlinks: true
 	}
-};
-
-export default config;
+});
