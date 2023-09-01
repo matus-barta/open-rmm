@@ -3,16 +3,11 @@ import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
 import log from '$lib/utils/logger';
+import { greet } from "db";
 
 export const orgUnits = t.router({
 	list: t.procedure.use(logger).query(() =>
-		PrismaClient.orgUnit.findMany({
-			select: {
-				OrgUnitName: true,
-				OrgUnitTitle: true,
-				_count: { select: { Computers: true } }
-			}
-		})
+		greet(`trpc server call`)
 	),
 	add: t.procedure
 		.use(logger)

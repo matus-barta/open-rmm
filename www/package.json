@@ -15,8 +15,7 @@
 		"preview": "vite preview",
 		"sort-package": "pnpx sort-package-json",
 		"test": "pnpx newman run ./tests/Open_RMM.postman_collection.json",
-		"modulize-wasm": "node ../db/modulize.mjs",
-		"wasm": "wasm-pack build ../db --target web && npm run modulize-wasm"
+		"wasm": "wasm-pack build ../db --target nodejs"
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.92",

@@ -1,36 +1,20 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { logger } from '$lib/trpc/middleware/logger';
 import { t } from '$lib/trpc/t';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import log from '$lib/utils/logger';
+import init, { greet } from "db";
 
 export const computers = t.router({
 	list: t.procedure
 		.use(logger)
 		.input(z.string())
 		.query(({ input }) =>
-			PrismaClient.computer.findMany({
-				where: {
-					OrgUnit: input
-				},
-				select: {
-					Id: true,
-					Uuid: true,
-					CreatedAt: true,
-					IsAdded: true,
-					IsAllowed: true,
-					SystemInfo: {
-						select: {
-							ComputerName: true,
-							PendingReboot: true,
-							LastBootupTime: true,
-							OsName: true,
-							Type: true
-						}
-					}
-				}
-			})
+			{	
+				init()
+				return greet(`trpc server call ${input}`)
+			}
 		),
 	createOtk: t.procedure
 		.use(logger)
@@ -41,7 +25,7 @@ export const computers = t.router({
 			})
 		)
 		.query(({ input }) =>
-			prisma.computer.create({
+			PrismaClient.computer.create({
 				data: {
 					OneTimeKey: generateOtk(),
 					OrgUnit: input.OrgUnit,
