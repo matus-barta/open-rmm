@@ -4,17 +4,19 @@
 	"private": false,
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
+		"build": "pnpm run wasm && vite build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev": "vite dev",
+		"dev": "pnpm run wasm && vite dev",
 		"format": "prettier --plugin-search-dir . --write .",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"ncu-update": "pnpx npm-check-updates",
 		"ncu-upgrade": "pnpx npm-check-updates -u",
 		"preview": "vite preview",
 		"sort-package": "pnpx sort-package-json",
-		"test": "newman run ./tests/Open_RMM.postman_collection.json"
+		"test": "pnpx newman run ./tests/Open_RMM.postman_collection.json",
+		"modulize-wasm": "node ../db/modulize.mjs",
+		"wasm": "wasm-pack build ../db --target web && npm run modulize-wasm"
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.92",
@@ -46,6 +48,7 @@
 		"typescript": "^5.0.0",
 		"unplugin-icons": "^0.16.5",
 		"vite": "^4.4.2",
+		"vite-plugin-wasm-pack": "^0.1.12",
 		"zod": "^3.21.4"
 	}
 }
