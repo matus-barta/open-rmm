@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,19 +20,19 @@ model Computer {
   CreatedAt       DateTime    @default(now())
   UpdatedAt       DateTime    @updatedAt
   OneTimeKey      String      @unique
-  ComputerOrgUnit OrgUnit     @relation(fields: [OrgUnit], references: [OrgUnitName])
-  OrgUnit         String
+  OrgUnitId       Int
   IsAdded         Boolean     @default(false)
   IsAllowed       Boolean     @default(false)
+  Antiviruses     Antivirus[]
+  ComputerOrgUnit OrgUnit     @relation(fields: [OrgUnitId], references: [Id])
   SystemInfo      SystemInfo?
   Updates         Update[]
-  Antiviruses     Antivirus[]
   Volumes         Volume[]
 }
 
 model SystemInfo {
-  Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid   String   @id @db.Uuid
+  Id             Int      @id @default(autoincrement())
+  ComputerUuid   String   @unique @db.Uuid
   CreatedAt      DateTime @default(now())
   UpdatedAt      DateTime @updatedAt
   PendingReboot  Boolean?
@@ -45,31 +42,31 @@ model SystemInfo {
   OsVersion      String
   OsName         String
   KernelVersion  String
+  Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
 }
 
 model Update {
   Id           Int      @id @default(autoincrement())
-  Computer     Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid String
+  ComputerUuid String   @db.Uuid
   CreatedAt    DateTime @default(now())
   Titles       String[]
   Count        Int
+  Computer     Computer @relation(fields: [ComputerUuid], references: [Uuid])
 }
 
 model Antivirus {
   Id               Int      @id @default(autoincrement())
-  Computers        Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid     String
+  ComputerUuid     String   @db.Uuid
   CreatedAt        DateTime @default(now())
   Name             String
   UpdateStatus     String
   ProtectionStatus String
+  Computers        Computer @relation(fields: [ComputerUuid], references: [Uuid])
 }
 
 model Volume {
   Id            Int      @id @default(autoincrement())
-  Computers     Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid  String
+  ComputerUuid  String   @db.Uuid
   CreatedAt     DateTime @default(now())
   VolumeId      String
   VolumeName    String?
@@ -77,4 +74,5 @@ model Volume {
   HealthStatus  String
   SizeRemaining Int
   Size          Int
+  Computers     Computer @relation(fields: [ComputerUuid], references: [Uuid])
 }
