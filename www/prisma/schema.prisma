@@ -37,7 +37,7 @@ model SystemInfo {
   UpdatedAt      DateTime    @updatedAt
   PendingReboot  Boolean?
   ComputerName   String
-  Type           MachineType @default(Unknown)
+  MachineType    MachineType @default(Unknown)
   LastBootupTime DateTime
   OsVersion      String
   OsName         String

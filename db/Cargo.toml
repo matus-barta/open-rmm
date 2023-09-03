@@ -11,4 +11,16 @@ crate-type = ["cdylib"]
 
 # deps
 [dependencies]
-wasm-bindgen = "0.2.63"
+wasm-bindgen = "0.2"
+tokio = { version = "1", features = ["full"] }
+sqlx = { version = "^0.7", features = [
+    "postgres",
+    "runtime-tokio",
+    "macros",
+    "chrono",
+    "uuid",
+] }
+uuid = "1.4"
+chrono = "0.4"
+wasm-bindgen-futures = "0.4.37"
+lazy_static = "1.4.0"

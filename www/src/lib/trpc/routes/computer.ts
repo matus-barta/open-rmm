@@ -11,10 +11,7 @@ export const computers = t.router({
 		.use(logger)
 		.input(z.string())
 		.query(({ input }) =>
-			{	
-				init()
-				return greet(`trpc server call ${input}`)
-			}
+			greet(`trpc server call ${input}`)
 		),
 	createOtk: t.procedure
 		.use(logger)
