@@ -19,7 +19,7 @@ model OrgUnit {
 
 model Computer {
   Id              Int         @id @default(autoincrement())
-  Uuid            String?     @unique
+  Uuid            String?     @unique @db.Uuid
   CreatedAt       DateTime    @default(now())
   UpdatedAt       DateTime    @updatedAt
   OneTimeKey      String      @unique
@@ -34,15 +34,14 @@ model Computer {
 }
 
 model SystemInfo {
-  Id             Int      @id @default(autoincrement())
   Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
-  ComputerUuid   String   @unique
+  ComputerUuid   String   @id @db.Uuid
   CreatedAt      DateTime @default(now())
   UpdatedAt      DateTime @updatedAt
   PendingReboot  Boolean?
   ComputerName   String
   Type           String?
-  LastBootupTime String
+  LastBootupTime DateTime
   OsVersion      String
   OsName         String
   KernelVersion  String
