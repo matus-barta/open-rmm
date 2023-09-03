@@ -31,18 +31,25 @@ model Computer {
 }
 
 model SystemInfo {
-  Id             Int      @id @default(autoincrement())
-  ComputerUuid   String   @unique @db.Uuid
-  CreatedAt      DateTime @default(now())
-  UpdatedAt      DateTime @updatedAt
+  Id             Int         @id @default(autoincrement())
+  ComputerUuid   String      @unique @db.Uuid
+  CreatedAt      DateTime    @default(now())
+  UpdatedAt      DateTime    @updatedAt
   PendingReboot  Boolean?
   ComputerName   String
-  Type           String?
+  Type           MachineType @default(Unknown)
   LastBootupTime DateTime
   OsVersion      String
   OsName         String
   KernelVersion  String
-  Computer       Computer @relation(fields: [ComputerUuid], references: [Uuid])
+  Computer       Computer    @relation(fields: [ComputerUuid], references: [Uuid])
+}
+
+enum MachineType {
+  LXC
+  VM
+  Physical
+  Unknown
 }
 
 model Update {
