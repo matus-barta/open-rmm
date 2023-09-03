@@ -15,7 +15,8 @@ pub fn greet(str: &str) -> String {
     format!("Hello, {}!", str)
 }
 
-#[derive(Debug)]
+#[derive(sqlx::Type, Debug)]
+#[sqlx(type_name = "MachineType")]
 pub enum MachineType {
     LXC,
     VM,
@@ -30,7 +31,7 @@ pub struct SystemInfo {
     pub CreatedAt: chrono::DateTime<chrono::Utc>,
     pub UpdatedAt: chrono::DateTime<chrono::Utc>,
     pub PendingReboot: Option<bool>,
-    pub Type: MachineType,
+    pub MachineType: MachineType,
     pub LastBootupTime: chrono::DateTime<chrono::Utc>,
     pub ComputerName: String,
     pub OsVersion: String,
@@ -39,8 +40,12 @@ pub struct SystemInfo {
 }
 
 #[wasm_bindgen]
-pub fn sql_test() -> () {
-    sqlx::query_as!(SystemInfo, "SELECT * FROM \"SystemInfo\"");
+pub async fn sql_test() -> () {
+    //  https://github.com/launchbadge/sqlx/issues/1004#issuecomment-764921020
+    sqlx::query_as!(
+        SystemInfo,
+        r#"SELECT "Id", "ComputerUuid", "CreatedAt", "UpdatedAt", "PendingReboot", "MachineType as "MachineType: MachineType"", "LastBootupTime", "ComputerName", "OsVersion", "OsName", "KernelVersion" FROM "SystemInfo""#
+    );
 }
 
 async fn create_pool_connection(database_url: String) -> Pool<Postgres> {
