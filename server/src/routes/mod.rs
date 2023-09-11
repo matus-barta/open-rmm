@@ -1,10 +1,16 @@
 use axum::response::Html;
 use axum::routing::post;
+use axum::Extension;
 use axum::{routing::get, Router};
 
 mod computer;
+mod error;
 mod healthcheck;
 mod system_info;
+
+pub use error::{Error, ResultExt};
+
+pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 pub fn routes() -> Router {
     Router::new()
@@ -14,6 +20,6 @@ pub fn routes() -> Router {
         )
         .route("/healthcheck", get(healthcheck::healthcheck))
         .route("/computer", post(computer::add_computer))
-        .route("/systeminfo", post(system_info::update_system_info))
+        .route("/systeminfo", get(system_info::update_system_info))
     //need to add checkUUID for this request ^^^^
 }

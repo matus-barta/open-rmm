@@ -1,5 +1,9 @@
 use axum::response::{IntoResponse, Json, Response};
+use axum::Extension;
 use serde::{Deserialize, Serialize};
+
+use crate::routes::{Error, Result};
+use crate::AppState;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SystemInfoSchema {
@@ -13,6 +17,15 @@ pub struct SystemInfoSchema {
     machine_type: String, //Physical, VM, LXC
 }
 
-pub async fn update_system_info(Json(body): Json<SystemInfoSchema>) -> Response {
-    todo!()
+#[derive(sqlx::FromRow, Serialize, Deserialize, Debug)]
+pub struct Test {
+    Id: i32,
+}
+
+pub async fn update_system_info(app_state: Extension<AppState>) -> Result<Json<Test>> {
+    let result = sqlx::query_as::<_, Test>(r#"SELECT "Id" FROM "Computer""#)
+        .fetch_one(&app_state.db_pool)
+        .await?;
+
+    Ok(Json(result))
 }
