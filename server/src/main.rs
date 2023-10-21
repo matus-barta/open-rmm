@@ -3,7 +3,10 @@ use dotenv::dotenv;
 use sqlx::PgPool;
 use std::net::SocketAddr;
 use tower_http::trace::TraceLayer;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use tracing::Level;
+use tracing_subscriber::{
+    filter::LevelFilter, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
+};
 
 mod db;
 mod middleware;
@@ -17,6 +20,10 @@ pub struct AppState {
 #[tokio::main]
 async fn main() {
     dotenv().ok(); // This line loads the environment variables from the ".env" file.
+
+    let log = std::env::var("LOG_LEVEL").expect("LOG_LEVEL must be set.");
+    println!("...Log level: {}", log);
+
     tracing_subscriber::registry()
         .with(tracing_subscriber::fmt::layer())
         .with(EnvFilter::from_env("LOG_LEVEL"))
