@@ -22,10 +22,14 @@ pub struct Test {
     Id: i32,
 }
 
-pub async fn update_system_info(app_state: Extension<AppState>) -> Result<Json<Test>> {
-    let result = sqlx::query_as::<_, Test>(r#"SELECT "Id" FROM "Computer""#)
+pub async fn update_system_info(
+    app_state: Extension<AppState>,
+) -> Result<Json<crate::db::system_info::SystemInfo>> {
+    /*let result = sqlx::query_as::<_, Test>(r#"SELECT "Id" FROM "Computer""#)
         .fetch_one(&app_state.db_pool)
         .await?;
+    */
 
+    let result = crate::db::system_info::sql_test(&app_state.db_pool).await?;
     Ok(Json(result))
 }

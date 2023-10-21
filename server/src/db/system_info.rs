@@ -1,4 +1,8 @@
-/*
+use serde::{Deserialize, Serialize};
+use sqlx::{FromRow, Pool, Postgres};
+
+use crate::routes::Result;
+
 #[derive(sqlx::Type, Debug, Serialize, Deserialize)]
 #[sqlx(type_name = "MachineType")]
 pub enum MachineType {
@@ -9,28 +13,26 @@ pub enum MachineType {
 }
 
 #[derive(Debug, FromRow, Serialize)]
+#[serde(rename_all = "PascalCase")]
+#[sqlx(rename_all = "PascalCase")]
 pub struct SystemInfo {
-    pub Id: i32,
-    pub ComputerUuid: uuid::Uuid,
-    pub CreatedAt: chrono::DateTime<chrono::Utc>,
-    pub UpdatedAt: chrono::DateTime<chrono::Utc>,
-    pub PendingReboot: Option<bool>,
-    pub MachineType: MachineType,
-    pub LastBootupTime: chrono::DateTime<chrono::Utc>,
-    pub ComputerName: String,
-    pub OsVersion: String,
-    pub OsName: String,
-    pub KernelVersion: String,
+    pub id: i32,
+    pub computer_uuid: uuid::Uuid,
+    pub created_at: chrono::DateTime<chrono::NaiveDateTime>,
+    pub updated_at: chrono::DateTime<chrono::NaiveDateTime>,
+    pub pending_reboot: Option<bool>,
+    pub machine_type: MachineType,
+    pub last_bootup_time: chrono::DateTime<chrono::NaiveDateTime>,
+    pub computer_name: String,
+    pub os_version: String,
+    pub os_name: String,
+    pub kernel_version: String,
 }
 
-pub async fn sql_test() -> Option<SystemInfo> {
+pub async fn sql_test(db_pool: &Pool<Postgres>) -> Result<SystemInfo, sqlx::Error> {
     //  https://github.com/launchbadge/sqlx/issues/1004#issuecomment-764921020
-    let result = sqlx::query_as(
-        r#"SELECT "Id", "ComputerUuid", "CreatedAt", "UpdatedAt", "PendingReboot", "MachineType", "LastBootupTime", "ComputerName", "OsVersion", "OsName", "KernelVersion" FROM "SystemInfo""#,
-    ).fetch_one(&PG_POOL.lock().unwrap().clone()).await; //https://morestina.net/blog/1774/rust-global-variables-demystified
-
-    match result {
-        Ok(res) => Some(res),
-        Err(_) => None,
-    }
-}*/
+    let result = sqlx::query_as::<Postgres, SystemInfo>(r#"SELECT * FROM "SystemInfo""#)
+        .fetch_one(db_pool)
+        .await?;
+    Ok(result)
+}
