@@ -17,8 +17,8 @@ model OrgUnit {
 model Computer {
   Id              Int         @id @default(autoincrement())
   Uuid            String?     @unique @db.Uuid
-  CreatedAt       DateTime    @default(now())
-  UpdatedAt       DateTime    @updatedAt
+  CreatedAt       DateTime    @default(now()) @db.Timestamptz()
+  UpdatedAt       DateTime    @updatedAt @db.Timestamptz()
   OneTimeKey      String      @unique
   OrgUnitId       Int
   IsAdded         Boolean     @default(false)
@@ -33,12 +33,12 @@ model Computer {
 model SystemInfo {
   Id             Int         @id @default(autoincrement())
   ComputerUuid   String      @unique @db.Uuid
-  CreatedAt      DateTime    @default(now())
-  UpdatedAt      DateTime    @updatedAt
+  CreatedAt      DateTime    @default(now()) @db.Timestamptz()
+  UpdatedAt      DateTime    @updatedAt @db.Timestamptz()
   PendingReboot  Boolean?
   ComputerName   String
   MachineType    MachineType @default(Unknown)
-  LastBootupTime DateTime
+  LastBootupTime DateTime    @db.Timestamptz()
   OsVersion      String
   OsName         String
   KernelVersion  String
@@ -55,7 +55,7 @@ enum MachineType {
 model Update {
   Id           Int      @id @default(autoincrement())
   ComputerUuid String   @db.Uuid
-  CreatedAt    DateTime @default(now())
+  CreatedAt    DateTime @default(now()) @db.Timestamptz()
   Titles       String[]
   Count        Int
   Computer     Computer @relation(fields: [ComputerUuid], references: [Uuid])
@@ -64,7 +64,7 @@ model Update {
 model Antivirus {
   Id               Int      @id @default(autoincrement())
   ComputerUuid     String   @db.Uuid
-  CreatedAt        DateTime @default(now())
+  CreatedAt        DateTime @default(now()) @db.Timestamptz()
   Name             String
   UpdateStatus     String
   ProtectionStatus String
@@ -74,7 +74,7 @@ model Antivirus {
 model Volume {
   Id            Int      @id @default(autoincrement())
   ComputerUuid  String   @db.Uuid
-  CreatedAt     DateTime @default(now())
+  CreatedAt     DateTime @default(now()) @db.Timestamptz()
   VolumeId      String
   VolumeName    String?
   VolumeLetter  String?
