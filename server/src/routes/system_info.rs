@@ -1,8 +1,8 @@
-use axum::response::{IntoResponse, Json, Response};
+use axum::response::Json;
 use axum::Extension;
 use serde::{Deserialize, Serialize};
 
-use crate::routes::{Error, Result};
+use crate::routes::Result;
 use crate::AppState;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -17,19 +17,9 @@ pub struct SystemInfoSchema {
     machine_type: String, //Physical, VM, LXC
 }
 
-#[derive(sqlx::FromRow, Serialize, Deserialize, Debug)]
-pub struct Test {
-    Id: i32,
-}
-
 pub async fn update_system_info(
     app_state: Extension<AppState>,
 ) -> Result<Json<crate::db::system_info::SystemInfo>> {
-    /*let result = sqlx::query_as::<_, Test>(r#"SELECT "Id" FROM "Computer""#)
-        .fetch_one(&app_state.db_pool)
-        .await?;
-    */
-
     let result = crate::db::system_info::sql_test(&app_state.db_pool).await?;
     Ok(Json(result))
 }

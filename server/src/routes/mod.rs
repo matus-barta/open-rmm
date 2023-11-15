@@ -1,6 +1,5 @@
 use axum::response::Html;
 use axum::routing::post;
-use axum::Extension;
 use axum::{routing::get, Router};
 
 mod computer;
