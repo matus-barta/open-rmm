@@ -1,9 +1,8 @@
-use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, Pool, Postgres};
+use sqlx::{Pool, Postgres};
 
 use crate::routes::Result;
 
-#[derive(sqlx::Type, Debug, Serialize, Deserialize)]
+#[derive(sqlx::Type, Debug, serde::Serialize, serde::Deserialize)]
 #[sqlx(type_name = "MachineType")]
 pub enum MachineType {
     LXC,
@@ -12,7 +11,7 @@ pub enum MachineType {
     Unknown,
 }
 
-#[derive(Debug, FromRow, Serialize)]
+#[derive(Debug, sqlx::FromRow, serde::Serialize)]
 #[serde(rename_all = "PascalCase")]
 #[sqlx(rename_all = "PascalCase")]
 pub struct SystemInfo {
