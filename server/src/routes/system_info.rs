@@ -1,9 +1,8 @@
 use axum::extract::Path;
-use axum::response::Json;
+use axum::response::{Json, Result};
 use axum::Extension;
 use serde::{Deserialize, Serialize};
 
-use crate::routes::Result;
 use crate::AppState;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -20,7 +19,7 @@ pub struct SystemInfoSchema {
 
 pub async fn update_system_info(
     app_state: Extension<AppState>,
-) -> Result<Json<crate::db::system_info::SystemInfo>> {
+) -> Result<Json<crate::db::system_info::SystemInfo>, anyhow::Error> {
     let result = crate::db::system_info::update_system_info(&app_state.db_pool).await?;
     Ok(Json(result))
 }
@@ -28,7 +27,14 @@ pub async fn update_system_info(
 pub async fn get_system_info(
     app_state: Extension<AppState>,
     Path(computer_uuid): Path<uuid::Uuid>,
-) -> Result<Json<crate::db::system_info::SystemInfo>> {
+) -> Result<Json<crate::db::system_info::SystemInfo>, anyhow::Error> {
     let result = crate::db::system_info::get_system_info(&app_state.db_pool, computer_uuid).await?;
+    Ok(Json(result))
+}
+
+pub async fn list_system_info(
+    app_state: Extension<AppState>,
+) -> Result<Json<Vec<uuid::Uuid>>, anyhow::Error> {
+    let result = crate::db::system_info::list_system_info(&app_state.db_pool).await?;
     Ok(Json(result))
 }

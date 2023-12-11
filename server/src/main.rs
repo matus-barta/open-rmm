@@ -46,8 +46,8 @@ async fn main() {
     tracing::info!("Server Running... ✅");
     tracing::debug!("➡️ at http://{addr}/");
 
-    axum::Server::bind(&addr)
-        .serve(routes.into_make_service())
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    axum::serve(listener, routes.into_make_service())
         .await
-        .unwrap()
+        .unwrap();
 }

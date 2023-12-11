@@ -1,6 +1,4 @@
-use sqlx::{Pool, Postgres};
-
-use crate::routes::Result;
+use sqlx::{Pool, Postgres, Row};
 
 #[derive(sqlx::Type, Debug, serde::Serialize, serde::Deserialize)]
 #[sqlx(type_name = "MachineType")]
@@ -32,14 +30,13 @@ pub async fn get_system_info(
     db_pool: &Pool<Postgres>,
     computer_uuid: uuid::Uuid,
 ) -> Result<SystemInfo, sqlx::Error> {
-    //  https://github.com/launchbadge/sqlx/issues/1004#issuecomment-764921020
     let result = sqlx::query_as::<Postgres, SystemInfo>(
         r#"SELECT * FROM "SystemInfo" WHERE "ComputerUuid" = $1"#,
     )
     .bind(computer_uuid)
     .fetch_one(db_pool)
     .await?;
-    Ok(result)
+    Ok::<SystemInfo, sqlx::Error>(result)
 }
 
 pub async fn update_system_info(db_pool: &Pool<Postgres>) -> Result<SystemInfo, sqlx::Error> {
@@ -47,5 +44,13 @@ pub async fn update_system_info(db_pool: &Pool<Postgres>) -> Result<SystemInfo, 
     let result = sqlx::query_as::<Postgres, SystemInfo>(r#"SELECT * FROM "SystemInfo""#)
         .fetch_one(db_pool)
         .await?;
-    Ok(result)
+    Ok::<SystemInfo, sqlx::Error>(result)
+}
+
+pub async fn list_system_info(db_pool: &Pool<Postgres>) -> Result<Vec<uuid::Uuid>, sqlx::Error> {
+    let result = sqlx::query(r#"SELECT "ComputerUuid" FROM "SystemInfo""#)
+        .map(|row: sqlx::postgres::PgRow| uuid::Uuid::try_parse(row.get("ComputerUuid")).unwrap())
+        .fetch_all(db_pool)
+        .await?;
+    Ok::<Vec<uuid::Uuid>, sqlx::Error>(result)
 }

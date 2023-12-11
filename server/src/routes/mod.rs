@@ -3,13 +3,8 @@ use axum::routing::post;
 use axum::{routing::get, Router};
 
 mod computer;
-mod error;
 mod healthcheck;
 mod system_info;
-
-pub use error::{Error, ResultExt};
-
-pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 pub fn routes() -> Router {
     Router::new()
@@ -24,7 +19,8 @@ pub fn routes() -> Router {
             "/systeminfo/:computer_uuid",
             get(system_info::get_system_info),
         )
+        .route("/systeminfo", get(system_info::list_system_info))
         //-----------------------AGENT API ENDPOINTS-------------------//
-        .route("/systeminfo", get(system_info::update_system_info))
+        .route("/systeminfo", post(system_info::update_system_info))
     //need to add checkUUID for this request ^^^^
 }
