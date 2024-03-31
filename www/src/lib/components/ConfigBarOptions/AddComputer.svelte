@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { trpc } from '$lib/trpc/client';
 	import { page } from '$app/stores';
 	import { copy } from 'svelte-copy';
 
@@ -8,13 +7,13 @@
 	let orgUnit: string;
 
 	async function addComputer() {
-		otk = (await trpc($page).computers.createOtk.query({ OrgUnit: orgUnit, IsAllowed: isAllowed }))
-			.OneTimeKey;
+		//otk = (await trpc($page).computers.createOtk.query({ OrgUnit: orgUnit, IsAllowed: isAllowed }))
+		//	.OneTimeKey;
 	}
 
 	let promise = getOrgUnits();
 	function getOrgUnits() {
-		return trpc($page).orgUnits.list.query();
+		//return trpc($page).orgUnits.list.query();
 	}
 
 	let info: string = '';
@@ -51,12 +50,12 @@
 			<label>
 				Org Unit
 				<select
-					class="bg-dark-color-lighter m-1 font-mono text-sm p-[0.5px] rounded-lg "
+					class="bg-dark-color-lighter m-1 font-mono text-sm p-[0.5px] rounded-lg"
 					bind:value={orgUnit}
 				>
-					{#each data as { OrgUnitName, OrgUnitTitle }}
+					<!--{#each data as { OrgUnitName, OrgUnitTitle }}
 						<option value={OrgUnitName}>{OrgUnitTitle}</option>
-					{/each}
+					{/each}-->
 				</select>
 			</label>
 
