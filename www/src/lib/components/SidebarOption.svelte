@@ -3,14 +3,14 @@
 	import IconHome from '$lib/icons/IconHome.svelte';
 
 	export let title: string;
-	export let name: string;
+	export let id: number;
 	export let path: string;
 	export let count: number;
 
-	$: selected = $page.url.pathname.includes(name);
+	$: selected = $page.url.pathname.includes(id.toString());
 </script>
 
-<a class="option {selected ? 'bg-dark-color-more-lighter' : 'bg-transparent'}" href="{path}{name}">
+<a class="option {selected ? 'bg-dark-color-more-lighter' : 'bg-transparent'}" href="{path}{id}">
 	<div class="flex flex-row items-center gap-2">
 		<div class="bg-accent-2-color-lighter rounded-md p-1 !stroke-grey-color-more-lighter">
 			<IconHome stroke={2} size="20" />

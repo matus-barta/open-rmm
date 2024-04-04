@@ -12,7 +12,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"gen-types": "supabase gen types typescript --db-url \"postgresql://postgres:supabase@docker03.home.anonymus09.com:5432/postgres\" > ./src/lib/database.types.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -41,5 +42,8 @@
 		"vite": "^5.0.3",
 		"vitest": "^1.2.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@supabase/supabase-js": "^2.41.1"
+	}
 }

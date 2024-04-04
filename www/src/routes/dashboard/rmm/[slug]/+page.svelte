@@ -110,51 +110,42 @@
 				</tr>
 			</thead>
 			<tbody class="text-xs">
-				{#each data.computers as computer}
+				{#each data.computer as computer}
 					<tr
 						class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
 						on:click={() => {
 							showConfigBar(ConfigBarOptions.ComputerInfo, {
-								Uuid: computer.Uuid,
-								CreatedAt: computer.CreatedAt,
-								IsAdded: computer.IsAdded,
-								IsAllowed: computer.IsAllowed,
+								Uuid: computer.uuid,
+								CreatedAt: computer.created_at,
+								IsAdded: computer.is_added,
+								IsAllowed: computer.is_allowed,
 								SystemInfo: {
-									ComputerName: computer.SystemInfo?.ComputerName,
-									LastBootupTime: computer.SystemInfo?.LastBootupTime,
-									OsName: computer.SystemInfo?.OsName,
-									PendingReboot: computer.SystemInfo?.PendingReboot,
-									Type: computer.SystemInfo?.Type
+									ComputerName: undefined,
+									LastBootupTime: undefined,
+									OsName: undefined,
+									PendingReboot: undefined,
+									Type: undefined
 								}
 							});
 						}}
 					>
 						<td>
-							{#if computer.SystemInfo != null}
-								<OsMark os={computer.SystemInfo.OsName} />
-							{/if}
+							<OsMark os={'computer.SystemInfo.OsName'} />
 						</td>
 						<td>
-							{#if computer.SystemInfo != null}
-								<TypeMark type={computer.SystemInfo.Type} />
-							{/if}
+							<TypeMark type={'computer.SystemInfo.Type'} />
 						</td>
 						<td class="flex justify-center items-center">
-							{#if computer.SystemInfo != null}
-								{computer.SystemInfo.ComputerName}
-							{/if}
+							{'computer.SystemInfo.ComputerName'}
 						</td>
 						<td>
 							{''}
 						</td>
 						<td>
-							<BoolMark is={computer.IsAdded} />
+							<BoolMark is={true} />
 						</td>
 						<td>
-							<BoolMark is={computer.IsAllowed} />
-						</td>
-						<td>
-							{''}
+							<BoolMark is={true} />
 						</td>
 						<td>
 							{''}
@@ -163,14 +154,13 @@
 							{''}
 						</td>
 						<td>
-							<BoolMark
-								is={computer.SystemInfo != null ? computer.SystemInfo.PendingReboot : null}
-							/>
+							{''}
+						</td>
+						<td>
+							<BoolMark is={true} />
 						</td>
 						<td class="flex justify-center items-center">
-							{#if computer.SystemInfo != null}
-								{formatIsoDateTime(computer.SystemInfo.LastBootupTime)}
-							{/if}
+							{"formatIsoDateTime('')"}
 						</td>
 					</tr>
 				{/each}

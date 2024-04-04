@@ -1,26 +1,34 @@
 <script lang="ts">
-	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SidebarOption from '$lib/components/SidebarOption.svelte';
+	import IconAdd from '$lib/icons/IconAdd.svelte';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
-
-	const orgUnits: string = data.orgUnits; /* data.orgUnits.map((orgUnit) => ({
-		title: orgUnit.OrgUnitTitle,
-		name: orgUnit.OrgUnitName,
-		count: orgUnit._count.Computers
-	}));*/
 </script>
 
 <div class="flex flex-row mb-auto w-full mx-auto h-full">
-	<!--<Sidebar
-		options={orgUnits}
-		add={{ path: '/dashboard/rmm/addorgunit/', title: 'Add Org. Unit' }}
-	/>-->
-	<p>{orgUnits}</p>
+	<div class="flex flex-col justify-between w-64 bg-dark-color">
+		<div class="flex flex-col">
+			{#each data.org_unit as option}
+				<SidebarOption
+					title={option.org_unit_name}
+					id={option.id}
+					path="/dashboard/rmm/"
+					count={0}
+				/>
+			{/each}
+		</div>
+		<div class="bg-darker-color h-11">
+			<a
+				href={'add.path'}
+				class="flex flex-row button-ish font-light hover:bg-transparent justify-center items-center space-x-2 h-full hover:text-accent-color hover:stroke-accent-color"
+			>
+				<IconAdd size="25" />
+				<span class="text-sm font-light">{'add.title'}</span>
+			</a>
+		</div>
+	</div>
 	<div class="w-full">
 		<slot />
 	</div>
 </div>
-
-<style>
-</style>
