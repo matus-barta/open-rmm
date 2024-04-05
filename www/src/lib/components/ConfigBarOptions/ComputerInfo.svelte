@@ -2,16 +2,15 @@
 	import formatIsoDateTime from '$lib/utils/formatDateTime';
 
 	type Computer = {
-		IsAllowed: boolean;
+		IsAllowed: boolean | null;
 		Uuid: string | null;
-		CreatedAt: string;
-		IsAdded: boolean;
+		IsAdded: boolean | null;
 		SystemInfo: {
-			ComputerName: string | undefined;
-			PendingReboot: boolean | undefined | null;
-			LastBootupTime: string | undefined;
-			OsName: string | undefined;
-			Type: string | undefined | null;
+			ComputerName: string | null;
+			PendingReboot: boolean | null;
+			LastBootupTime: string | null;
+			OsName: string | null;
+			Type: string | null;
 		} | null;
 	};
 
@@ -27,15 +26,6 @@
 				type="text"
 				disabled
 				value={computer?.Uuid}
-			/>
-		</label>
-		<label>
-			Created At
-			<input
-				class="rounded-lg w-full border-[0.5px] font-mono text-xs h-6 p-1"
-				type="text"
-				disabled
-				value={formatIsoDateTime(computer?.CreatedAt)}
 			/>
 		</label>
 		<label>

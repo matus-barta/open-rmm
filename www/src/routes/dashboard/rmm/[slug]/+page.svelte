@@ -21,16 +21,15 @@
 	}
 
 	type Computer = {
-		IsAllowed: boolean;
+		IsAllowed: boolean | null;
 		Uuid: string | null;
-		CreatedAt: string;
-		IsAdded: boolean;
+		IsAdded: boolean | null;
 		SystemInfo: {
-			ComputerName: string | undefined;
-			PendingReboot: boolean | undefined | null;
-			LastBootupTime: string | undefined;
-			OsName: string | undefined;
-			Type: string | undefined | null;
+			ComputerName: string | null;
+			PendingReboot: boolean | null;
+			LastBootupTime: string | null;
+			OsName: string | null;
+			Type: string | null;
 		} | null;
 	};
 
@@ -46,7 +45,11 @@
 </script>
 
 <svelte:head>
-	<title>Open RMM - {$page.params.slug}</title>
+	<title
+		>Open RMM - {data.org_unit_with_count.find((obj) => {
+			return obj.id === Number.parseInt($page.params.slug); //TODO: or should jut do request to DB for org_unit name?
+		})?.name}</title
+	>
 </svelte:head>
 
 <div class="flex flex-col w-full pt-1 relative h-full">
@@ -110,57 +113,56 @@
 				</tr>
 			</thead>
 			<tbody class="text-xs">
-				{#each data.computer as computer}
+				{#each data.computer_with_system_info as computer}
 					<tr
 						class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
 						on:click={() => {
 							showConfigBar(ConfigBarOptions.ComputerInfo, {
 								Uuid: computer.uuid,
-								CreatedAt: computer.created_at,
 								IsAdded: computer.is_added,
 								IsAllowed: computer.is_allowed,
 								SystemInfo: {
-									ComputerName: undefined,
-									LastBootupTime: undefined,
-									OsName: undefined,
-									PendingReboot: undefined,
-									Type: undefined
+									ComputerName: computer.computer_name,
+									LastBootupTime: computer.last_bootup_time,
+									OsName: computer.os_name,
+									PendingReboot: computer.pending_reboot,
+									Type: computer.machine_type
 								}
 							});
 						}}
 					>
 						<td>
-							<OsMark os={'computer.SystemInfo.OsName'} />
+							<OsMark os={computer.os_name} />
 						</td>
 						<td>
-							<TypeMark type={'computer.SystemInfo.Type'} />
+							<TypeMark type={computer.machine_type} />
 						</td>
 						<td class="flex justify-center items-center">
-							{'computer.SystemInfo.ComputerName'}
+							{computer.computer_name}
 						</td>
 						<td>
-							{''}
+							{'description'}
 						</td>
 						<td>
-							<BoolMark is={true} />
+							<BoolMark is={computer.is_added} />
 						</td>
 						<td>
-							<BoolMark is={true} />
+							<BoolMark is={computer.is_allowed} />
 						</td>
 						<td>
-							{''}
+							{'AV'}
 						</td>
 						<td>
-							{''}
+							{'disk'}
 						</td>
 						<td>
-							{''}
+							<BoolMark is={false} />
 						</td>
 						<td>
-							<BoolMark is={true} />
+							<BoolMark is={computer.pending_reboot} />
 						</td>
 						<td class="flex justify-center items-center">
-							{"formatIsoDateTime('')"}
+							{formatIsoDateTime(computer.last_bootup_time)}
 						</td>
 					</tr>
 				{/each}

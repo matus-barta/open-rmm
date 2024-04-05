@@ -36,16 +36,6 @@
 				required
 			/>
 		</label>
-		<label>
-			Organization Unit Title:
-			<input
-				disabled={creating}
-				name="OrgUnitTitle"
-				value={form?.OrgUnitTitle ?? ''}
-				autocomplete="off"
-				required
-			/>
-		</label>
 		<input
 			class="button-ish border-[1px] rounded-lg border-grey-color py-2 hover:bg-dark-color-more-lighter"
 			type="submit"

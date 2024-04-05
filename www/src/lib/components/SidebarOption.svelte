@@ -2,12 +2,12 @@
 	import { page } from '$app/stores';
 	import IconHome from '$lib/icons/IconHome.svelte';
 
-	export let title: string;
-	export let id: number;
+	export let title: string | null;
+	export let id: number | null;
 	export let path: string;
-	export let count: number;
+	export let count: number | null;
 
-	$: selected = $page.url.pathname.includes(id.toString());
+	$: selected = $page.url.pathname.includes(id != null ? id.toString() : '');
 </script>
 
 <a class="option {selected ? 'bg-dark-color-more-lighter' : 'bg-transparent'}" href="{path}{id}">
@@ -20,7 +20,7 @@
 	<span>{count}</span>
 </a>
 
-<style>
+<style lang="postcss">
 	.option {
 		@apply flex flex-row items-center justify-between px-2 py-1 mx-2 my-1 rounded-md font-normal tracking-normal text-sm text-grey-color-more-lighter;
 	}

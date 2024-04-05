@@ -42,23 +42,30 @@ export type Database = {
             referencedRelation: "org_unit"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "public_computer_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_unit_with_count"
+            referencedColumns: ["id"]
+          },
         ]
       }
       org_unit: {
         Row: {
           created_at: string
           id: number
-          org_unit_name: string
+          name: string
         }
         Insert: {
           created_at?: string
           id?: number
-          org_unit_name?: string
+          name?: string
         }
         Update: {
           created_at?: string
           id?: number
-          org_unit_name?: string
+          name?: string
         }
         Relationships: []
       }
@@ -104,11 +111,56 @@ export type Database = {
             referencedRelation: "computer"
             referencedColumns: ["uuid"]
           },
+          {
+            foreignKeyName: "public_system_info_computer_uuid_fkey"
+            columns: ["computer_uuid"]
+            isOneToOne: true
+            referencedRelation: "computer_with_system_info"
+            referencedColumns: ["uuid"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      computer_with_system_info: {
+        Row: {
+          computer_name: string | null
+          is_added: boolean | null
+          is_allowed: boolean | null
+          kernel_version: string | null
+          last_bootup_time: string | null
+          machine_type: Database["public"]["Enums"]["machine_type"] | null
+          org_unit_id: number | null
+          os_name: string | null
+          os_version: string | null
+          pending_reboot: boolean | null
+          uuid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_computer_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_unit"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_computer_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_unit_with_count"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_unit_with_count: {
+        Row: {
+          computer_count: number | null
+          id: number | null
+          name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

@@ -9,22 +9,22 @@
 <div class="flex flex-row mb-auto w-full mx-auto h-full">
 	<div class="flex flex-col justify-between w-64 bg-dark-color">
 		<div class="flex flex-col">
-			{#each data.org_unit as option}
+			{#each data.org_unit_with_count as org_unit}
 				<SidebarOption
-					title={option.org_unit_name}
-					id={option.id}
+					title={org_unit.name}
+					id={org_unit.id}
 					path="/dashboard/rmm/"
-					count={0}
+					count={org_unit.computer_count}
 				/>
 			{/each}
 		</div>
 		<div class="bg-darker-color h-11">
 			<a
-				href={'add.path'}
+				href={'/dashboard/rmm/addorgunit'}
 				class="flex flex-row button-ish font-light hover:bg-transparent justify-center items-center space-x-2 h-full hover:text-accent-color hover:stroke-accent-color"
 			>
 				<IconAdd size="25" />
-				<span class="text-sm font-light">{'add.title'}</span>
+				<span class="text-sm font-light">{'Add Org unit'}</span>
 			</a>
 		</div>
 	</div>
