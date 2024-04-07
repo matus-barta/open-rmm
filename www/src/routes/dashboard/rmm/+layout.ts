@@ -1,9 +1,9 @@
 import type { LayoutLoad } from './$types';
-import { supabase } from '$lib/supabase';
+import { supabaseClient } from '$lib/server/supabase';
 import { error } from '@sveltejs/kit';
 
 export const load: LayoutLoad = async () => {
-	const { data: org_unit_with_count, error: db_error } = await supabase
+	const { data: org_unit_with_count, error: db_error } = await supabaseClient
 		.from('org_unit_with_count')
 		.select();
 	if (!org_unit_with_count) throw error(404, db_error); //TODO: log error and show some client friendly msg

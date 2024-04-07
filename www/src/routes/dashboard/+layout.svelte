@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '../../app.css';
 	import IconLogo from '$lib/icons/IconLogo.svelte';
 	import IconSettings from '$lib/icons/IconSettings.svelte';
 	import IconRMM from '$lib/icons/IconRMM.svelte';

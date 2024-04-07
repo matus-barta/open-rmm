@@ -1,10 +1,10 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { supabase } from '$lib/supabase';
+import { supabaseClient } from '$lib/server/supabase';
 
 export const load: PageLoad = async (event) => {
 	//computers: trpc(event).computers.list.query(event.params.slug)
-	const { data: computer_with_system_info, error: db_error } = await supabase
+	const { data: computer_with_system_info, error: db_error } = await supabaseClient
 		.from('computer_with_system_info')
 		.select()
 		.eq('org_unit_id', event.params.slug);

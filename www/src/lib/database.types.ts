@@ -7,15 +7,41 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
-      computer: {
+      computers: {
         Row: {
           created_at: string
           is_added: boolean
           is_allowed: boolean
           one_time_key: string | null
-          org_unit_id: number | null
+          org_unit_uuid: string
+          tenant_uuid: string
           uuid: string
         }
         Insert: {
@@ -23,7 +49,8 @@ export type Database = {
           is_added?: boolean
           is_allowed?: boolean
           one_time_key?: string | null
-          org_unit_id?: number | null
+          org_unit_uuid?: string
+          tenant_uuid?: string
           uuid?: string
         }
         Update: {
@@ -31,43 +58,94 @@ export type Database = {
           is_added?: boolean
           is_allowed?: boolean
           one_time_key?: string | null
-          org_unit_id?: number | null
+          org_unit_uuid?: string
+          tenant_uuid?: string
           uuid?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_computer_org_unit_id_fkey"
-            columns: ["org_unit_id"]
+            foreignKeyName: "public_computer_org_unit_uuid_fkey"
+            columns: ["org_unit_uuid"]
             isOneToOne: false
-            referencedRelation: "org_unit"
-            referencedColumns: ["id"]
+            referencedRelation: "org_units"
+            referencedColumns: ["uuid"]
           },
           {
-            foreignKeyName: "public_computer_org_unit_id_fkey"
-            columns: ["org_unit_id"]
+            foreignKeyName: "public_computer_tenant_uuid_fkey"
+            columns: ["tenant_uuid"]
             isOneToOne: false
-            referencedRelation: "org_unit_with_count"
-            referencedColumns: ["id"]
+            referencedRelation: "tenants"
+            referencedColumns: ["uuid"]
           },
         ]
       }
-      org_unit: {
+      org_units: {
         Row: {
           created_at: string
-          id: number
           name: string
+          tenant_uuid: string
+          uuid: string
         }
         Insert: {
           created_at?: string
-          id?: number
           name?: string
+          tenant_uuid?: string
+          uuid?: string
         }
         Update: {
           created_at?: string
-          id?: number
           name?: string
+          tenant_uuid?: string
+          uuid?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_org_unit_tenant_uuid_fkey"
+            columns: ["tenant_uuid"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          photo: string | null
+          tenant_id: string | null
+          uuid: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          photo?: string | null
+          tenant_id?: string | null
+          uuid: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          photo?: string | null
+          tenant_id?: string | null
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_profiles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "public_profiles_uuid_fkey"
+            columns: ["uuid"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       system_info: {
         Row: {
@@ -108,65 +186,217 @@ export type Database = {
             foreignKeyName: "public_system_info_computer_uuid_fkey"
             columns: ["computer_uuid"]
             isOneToOne: true
-            referencedRelation: "computer"
-            referencedColumns: ["uuid"]
-          },
-          {
-            foreignKeyName: "public_system_info_computer_uuid_fkey"
-            columns: ["computer_uuid"]
-            isOneToOne: true
-            referencedRelation: "computer_with_system_info"
+            referencedRelation: "computers"
             referencedColumns: ["uuid"]
           },
         ]
       }
-    }
-    Views: {
-      computer_with_system_info: {
+      tenants: {
         Row: {
-          computer_name: string | null
-          is_added: boolean | null
-          is_allowed: boolean | null
-          kernel_version: string | null
-          last_bootup_time: string | null
-          machine_type: Database["public"]["Enums"]["machine_type"] | null
-          org_unit_id: number | null
-          os_name: string | null
-          os_version: string | null
-          pending_reboot: boolean | null
-          uuid: string | null
+          created_at: string
+          name: string
+          uuid: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_computer_org_unit_id_fkey"
-            columns: ["org_unit_id"]
-            isOneToOne: false
-            referencedRelation: "org_unit"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_computer_org_unit_id_fkey"
-            columns: ["org_unit_id"]
-            isOneToOne: false
-            referencedRelation: "org_unit_with_count"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      org_unit_with_count: {
-        Row: {
-          computer_count: number | null
-          id: number | null
-          name: string | null
+        Insert: {
+          created_at?: string
+          name: string
+          uuid?: string
+        }
+        Update: {
+          created_at?: string
+          name?: string
+          uuid?: string
         }
         Relationships: []
       }
+    }
+    Views: {
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
     }
     Enums: {
       machine_type: "LXC" | "VM" | "Physical" | "Unknown"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+  storage: {
+    Tables: {
+      buckets: {
+        Row: {
+          allowed_mime_types: string[] | null
+          avif_autodetection: boolean | null
+          created_at: string | null
+          file_size_limit: number | null
+          id: string
+          name: string
+          owner: string | null
+          owner_id: string | null
+          public: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_mime_types?: string[] | null
+          avif_autodetection?: boolean | null
+          created_at?: string | null
+          file_size_limit?: number | null
+          id: string
+          name: string
+          owner?: string | null
+          owner_id?: string | null
+          public?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_mime_types?: string[] | null
+          avif_autodetection?: boolean | null
+          created_at?: string | null
+          file_size_limit?: number | null
+          id?: string
+          name?: string
+          owner?: string | null
+          owner_id?: string | null
+          public?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      migrations: {
+        Row: {
+          executed_at: string | null
+          hash: string
+          id: number
+          name: string
+        }
+        Insert: {
+          executed_at?: string | null
+          hash: string
+          id: number
+          name: string
+        }
+        Update: {
+          executed_at?: string | null
+          hash?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      objects: {
+        Row: {
+          bucket_id: string | null
+          created_at: string | null
+          id: string
+          last_accessed_at: string | null
+          metadata: Json | null
+          name: string | null
+          owner: string | null
+          owner_id: string | null
+          path_tokens: string[] | null
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          bucket_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          name?: string | null
+          owner?: string | null
+          owner_id?: string | null
+          path_tokens?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          bucket_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          name?: string | null
+          owner?: string | null
+          owner_id?: string | null
+          path_tokens?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "objects_bucketId_fkey"
+            columns: ["bucket_id"]
+            isOneToOne: false
+            referencedRelation: "buckets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      can_insert_object: {
+        Args: {
+          bucketid: string
+          name: string
+          owner: string
+          metadata: Json
+        }
+        Returns: undefined
+      }
+      extension: {
+        Args: {
+          name: string
+        }
+        Returns: string
+      }
+      filename: {
+        Args: {
+          name: string
+        }
+        Returns: string
+      }
+      foldername: {
+        Args: {
+          name: string
+        }
+        Returns: string[]
+      }
+      get_size_by_bucket: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          size: number
+          bucket_id: string
+        }[]
+      }
+      search: {
+        Args: {
+          prefix: string
+          bucketname: string
+          limits?: number
+          levels?: number
+          offsets?: number
+          search?: string
+          sortcolumn?: string
+          sortorder?: string
+        }
+        Returns: {
+          name: string
+          id: string
+          updated_at: string
+          created_at: string
+          last_accessed_at: string
+          metadata: Json
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never

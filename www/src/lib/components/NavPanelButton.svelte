@@ -22,7 +22,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.navButton {
 		@apply p-4 border-l-2 border-transparent;
 	}
