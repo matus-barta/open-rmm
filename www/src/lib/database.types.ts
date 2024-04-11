@@ -81,19 +81,25 @@ export type Database = {
       }
       org_units: {
         Row: {
+          color: string | null
           created_at: string
+          icon_id: number
           name: string
           tenant_uuid: string
           uuid: string
         }
         Insert: {
+          color?: string | null
           created_at?: string
+          icon_id?: number
           name?: string
           tenant_uuid?: string
           uuid?: string
         }
         Update: {
+          color?: string | null
           created_at?: string
+          icon_id?: number
           name?: string
           tenant_uuid?: string
           uuid?: string
@@ -113,21 +119,21 @@ export type Database = {
           created_at: string
           full_name: string
           photo: string | null
-          tenant_id: string | null
+          tenant_id: string
           uuid: string
         }
         Insert: {
           created_at?: string
           full_name: string
           photo?: string | null
-          tenant_id?: string | null
+          tenant_id: string
           uuid: string
         }
         Update: {
           created_at?: string
           full_name?: string
           photo?: string | null
-          tenant_id?: string | null
+          tenant_id?: string
           uuid?: string
         }
         Relationships: [

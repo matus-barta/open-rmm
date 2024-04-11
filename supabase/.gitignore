@@ -2,3 +2,4 @@
 .branches
 .temp
 .env
+pnpm-lock.yaml

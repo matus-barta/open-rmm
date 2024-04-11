@@ -3,6 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import type { Handle } from '@sveltejs/kit';
 import type { Database } from '$lib/database.types';
 
+//https://www.reddit.com/r/sveltejs/comments/16w2o41/supabase_auth_and_sveltekit_docs_suck_so_here_we/
+//https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=hooks&framework=sveltekit
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabaseServer = createServerClient<Database>(
 		PUBLIC_SUPABASE_URL,
@@ -42,7 +44,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		const {
 			data: { session }
-		} = await event.locals.supabaseServer.auth.getSession();
+		} = await event.locals.supabaseServer.auth.getSession(); //https://github.com/supabase/auth-js/issues/873
 
 		return { session, user };
 	};
