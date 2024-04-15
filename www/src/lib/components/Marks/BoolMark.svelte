@@ -1,6 +1,6 @@
 <script lang="ts">
 	import IconQuestion from '$lib/icons/IconQuestion.svelte';
-	export let is: boolean | null;
+	export let is: boolean | null | undefined;
 
 	const size = 20;
 	const stroke = 2.5;
@@ -40,7 +40,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.checkmark {
 		@apply flex justify-center p-[1px];
 	}

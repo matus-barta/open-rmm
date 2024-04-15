@@ -5,13 +5,16 @@
 		IsAllowed: boolean | null;
 		Uuid: string | null;
 		IsAdded: boolean | null;
-		SystemInfo: {
-			ComputerName: string | null;
-			PendingReboot: boolean | null;
-			LastBootupTime: string | null;
-			OsName: string | null;
-			Type: string | null;
-		} | null;
+		SystemInfo:
+			| {
+					ComputerName: string | null | undefined;
+					PendingReboot: boolean | null | undefined;
+					LastBootupTime: string | null | undefined;
+					OsName: string | null | undefined;
+					Type: string | null | undefined;
+			  }
+			| null
+			| undefined;
 	};
 
 	export let computer: Computer | undefined;

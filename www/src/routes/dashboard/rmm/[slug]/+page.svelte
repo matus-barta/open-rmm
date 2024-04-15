@@ -11,9 +11,12 @@
 
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
-	import { invalidateAll } from '$app/navigation';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import { error } from '@sveltejs/kit';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
+	$: orgUnitName = '';
 
 	enum ConfigBarOptions {
 		AddComputer = 'Add Computer',
@@ -24,13 +27,16 @@
 		IsAllowed: boolean | null;
 		Uuid: string | null;
 		IsAdded: boolean | null;
-		SystemInfo: {
-			ComputerName: string | null;
-			PendingReboot: boolean | null;
-			LastBootupTime: string | null;
-			OsName: string | null;
-			Type: string | null;
-		} | null;
+		SystemInfo:
+			| {
+					ComputerName: string | null | undefined;
+					PendingReboot: boolean | null | undefined;
+					LastBootupTime: string | null | undefined;
+					OsName: string | null | undefined;
+					Type: string | null | undefined;
+			  }
+			| null
+			| undefined;
 	};
 
 	let _configEnabled = false;
@@ -42,14 +48,53 @@
 		_configBarOption = configBarOption;
 		_computer = computer;
 	}
+
+	const get_computers_in_org_unit = async (org_unit_uuid: string) => {
+		const { data: computers, error: db_error } = await data.supabaseClient
+			.from('computers')
+			.select(
+				`uuid,
+			is_allowed,
+			is_added,
+			system_info(
+				machine_type,
+				pending_reboot,
+				computer_name,
+				last_bootup_time,
+				os_version,
+				os_name,
+				kernel_version
+			)`
+			)
+			.eq('org_unit_uuid', org_unit_uuid);
+		if (!computers) {
+			console.log(db_error);
+			throw error(404, db_error);
+		} //TODO: log error and show some client friendly msg
+		return computers;
+	};
+
+	const get_org_unit_name = async (org_unit_uuid: string) => {
+		const { data: org_unit, error: db_error } = await data.supabaseClient
+			.from('org_units')
+			.select('name')
+			.eq('uuid', org_unit_uuid)
+			.limit(1)
+			.single();
+		if (!org_unit) {
+			console.log(db_error);
+			throw error(404, db_error);
+		} //TODO: log error and show some client friendly msg
+		return org_unit.name;
+	};
+
+	afterNavigate(async () => {
+		orgUnitName = await get_org_unit_name($page.params.slug);
+	});
 </script>
 
 <svelte:head>
-	<title
-		>Open RMM - {data.org_unit_with_count.find((obj) => {
-			return obj.id === Number.parseInt($page.params.slug); //TODO: or should jut do request to DB for org_unit name?
-		})?.name}</title
-	>
+	<title>Open RMM - {orgUnitName}</title>
 </svelte:head>
 
 <div class="flex flex-col w-full pt-1 relative h-full">
@@ -113,59 +158,61 @@
 				</tr>
 			</thead>
 			<tbody class="text-xs">
-				{#each data.computer_with_system_info as computer}
-					<tr
-						class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
-						on:click={() => {
-							showConfigBar(ConfigBarOptions.ComputerInfo, {
-								Uuid: computer.uuid,
-								IsAdded: computer.is_added,
-								IsAllowed: computer.is_allowed,
-								SystemInfo: {
-									ComputerName: computer.computer_name,
-									LastBootupTime: computer.last_bootup_time,
-									OsName: computer.os_name,
-									PendingReboot: computer.pending_reboot,
-									Type: computer.machine_type
-								}
-							});
-						}}
-					>
-						<td>
-							<OsMark os={computer.os_name} />
-						</td>
-						<td>
-							<TypeMark type={computer.machine_type} />
-						</td>
-						<td class="flex justify-center items-center">
-							{computer.computer_name}
-						</td>
-						<td>
-							{'description'}
-						</td>
-						<td>
-							<BoolMark is={computer.is_added} />
-						</td>
-						<td>
-							<BoolMark is={computer.is_allowed} />
-						</td>
-						<td>
-							{'AV'}
-						</td>
-						<td>
-							{'disk'}
-						</td>
-						<td>
-							<BoolMark is={false} />
-						</td>
-						<td>
-							<BoolMark is={computer.pending_reboot} />
-						</td>
-						<td class="flex justify-center items-center">
-							{formatIsoDateTime(computer.last_bootup_time)}
-						</td>
-					</tr>
-				{/each}
+				{#await get_computers_in_org_unit($page.params.slug) then data}
+					{#each data as computer}
+						<tr
+							class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
+							on:click={() => {
+								showConfigBar(ConfigBarOptions.ComputerInfo, {
+									Uuid: computer.uuid,
+									IsAdded: computer.is_added,
+									IsAllowed: computer.is_allowed,
+									SystemInfo: {
+										ComputerName: computer.system_info?.computer_name,
+										LastBootupTime: computer.system_info?.last_bootup_time,
+										OsName: computer.system_info?.os_name,
+										PendingReboot: computer.system_info?.pending_reboot,
+										Type: computer.system_info?.machine_type
+									}
+								});
+							}}
+						>
+							<td>
+								<OsMark os={computer.system_info?.os_name} />
+							</td>
+							<td>
+								<TypeMark type={computer.system_info?.machine_type} />
+							</td>
+							<td class="flex justify-center items-center">
+								{computer.system_info?.computer_name}
+							</td>
+							<td>
+								{'description'}
+							</td>
+							<td>
+								<BoolMark is={computer.is_added} />
+							</td>
+							<td>
+								<BoolMark is={computer.is_allowed} />
+							</td>
+							<td>
+								{'AV'}
+							</td>
+							<td>
+								{'disk'}
+							</td>
+							<td>
+								<BoolMark is={false} />
+							</td>
+							<td>
+								<BoolMark is={computer.system_info?.pending_reboot} />
+							</td>
+							<td class="flex justify-center items-center">
+								{formatIsoDateTime(computer.system_info?.last_bootup_time)}
+							</td>
+						</tr>
+					{/each}
+				{/await}
 			</tbody>
 		</table>
 	</div>

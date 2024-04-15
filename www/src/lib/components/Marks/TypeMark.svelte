@@ -1,6 +1,6 @@
 <script lang="ts">
 	import IconQuestion from '$lib/icons/IconQuestion.svelte';
-	export let type: string | null;
+	export let type: string | null | undefined;
 
 	const size = 20;
 	const stroke = 2.5;
@@ -42,7 +42,7 @@
 			>
 		{/if}
 	</div>
-{:else if type?.toLowerCase().includes('container')}
+{:else if type?.toLowerCase().includes('lxc')}
 	<div class="checkmark">
 		<svg width={size} height={size} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
 			><path
@@ -57,7 +57,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.checkmark {
 		@apply flex justify-center p-[1px]  text-grey-color;
 	}

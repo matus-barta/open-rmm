@@ -24,7 +24,7 @@
 			.eq('org_unit_uuid', org_unit_uuid);
 		if (!count) {
 			console.log(db_error);
-			throw error(500, db_error);
+			throw error(500, db_error != null ? db_error : 'db_error is null but got error?!');
 		} //TODO: log error and show some client friendly msg
 		return count;
 	};

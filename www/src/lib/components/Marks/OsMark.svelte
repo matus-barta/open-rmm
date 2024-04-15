@@ -1,7 +1,7 @@
 <script lang="ts">
 	import IconQuestion from '$lib/icons/IconQuestion.svelte';
 
-	export let os: string | null;
+	export let os: string | null | undefined;
 
 	const size = 15;
 	const stroke = 2.5;
@@ -47,7 +47,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="postcss">
 	.checkmark {
 		@apply flex justify-center p-[1px];
 	}
