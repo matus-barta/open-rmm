@@ -40,6 +40,7 @@ export const actions: Actions = {
 			//verify user is not null (the insert doesn't like null option)
 			const full_name = body.full_name as string; //TODO: verify user input
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { data: db_req_data2, error: db_err2 } = await supabaseServiceClient
 				.from('profiles')
 				.insert([{ uuid: user_data.user.id, full_name: full_name, tenant_id: db_req_data[0].uuid }])

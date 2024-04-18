@@ -4,7 +4,6 @@ import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
 import type { Database } from '$lib/database.types';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
-	console.log('Ran client layout load');
 	const supabaseClient = createBrowserClient<Database>(
 		PUBLIC_SUPABASE_URL,
 		PUBLIC_SUPABASE_ANON_KEY,

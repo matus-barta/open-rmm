@@ -9,11 +9,11 @@
 	<h1 class="text-3xl font-bold underline">Open RMM</h1>
 	<form action="?/login" method="post" class="flex flex-col">
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label>Email</label>
-		<input type="text" name="email" />
+		<label for="email">Email</label>
+		<input type="text" name="email" id="email" />
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label>Password</label>
-		<input type="password" name="password" />
+		<label for="password">Password</label>
+		<input type="password" name="password" id="password" />
 		<button type="submit" class="">Login</button>
 	</form>
 </main>

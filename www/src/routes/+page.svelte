@@ -28,7 +28,7 @@
 		<p>Please login or register.</p>
 		<div class="flex flex-col">
 			<a class="button-ish" href="/auth/login">Login</a>
-			<a class="buttlon-ish" href="/auth/register">register</a>
+			<a class="buttlon-ish" href="/auth/register">Register</a>
 		</div>
 	{/if}
 </main>
