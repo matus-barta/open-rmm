@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"gen-types": "supabase gen types typescript --local > ./src/lib/database.types.ts",
+		"gen-types": "supabase gen types typescript --local > ./src/lib/db/database.types.ts",
 		"ncu": "pnpx npm-check-updates",
 		"ncu-u": "pnpx npm-check-updates -u"
 	},
@@ -21,9 +21,9 @@
 		"@faker-js/faker": "^8.4.1",
 		"@playwright/test": "^1.43.1",
 		"@supabase/ssr": "^0.3.0",
-		"@supabase/supabase-js": "^2.42.4",
+		"@supabase/supabase-js": "^2.42.5",
 		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/kit": "^2.5.6",
+		"@sveltejs/kit": "^2.5.7",
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
 		"@testing-library/jest-dom": "^6.4.2",
 		"@testing-library/svelte": "^5.0.1",
@@ -48,7 +48,7 @@
 		"tailwindcss": "^3.4.3",
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.5",
-		"vite": "^5.2.9",
+		"vite": "^5.2.10",
 		"vitest": "^1.5.0"
 	},
 	"type": "module"
