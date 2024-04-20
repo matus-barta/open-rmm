@@ -12,8 +12,7 @@
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
-	import { error } from '@sveltejs/kit';
-	import { onMount } from 'svelte';
+	import { get_computers_in_org_unit, get_org_unit_name } from '$lib/db/orgUnit';
 
 	export let data: PageData;
 	$: orgUnitName = '';
@@ -49,47 +48,8 @@
 		_computer = computer;
 	}
 
-	const get_computers_in_org_unit = async (org_unit_uuid: string) => {
-		const { data: computers, error: db_error } = await data.supabaseClient
-			.from('computers')
-			.select(
-				`uuid,
-			is_allowed,
-			is_added,
-			system_info(
-				machine_type,
-				pending_reboot,
-				computer_name,
-				last_bootup_time,
-				os_version,
-				os_name,
-				kernel_version
-			)`
-			)
-			.eq('org_unit_uuid', org_unit_uuid);
-		if (!computers) {
-			console.log(db_error);
-			throw error(404, db_error);
-		} //TODO: log error and show some client friendly msg
-		return computers;
-	};
-
-	const get_org_unit_name = async (org_unit_uuid: string) => {
-		const { data: org_unit, error: db_error } = await data.supabaseClient
-			.from('org_units')
-			.select('name')
-			.eq('uuid', org_unit_uuid)
-			.limit(1)
-			.single();
-		if (!org_unit) {
-			console.log(db_error);
-			throw error(404, db_error);
-		} //TODO: log error and show some client friendly msg
-		return org_unit.name;
-	};
-
 	afterNavigate(async () => {
-		orgUnitName = await get_org_unit_name($page.params.slug);
+		orgUnitName = await get_org_unit_name(data.supabaseClient, $page.params.slug);
 	});
 </script>
 
@@ -158,8 +118,8 @@
 				</tr>
 			</thead>
 			<tbody class="text-xs">
-				{#await get_computers_in_org_unit($page.params.slug) then data}
-					{#each data as computer}
+				{#await get_computers_in_org_unit(data.supabaseClient, $page.params.slug) then computers}
+					{#each computers as computer}
 						<tr
 							class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
 							on:click={() => {

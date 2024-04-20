@@ -9,41 +9,13 @@
 	import IconDoc from '$lib/icons/IconDoc.svelte';
 	import { defaultRoute } from '$lib/config';
 	import type { LayoutData } from './$types';
-	import { error } from '@sveltejs/kit';
+	import { get_tenant } from '$lib/db/tenant';
+	import { get_profile } from '$lib/db/user';
 
 	export let data: LayoutData;
 	const user = data.session?.user;
 
 	const size = 30;
-
-	const get_tenant = async (tenant_uuid: string) => {
-		const { data: tenant, error: db_error } = await data.supabaseClient
-			.from('tenants')
-			.select('name')
-			.eq('uuid', tenant_uuid)
-			.limit(1) //https://supabase.com/docs/reference/javascript/single
-			.single();
-		if (!tenant) {
-			console.log(db_error);
-			throw error(404, db_error);
-		} //TODO: log error and show some client friendly msg
-		return tenant;
-	};
-
-	const get_profile = async (user_uuid: string) => {
-		console.log(user_uuid);
-		const { data: profile, error: db_error } = await data.supabaseClient
-			.from('profiles')
-			.select('photo, full_name, tenant_id')
-			.eq('uuid', user_uuid)
-			.limit(1)
-			.single();
-		if (!profile) {
-			console.log(db_error);
-			throw error(404, db_error);
-		} //TODO: log error and show some client friendly msg
-		return profile;
-	};
 </script>
 
 <div id="Main" class="flex flex-col h-screen">
@@ -55,8 +27,8 @@
 			<IconLogo size="42" />
 		</a>
 		{#if user}
-			{#await get_profile(user.id) then profile}
-				{#await get_tenant(profile.tenant_id) then tenant}
+			{#await get_profile(data.supabaseClient, user.id) then profile}
+				{#await get_tenant(data.supabaseClient, profile.tenant_id) then tenant}
 					<span class="pl-1 w-fit whitespace-nowrap">{tenant.name}</span>
 				{/await}
 				<SearchBox />
