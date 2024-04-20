@@ -13,7 +13,7 @@
 {:else}
 	<div class="group flex relative">
 		<a href={link} class="navButton button-ish">
-			<slot />
+			<slot /> //TODO: replace with icon selector
 		</a>
 		<span
 			class="group-hover:opacity-100 transition-opacity delay-1500 duration-150 ease-in-out bg-dark-color-more-lighter text-grey-color inline-block px-2 py-1 text-sm font-medium rounded-lg shadow-sm absolute left-[74px] opacity-0 m-4 mx-auto"
