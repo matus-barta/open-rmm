@@ -1,11 +1,12 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { createServerClient } from '@supabase/ssr';
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import type { Database } from '$lib/database.types';
 
 //https://www.reddit.com/r/sveltejs/comments/16w2o41/supabase_auth_and_sveltekit_docs_suck_so_here_we/
 //https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=hooks&framework=sveltekit
 export const handle: Handle = async ({ event, resolve }) => {
+	//prepare supabaseServer function
 	event.locals.supabaseServer = createServerClient<Database>(
 		PUBLIC_SUPABASE_URL,
 		PUBLIC_SUPABASE_ANON_KEY,
@@ -33,7 +34,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	 * doesn't validate the JWT, this function validates the JWT by first calling
 	 * `getUser` and aborts early if the JWT signature is invalid.
 	 */
-	event.locals.safeGetSession = async () => {
+	//prepare safeGetSession function - now only local one
+	const safeGetSession = async () => {
 		const {
 			data: { user },
 			error
@@ -48,6 +50,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		return { session, user };
 	};
+
+	//get user session
+	const { session, user } = await safeGetSession();
+
+	//load to locals
+	event.locals.session = session;
+	event.locals.user = user;
+
+	//TODO: make some nice function to check over all protected routes
+	if (event.url.pathname.startsWith('/dashboard')) {
+		if (!event.locals.user) throw redirect(303, '/');
+	}
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
