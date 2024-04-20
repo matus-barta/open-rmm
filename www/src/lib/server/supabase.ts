@@ -4,4 +4,9 @@ import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { Database } from '$lib/db/database.types';
 
 //https://github.com/orgs/supabase/discussions/15860
-export const supabaseServiceClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE_KEY);
+export const supabaseServiceClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE_KEY, {
+	auth: {
+		autoRefreshToken: false,
+		persistSession: false
+	}
+});

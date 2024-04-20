@@ -2,6 +2,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
+	import { registrationEnabled } from '$lib/config';
 	export let data: PageData;
 
 	const submitLogout: SubmitFunction = async ({ cancel }) => {
@@ -28,7 +29,9 @@
 		<p>Please login or register.</p>
 		<div class="flex flex-col">
 			<a class="button-ish" href="/auth/login">Login</a>
-			<a class="buttlon-ish" href="/auth/register">Register</a>
+			{#if registrationEnabled}
+				<a class="buttlon-ish" href="/auth/register">Register</a>
+			{/if}
 		</div>
 	{/if}
 </main>
