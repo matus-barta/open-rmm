@@ -1,3 +1,4 @@
+import { defaultRoute } from '$lib/config';
 import { supabaseServiceClient } from '$lib/server/supabase';
 import { AuthApiError } from '@supabase/supabase-js';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
@@ -50,7 +51,8 @@ export const actions: Actions = {
 				return fail(500, { error: 'Server error, please try again later.' });
 			}
 
-			throw redirect(303, '/'); //when successful redirect
+			//when successful then redirect
+			throw redirect(303, defaultRoute);
 		} else {
 			//here failing when user is null
 			return fail(500, { error: 'Server error, please try again later.' });

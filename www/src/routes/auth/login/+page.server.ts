@@ -1,6 +1,7 @@
 import { AuthApiError } from '@supabase/supabase-js';
 import type { Actions } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
+import { defaultRoute } from '$lib/config';
 
 export const actions: Actions = {
 	login: async ({ request, locals }) => {
@@ -19,6 +20,6 @@ export const actions: Actions = {
 			return fail(500, { error: 'Server error , please try again later.' });
 		}
 
-		throw redirect(303, '/');
+		throw redirect(303, defaultRoute);
 	}
 };

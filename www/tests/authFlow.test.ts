@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { defaultRoute } from '$lib/config';
 
 const userData = {
 	fullName: faker.person.fullName(),
@@ -15,7 +16,8 @@ test('register user and show email on index page', async ({ page }) => {
 	await page.getByLabel('Password').fill(userData.password);
 	await page.getByLabel('Tenant name').fill(userData.companyName);
 	await page.getByRole('button', { name: 'Register' }).click();
-	await expect(page).toHaveURL('/');
+	await expect(page).toHaveURL(defaultRoute);
+	await page.goto('/');
 	await expect(page.getByText(`Welcome back ${userData.email}!`)).toBeVisible();
 });
 
@@ -24,7 +26,8 @@ test('login user', async ({ page }) => {
 	await page.getByLabel('Email').fill(userData.email);
 	await page.getByLabel('Password').fill(userData.password);
 	await page.getByRole('button', { name: 'Login' }).click();
-	await expect(page).toHaveURL('/');
+	await expect(page).toHaveURL(defaultRoute);
+	await page.goto('/');
 	await expect(page.getByText(`Welcome back ${userData.email}!`)).toBeVisible();
 });
 
@@ -33,8 +36,9 @@ test('logout user', async ({ page }) => {
 	await page.getByLabel('Email').fill(userData.email);
 	await page.getByLabel('Password').fill(userData.password);
 	await page.getByRole('button', { name: 'Login' }).click();
+	await expect(page).toHaveURL(defaultRoute);
 
-	await expect(page).toHaveURL('/');
+	await page.goto('/');
 	await page.getByRole('button', { name: 'Logout' }).click();
 
 	await expect(page).toHaveURL('/');
@@ -47,8 +51,8 @@ test('check company name on /dashboard', async ({ page }) => {
 	await page.getByLabel('Password').fill(userData.password);
 	await page.getByRole('button', { name: 'Login' }).click();
 
-	await page.goto('/dashboard');
 	await page.waitForLoadState();
+	await expect(page).toHaveURL(defaultRoute);
 	await expect(page).toHaveTitle('Open RMM - Dashboard');
 
 	await expect(page.getByText(userData.companyName)).toBeVisible();
