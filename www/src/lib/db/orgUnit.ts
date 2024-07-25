@@ -74,3 +74,34 @@ export const get_computers_in_org_unit = async (
 	} //TODO: log error and show some client friendly msg
 	return computers;
 };
+
+/**
+ * WORKS only as service account - RLS only for reads
+ * FIXME:fix RLS!
+ * @param supabaseClient
+ * @param user_id
+ * @param org_unit_name
+ * @param tenant_id
+ * @param color
+ * @param icon_id
+ */
+export const add_org_unit = async (
+	supabaseClient: SupabaseClient<Database>,
+	user_id: string,
+	org_unit_name: string,
+	tenant_id: string,
+	color?: string,
+	icon_id?: number
+) => {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { data: db_req_data, error: db_error } = await supabaseClient
+		.from('org_units')
+		.insert([
+			{ uuid: user_id, name: org_unit_name, tenant_uuid: tenant_id, color: color, icon_id: icon_id }
+		])
+		.select();
+	if (db_error) {
+		console.log(db_error);
+		throw error(404, db_error);
+	} //TODO: log error and show some client friendly msg
+};

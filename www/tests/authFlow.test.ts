@@ -58,3 +58,6 @@ test('check company name on /dashboard', async ({ page }) => {
 	await expect(page.getByText(userData.companyName)).toBeVisible();
 	await expect(page.getByText(userData.fullName)).toBeVisible();
 });
+
+//TODO: check for default org unit
+//TODO: check for redirecting when logged in

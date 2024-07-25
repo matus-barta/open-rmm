@@ -1,4 +1,5 @@
 import { defaultRoute, registrationEnabled } from '$lib/config';
+import { add_org_unit } from '$lib/db/orgUnit';
 import { supabaseServiceClient } from '$lib/server/supabase';
 import { AuthApiError } from '@supabase/supabase-js';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
@@ -8,6 +9,7 @@ export const actions: Actions = {
 		if (registrationEnabled) {
 			const body = Object.fromEntries(await request.formData());
 
+			//-----------REGISTERING USER----------//
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { data: user_data, error: err } = await locals.supabase.auth.signUp({
 				email: body.email as string,
@@ -27,7 +29,7 @@ export const actions: Actions = {
 
 			const tenant_name = body.tenant_name as string; //TODO: do some input checking
 
-			//creating tenant
+			//-----------CREATING TENANT-----------//
 			const { data: db_req_data, error: db_err } = await supabaseServiceClient
 				.from('tenants')
 				.insert([{ name: tenant_name }])
@@ -37,7 +39,7 @@ export const actions: Actions = {
 				return fail(500, { error: 'Server error, please try again later.' });
 			}
 
-			//creating user profile with id of user and tenant id
+			//-------CREATING USER PROFILE WITH ID OF USER AND TENANT ID--------//
 			if (user_data.user) {
 				//verify user is not null (the insert doesn't like null option)
 				const full_name = body.full_name as string; //TODO: verify user input
@@ -53,6 +55,9 @@ export const actions: Actions = {
 				if (db_err2) {
 					return fail(500, { error: 'Server error, please try again later.' });
 				}
+
+				//----------CREATE DEFAULT ORG UNIT---------//
+				add_org_unit(supabaseServiceClient, user_data.user.id, 'Default', db_req_data[0].uuid);
 
 				//when successful then redirect
 				throw redirect(303, defaultRoute);
