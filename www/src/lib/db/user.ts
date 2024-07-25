@@ -3,7 +3,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from './database.types';
 
 export const get_profile = async (supabaseClient: SupabaseClient<Database>, user_uuid: string) => {
-	console.log(user_uuid);
+	console.log(`Your UUID: ${user_uuid}`);
+
 	const { data: profile, error: db_error } = await supabaseClient
 		.from('profiles')
 		.select('photo, full_name, tenant_id')
