@@ -8,7 +8,7 @@ export const actions: Actions = {
 		const body = Object.fromEntries(await request.formData());
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { data, error: err } = await locals.supabaseServer.auth.signInWithPassword({
+		const { data, error: err } = await locals.supabase.auth.signInWithPassword({
 			email: body.email as string,
 			password: body.password as string
 		});

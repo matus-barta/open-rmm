@@ -6,7 +6,7 @@
 	export let data: PageData;
 
 	const submitLogout: SubmitFunction = async ({ cancel }) => {
-		const { error } = await data.supabaseClient.auth.signOut();
+		const { error } = await data.supabase.auth.signOut();
 		if (error) {
 			console.log(error);
 		}

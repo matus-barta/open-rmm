@@ -27,8 +27,8 @@
 			<IconLogo size="42" />
 		</a>
 		{#if user}
-			{#await get_profile(data.supabaseClient, user.id) then profile}
-				{#await get_tenant(data.supabaseClient, profile.tenant_id) then tenant}
+			{#await get_profile(data.supabase, user.id) then profile}
+				{#await get_tenant(data.supabase, profile.tenant_id) then tenant}
 					<span class="pl-1 w-fit whitespace-nowrap">{tenant.name}</span>
 				{/await}
 				<SearchBox />

@@ -1,29 +1,42 @@
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
-import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ssr';
 import type { Database } from '$lib/db/database.types';
 
-export const load: LayoutLoad = async ({ fetch, data }) => {
-	const supabaseClient = createBrowserClient<Database>(
-		PUBLIC_SUPABASE_URL,
-		PUBLIC_SUPABASE_ANON_KEY,
-		{
-			global: {
-				fetch
-			},
-			cookies: {
-				get(key) {
-					if (!isBrowser()) {
-						return JSON.stringify(data.session);
-					}
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
-					const cookie = parse(document.cookie);
-					return cookie[key];
+export const load: LayoutLoad = async ({ data, depends, fetch }) => {
+	/**
+	 * Declare a dependency so the layout can be invalidated, for example, on
+	 * session refresh.
+	 */
+	depends('supabase:auth');
+
+	const supabase = isBrowser()
+		? createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+				global: {
+					fetch
 				}
-			}
-		}
-	);
+			})
+		: createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+				global: {
+					fetch
+				},
+				cookies: {
+					getAll() {
+						return data.cookies;
+					}
+				}
+			});
 
+	//FIXME:remove in future when fixed now just to stop warn spam
+	if ('suppressGetSessionWarning' in supabase.auth) {
+		// @ts-expect-error - suppressGetSessionWarning is not part of the official API
+		supabase.auth.suppressGetSessionWarning = true;
+	} else {
+		console.warn(
+			'SupabaseAuthClient#suppressGetSessionWarning was removed. See https://github.com/supabase/auth-js/issues/888.'
+		);
+	}
 	/**
 	 * It's fine to use `getSession` here, because on the client, `getSession` is
 	 * safe, and on the server, it reads `session` from the `LayoutData`, which
@@ -31,7 +44,11 @@ export const load: LayoutLoad = async ({ fetch, data }) => {
 	 */
 	const {
 		data: { session }
-	} = await supabaseClient.auth.getSession();
+	} = await supabase.auth.getSession();
 
-	return { supabaseClient, session };
+	const {
+		data: { user }
+	} = await supabase.auth.getUser();
+
+	return { session, supabase, user };
 };

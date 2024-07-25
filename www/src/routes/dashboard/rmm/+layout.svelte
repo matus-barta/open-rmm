@@ -10,7 +10,7 @@
 <div class="flex flex-row mb-auto w-full mx-auto h-full">
 	<div class="flex flex-col justify-between w-64 bg-dark-color">
 		<div class="flex flex-col">
-			{#await get_org_units(data.supabaseClient) then org_units}
+			{#await get_org_units(data.supabase) then org_units}
 				{#each org_units as org_unit}
 					<SidebarOption
 						title={org_unit.name}
@@ -18,7 +18,7 @@
 						path="/dashboard/rmm/"
 						color={org_unit.color}
 						icon={org_unit.icon_id}
-						count={get_computer_count_in_org_unit(data.supabaseClient, org_unit.uuid)}
+						count={get_computer_count_in_org_unit(data.supabase, org_unit.uuid)}
 					/>
 				{/each}
 			{/await}

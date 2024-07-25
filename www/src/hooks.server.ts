@@ -1,74 +1,99 @@
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { createServerClient } from '@supabase/ssr';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle, redirect } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
+
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+
 import type { Database } from '$lib/db/database.types';
 
 //https://www.reddit.com/r/sveltejs/comments/16w2o41/supabase_auth_and_sveltekit_docs_suck_so_here_we/
 //https://supabase.com/docs/guides/auth/server-side/creating-a-client?environment=hooks&framework=sveltekit
-export const handle: Handle = async ({ event, resolve }) => {
-	//prepare supabaseServer function
-	event.locals.supabaseServer = createServerClient<Database>(
+const supabase: Handle = async ({ event, resolve }) => {
+	/**
+	 * Creates a Supabase client specific to this server request.
+	 *
+	 * The Supabase client gets the Auth token from the request cookies.
+	 */
+	event.locals.supabase = createServerClient<Database>(
 		PUBLIC_SUPABASE_URL,
 		PUBLIC_SUPABASE_ANON_KEY,
 		{
 			cookies: {
-				get: (key) => event.cookies.get(key),
+				getAll: () => event.cookies.getAll(),
 				/**
-				 * Note: You have to add the `path` variable to the
-				 * set and remove method due to sveltekit's cookie API
-				 * requiring this to be set, setting the path to an empty string
-				 * will replicate previous/standard behaviour (https://kit.svelte.dev/docs/types#public-types-cookies)
+				 * SvelteKit's cookies API requires `path` to be explicitly set in
+				 * the cookie options. Setting `path` to `/` replicates previous/
+				 * standard behavior.
 				 */
-				set: (key, value, options) => {
-					event.cookies.set(key, value, { ...options, path: '/' });
-				},
-				remove: (key, options) => {
-					event.cookies.delete(key, { ...options, path: '/' });
+				setAll: (cookiesToSet) => {
+					cookiesToSet.forEach(({ name, value, options }) => {
+						event.cookies.set(name, value, { ...options, path: '/' });
+					});
 				}
 			}
 		}
 	);
 
+	//FIXME:remove in future when fixed now just to stop warn spam
+	if ('suppressGetSessionWarning' in event.locals.supabase.auth) {
+		// @ts-expect-error - suppressGetSessionWarning is not part of the official API
+		event.locals.supabase.auth.suppressGetSessionWarning = true;
+	} else {
+		console.warn(
+			'SupabaseAuthClient#suppressGetSessionWarning was removed. See https://github.com/supabase/auth-js/issues/888.'
+		);
+	}
+
 	/**
-	 * Unlike `supabase.auth.getSession`, which is unsafe on the server because it
-	 * doesn't validate the JWT, this function validates the JWT by first calling
-	 * `getUser` and aborts early if the JWT signature is invalid.
+	 * Unlike `supabase.auth.getSession()`, which returns the session _without_
+	 * validating the JWT, this function also calls `getUser()` to validate the
+	 * JWT before returning the session.
 	 */
-	// prepare safeGetSession function - now only local one
-	const safeGetSession = async () => {
+	event.locals.safeGetSession = async () => {
 		const {
-			data: { user },
-			error
-		} = await event.locals.supabaseServer.auth.getUser();
-		if (error) {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession();
+		if (!session) {
 			return { session: null, user: null };
 		}
 
 		const {
-			data: { session }
-		} = await event.locals.supabaseServer.auth.getSession(); // https://github.com/supabase/auth-js/issues/873
-
-		//@ts-expect-error this is workaround for supabase spamming us with warning
-		if (session) delete session.user; // https://github.com/supabase/auth-js/issues/873#issuecomment-2067777112
+			data: { user },
+			error
+		} = await event.locals.supabase.auth.getUser();
+		if (error) {
+			// JWT validation has failed
+			return { session: null, user: null };
+		}
 
 		return { session, user };
 	};
 
-	// get user session
-	const { session, user } = await safeGetSession();
-
-	// load to locals
-	event.locals.session = session;
-	event.locals.user = user;
-
-	// TODO: make some nice function to check over all protected routes
-	if (event.url.pathname.startsWith('/dashboard')) {
-		if (!event.locals.user) throw redirect(303, '/');
-	}
-
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
-			return name === 'content-range';
+			/**
+			 * Supabase libraries use the `content-range` and `x-supabase-api-version`
+			 * headers, so we need to tell SvelteKit to pass it through.
+			 */
+			return name === 'content-range' || name === 'x-supabase-api-version';
 		}
 	});
 };
+
+const authGuard: Handle = async ({ event, resolve }) => {
+	const { session, user } = await event.locals.safeGetSession();
+	event.locals.session = session;
+	event.locals.user = user;
+
+	if (!event.locals.session && event.url.pathname.startsWith('/dashboard')) {
+		redirect(303, '/auth');
+	}
+
+	if (event.locals.session && event.url.pathname === '/auth') {
+		redirect(303, '/dashboard');
+	}
+
+	return resolve(event);
+};
+
+export const handle: Handle = sequence(supabase, authGuard);

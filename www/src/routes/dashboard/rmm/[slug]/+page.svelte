@@ -49,7 +49,7 @@
 	}
 
 	afterNavigate(async () => {
-		orgUnitName = await get_org_unit_name(data.supabaseClient, $page.params.slug);
+		orgUnitName = await get_org_unit_name(data.supabase, $page.params.slug);
 	});
 </script>
 
@@ -118,7 +118,7 @@
 				</tr>
 			</thead>
 			<tbody class="text-xs">
-				{#await get_computers_in_org_unit(data.supabaseClient, $page.params.slug) then computers}
+				{#await get_computers_in_org_unit(data.supabase, $page.params.slug) then computers}
 					{#each computers as computer}
 						<tr
 							class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
