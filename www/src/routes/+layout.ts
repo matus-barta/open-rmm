@@ -29,6 +29,7 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 			});
 
 	//FIXME:remove in future when fixed now just to stop warn spam
+	//https://github.com/supabase/auth-js/issues/888#issuecomment-2189298518
 	if ('suppressGetSessionWarning' in supabase.auth) {
 		// @ts-expect-error - suppressGetSessionWarning is not part of the official API
 		supabase.auth.suppressGetSessionWarning = true;

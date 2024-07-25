@@ -35,6 +35,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 	);
 
 	//FIXME:remove in future when fixed now just to stop warn spam
+	//https://github.com/supabase/auth-js/issues/888#issuecomment-2189298518
 	if ('suppressGetSessionWarning' in event.locals.supabase.auth) {
 		// @ts-expect-error - suppressGetSessionWarning is not part of the official API
 		event.locals.supabase.auth.suppressGetSessionWarning = true;
