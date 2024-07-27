@@ -91,7 +91,7 @@ export const add_org_unit = async (
 	org_unit_name: string,
 	tenant_id: string,
 	color?: string,
-	icon_id?: number
+	icon_id = 0
 ) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { data: db_req_data, error: db_error } = await supabaseClient
