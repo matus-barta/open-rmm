@@ -1,20 +1,15 @@
 <script lang="ts">
-	//import { page } from '$app/stores';
+	import { add_computer } from '$lib/db/computer';
+	import type { Database } from '$lib/db/database.types';
+	import { get_org_units } from '$lib/db/orgUnit';
+	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { copy } from 'svelte-copy';
+
+	export let supabaseClient: SupabaseClient<Database>;
 
 	let otk: string = '';
 	let isAllowed: boolean = true;
-	let orgUnit: string;
-
-	async function addComputer() {
-		//otk = (await trpc($page).computers.createOtk.query({ OrgUnit: orgUnit, IsAllowed: isAllowed }))
-		//	.OneTimeKey;
-	}
-
-	let promise = getOrgUnits();
-	function getOrgUnits() {
-		//return trpc($page).orgUnits.list.query();
-	}
+	let selectedOrgUnitUuid: string;
 
 	let info: string = '';
 	function copiedInfo() {
@@ -23,12 +18,16 @@
 			info = '';
 		}, 3000);
 	}
+
+	async function addComputer() {
+		otk = await add_computer(supabaseClient, selectedOrgUnitUuid, isAllowed).then((value) => {
+			return value ?? '';
+		});
+	}
 </script>
 
 <div class="w-full h-full px-2 py-4 flex flex-col justify-between">
-	{#await promise}
-		<p>loading</p>
-	{:then data}
+	{#await get_org_units(supabaseClient) then data}
 		<div class="flex flex-col gap-2">
 			<label>
 				One Time Key
@@ -51,11 +50,11 @@
 				Org Unit
 				<select
 					class="bg-dark-color-lighter m-1 font-mono text-sm p-[0.5px] rounded-lg"
-					bind:value={orgUnit}
+					bind:value={selectedOrgUnitUuid}
 				>
-					<!--{#each data as { OrgUnitName, OrgUnitTitle }}
-						<option value={OrgUnitName}>{OrgUnitTitle}</option>
-					{/each}-->
+					{#each data as orgUnit}
+						<option value={orgUnit.uuid}>{orgUnit.name}</option>
+					{/each}
 				</select>
 			</label>
 

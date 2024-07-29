@@ -67,7 +67,7 @@
 			}}
 		>
 			{#if _configBarOption == ConfigBarOptions.AddComputer}
-				<AddComputer />
+				<AddComputer supabaseClient={data.supabase} />
 			{:else if _configBarOption == ConfigBarOptions.ComputerInfo}
 				<ComputerInfo computer={_computer} />
 				<!--TODO: or just slap ID to it and load it in the component-->
