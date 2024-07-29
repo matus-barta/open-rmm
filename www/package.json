@@ -37,6 +37,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.43.0",
 		"jsdom": "^24.1.1",
+		"nanoid": "^5.0.7",
 		"pino": "^9.3.2",
 		"pino-pretty": "^11.2.2",
 		"postcss": "^8.4.40",

@@ -1,5 +1,6 @@
 import formatIsoDateTime from './formatDateTime';
 import { describe, it, expect } from 'vitest';
+import { OneTimeKey } from './generators';
 
 describe('formatIsoDateTime', () => {
 	it('get correct format with valid DateTime', () => {
@@ -13,5 +14,14 @@ describe('formatIsoDateTime', () => {
 	});
 	it('get N/A with undefined DateTime', () => {
 		expect(formatIsoDateTime(undefined)).toBe('N/A');
+	});
+});
+
+describe('OneTimeKey', () => {
+	it('get 64 characters', () => {
+		expect(OneTimeKey()).toHaveLength(64);
+	});
+	it('call twice, to not equal', () => {
+		expect(OneTimeKey()).not.equal(OneTimeKey);
 	});
 });
