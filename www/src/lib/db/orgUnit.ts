@@ -87,7 +87,6 @@ export const get_computers_in_org_unit = async (
  */
 export const add_org_unit = async (
 	supabaseClient: SupabaseClient<Database>,
-	user_id: string,
 	org_unit_name: string,
 	tenant_id: string,
 	color?: string,
@@ -96,9 +95,7 @@ export const add_org_unit = async (
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { data: db_req_data, error: db_error } = await supabaseClient
 		.from('org_units')
-		.insert([
-			{ uuid: user_id, name: org_unit_name, tenant_uuid: tenant_id, color: color, icon_id: icon_id }
-		])
+		.insert([{ name: org_unit_name, tenant_uuid: tenant_id, color: color, icon_id: icon_id }])
 		.select();
 	if (db_error) {
 		console.log(db_error);

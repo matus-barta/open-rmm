@@ -1,7 +1,9 @@
 import { defaultRoute, registrationEnabled } from '$lib/config';
 import { add_org_unit } from '$lib/db/orgUnit';
 import { supabaseServiceClient } from '$lib/server/supabase';
+
 import { AuthApiError } from '@supabase/supabase-js';
+
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
@@ -57,7 +59,7 @@ export const actions: Actions = {
 				}
 
 				//----------CREATE DEFAULT ORG UNIT---------//
-				add_org_unit(supabaseServiceClient, user_data.user.id, 'Default', db_req_data[0].uuid);
+				add_org_unit(supabaseServiceClient, 'Default', db_req_data[0].uuid);
 
 				//when successful then redirect
 				throw redirect(303, defaultRoute);
