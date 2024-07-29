@@ -2,6 +2,12 @@ import { error } from '@sveltejs/kit';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from './database.types';
 
+/**
+ * Get count of devices in org unit
+ * @param supabaseClient
+ * @param org_unit_uuid
+ * @returns count of devices
+ */
 export const get_computer_count_in_org_unit = async (
 	supabaseClient: SupabaseClient<Database>,
 	org_unit_uuid: string
@@ -19,6 +25,12 @@ export const get_computer_count_in_org_unit = async (
 	return count;
 };
 
+/**
+ * Get list of org units
+ * If its req by client then returns only own Org Units
+ * @param supabaseClient
+ * @returns Array of org units
+ */
 export const get_org_units = async (supabaseClient: SupabaseClient<Database>) => {
 	const { data: org_units, error: db_error } = await supabaseClient
 		.from('org_units')
@@ -30,6 +42,12 @@ export const get_org_units = async (supabaseClient: SupabaseClient<Database>) =>
 	return org_units;
 };
 
+/**
+ * Get urg unit name by org unit uuid
+ * @param supabaseClient
+ * @param org_unit_uuid org unit uuid
+ * @returns name or org unit
+ */
 export const get_org_unit_name = async (
 	supabaseClient: SupabaseClient<Database>,
 	org_unit_uuid: string
@@ -47,6 +65,12 @@ export const get_org_unit_name = async (
 	return org_unit.name;
 };
 
+/**
+ * Get all computers in Org Unit
+ * @param supabaseClient
+ * @param org_unit_uuid
+ * @returns Array of computers
+ */
 export const get_computers_in_org_unit = async (
 	supabaseClient: SupabaseClient<Database>,
 	org_unit_uuid: string
@@ -76,14 +100,12 @@ export const get_computers_in_org_unit = async (
 };
 
 /**
- * WORKS only as service account - RLS only for reads
- * FIXME:fix RLS!
+ * Add Org unit for own tenant
  * @param supabaseClient
- * @param user_id
  * @param org_unit_name
  * @param tenant_id
- * @param color
- * @param icon_id
+ * @param color optional
+ * @param icon_id default 0
  */
 export const add_org_unit = async (
 	supabaseClient: SupabaseClient<Database>,

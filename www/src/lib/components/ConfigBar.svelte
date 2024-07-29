@@ -4,7 +4,7 @@
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch('close');
-	const refresh = () => invalidateAll();
+	const refresh = () => invalidateAll(); //TODO: invalidate only config bar
 
 	export let title: string;
 </script>
