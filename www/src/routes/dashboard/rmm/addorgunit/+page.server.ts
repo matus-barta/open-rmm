@@ -1,25 +1,29 @@
-import { fail } from '@sveltejs/kit';
+import { add_org_unit } from '$lib/db/orgUnit';
+import { get_tenant_id_by_user_id } from '$lib/db/tenant';
+import { fail, type Actions } from '@sveltejs/kit';
 
-export const actions = {
-	create: async (event) => {
-		const data = await event.request.formData();
+export const actions: Actions = {
+	create: async ({ request, locals }) => {
+		const body = Object.fromEntries(await request.formData());
 
 		try {
-			/*const err: { message: string } = await router
-				.createCaller(await createContext(event))
-				.orgUnits.add({
-					OrgName: data.get('OrgUnitName') as string,
-					OrgTitle: data.get('OrgUnitTitle') as string
-				});
+			if (locals.user) {
+				const tenant_id = await get_tenant_id_by_user_id(locals.supabase, locals.user.id);
+				add_org_unit(locals.supabase, body.OrgUnitName as string, tenant_id).catch(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(error: any) => {
+						console.log(error);
+					}
+				);
+			} else {
+				//here failing when user is null
+				return fail(500, { error: 'Server error, please try again later.' });
+			}
 
-			console.log(JSON.stringify(err));
-
-			if (err.message != '') throw new Error(err.message);*/
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			return fail(422, {
-				OrgUnitName: data.get('OrgUnitName'),
-				OrgUnitTitle: data.get('OrgUnitTitle'),
+				OrgUnitName: body.OrgUnitName,
 				error: error.message
 			});
 		}
