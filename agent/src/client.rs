@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use sysinfo::{System, SystemExt};
+use sysinfo::System;
 use uuid::Uuid;
+
+use postgrest::Postgrest;
 
 use crate::config::Config;
 
@@ -15,25 +17,14 @@ pub struct Client {
     pub config: Config,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-struct UuidResponse {
-    #[serde(alias = "Uuid")]
-    uuid: String,
-}
-
 impl Client {
     pub async fn register_computer(&self, otk: String) -> Result<(), Box<dyn std::error::Error>> {
         let uuid = Uuid::new_v4();
         device_uuid::save_uuid(uuid.to_string()).await?;
 
-        let mut map = HashMap::new();
-        map.insert("UUID", uuid.to_string());
-        map.insert("OneTimeKey", otk);
+        let client = Postgrest::new(self.config.supabase_url.clone());
 
-        let res_json =
-            send_post_req_with_uuid_res(&map, self.config.url.clone() + "/computer", false).await?;
-
-        println!("Sent Computer registration - Response:\n{:#?}", res_json);
+        println!("Sent Computer registration - Response:\n{:#?}", uuid);
 
         Ok(())
     }
@@ -43,9 +34,12 @@ impl Client {
 
         build_system_info(&mut map).await;
 
-        let res_json =
-            send_post_req_with_uuid_res(&map, self.config.url.clone() + "/systeminfo", true)
-                .await?;
+        let res_json = send_post_req_with_uuid_res(
+            &map,
+            self.config.supabase_url.clone() + "/systeminfo",
+            true,
+        )
+        .await?;
 
         println!("Sent System info report - Response:\n{:#?}", res_json);
 
@@ -69,25 +63,27 @@ async fn build_system_info(map: &mut HashMap<&str, String>) {
     );
     map.insert(
         "ComputerName",
-        sys.host_name().unwrap_or_else(|| "<unknown>".to_owned()),
+        sysinfo::System::host_name().unwrap_or_else(|| "<unknown>".to_owned()),
     );
     map.insert(
         "LastBootUpTime",
-        utils::convert_unix_timestamp_to_iso(sys.boot_time()),
+        utils::convert_unix_timestamp_to_iso(sysinfo::System::boot_time()),
     );
-    map.insert("Uptime", sys.uptime().to_string());
+    map.insert("Uptime", sysinfo::System::uptime().to_string());
     map.insert(
         "OsVersion",
-        sys.os_version().unwrap_or_else(|| "<unknown>".to_owned()),
+        sysinfo::System::os_version().unwrap_or_else(|| "<unknown>".to_owned()),
     );
     map.insert(
         "OsName",
-        os_version_name::process_os_name(sys.long_os_version(), sys.os_version()),
+        os_version_name::process_os_name(
+            sysinfo::System::long_os_version(),
+            sysinfo::System::os_version(),
+        ),
     );
     map.insert(
         "KernelVersion",
-        sys.kernel_version()
-            .unwrap_or_else(|| "<unknown>".to_owned()),
+        sysinfo::System::kernel_version().unwrap_or_else(|| "<unknown>".to_owned()),
     );
     map.insert("Type", detect_system_type::detect_system_type().to_string());
 }

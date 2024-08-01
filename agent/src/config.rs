@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub url: String,
+    pub supabase_url: String,
 }
 
 pub async fn load_config() -> std::io::Result<Config> {
