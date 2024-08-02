@@ -6,12 +6,14 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
+// deno-lint-ignore require-await
 Deno.serve(async (req) => {
   try {
-    const { one_time_key } = await req.json();
+    /*const { one_time_key } = await req.json();
     if (!one_time_key)
+      //FIXME: Add more validation fot OTK
       return new Response("Missing OTK in request.", { status: 400 });
-
+*/
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -23,15 +25,17 @@ Deno.serve(async (req) => {
     );
 
     const { data, error } = await supabase
-      .from("computers")
+      .from("tenants")
       .select("*")
-      .eq("one_time_key", one_time_key)
       .limit(1)
       .single();
     if (error) {
+      console.log(error);
+      //return new Response("OTK not found in Computers", { status: 400 });
       throw error;
     }
-
+    console.log(JSON.stringify(data));
+    /*
     if (!data)
       return new Response("OTK not found in Computers", { status: 400 });
 
@@ -42,12 +46,12 @@ Deno.serve(async (req) => {
         .eq("uuid", data.uuid);
       if (error) {
         throw error;
-      }
-      return new Response(JSON.stringify(data.uuid), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
-    }
+      }*/
+    return new Response("yo" /*JSON.stringify(data.uuid)*/, {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
+    //}
   } catch (err) {
     return new Response(String(err?.message ?? err), { status: 500 });
   }
