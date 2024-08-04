@@ -4,56 +4,67 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient, CustomAuthError } from "jsr:@supabase/supabase-js@2";
+import type { Database } from "../_shared/database.types.ts";
 
-// deno-lint-ignore require-await
 Deno.serve(async (req) => {
   try {
-    /*const { one_time_key } = await req.json();
-    if (!one_time_key)
-      //FIXME: Add more validation fot OTK
-      return new Response("Missing OTK in request.", { status: 400 });
-*/
-    const supabase = createClient(
+    const { one_time_key } = await req.json();
+
+    if (!one_time_key) throw "Missing OTK in request.";
+    if (String(one_time_key).length != 64) throw "Wrong length";
+
+    const supabase = createClient<Database>(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       {
-        global: {
-          headers: { Authorization: req.headers.get("Authorization")! },
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+          detectSessionInUrl: false,
         },
       }
     );
 
-    const { data, error } = await supabase
-      .from("tenants")
+    const { data: computer, error } = await supabase
+      .from("computers")
       .select("*")
+      .eq("one_time_key", one_time_key)
       .limit(1)
       .single();
     if (error) {
-      console.log(error);
-      //return new Response("OTK not found in Computers", { status: 400 });
-      throw error;
+      if (error.code == "PGRST116") throw "OTK not found in Computers";
+      else throw error;
     }
-    console.log(JSON.stringify(data));
-    /*
-    if (!data)
-      return new Response("OTK not found in Computers", { status: 400 });
 
-    if (data.is_allowed && !data.is_added) {
+    if (!computer) throw "OTK not found in Computers";
+
+    if (computer.is_allowed && !computer.is_added) {
       const { data, error } = await supabase
         .from("computers")
         .update({ is_added: true })
-        .eq("uuid", data.uuid);
+        .eq("uuid", computer.uuid);
       if (error) {
         throw error;
-      }*/
-    return new Response("yo" /*JSON.stringify(data.uuid)*/, {
-      headers: { "Content-Type": "application/json" },
-      status: 200,
-    });
-    //}
+      }
+
+      console.log(`Registered ${computer.uuid}`);
+
+      return new Response(JSON.stringify(computer.uuid), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
+    } else {
+      throw "Computer not allowed or already registered!";
+    }
   } catch (err) {
-    return new Response(String(err?.message ?? err), { status: 500 });
+    if (typeof err == typeof CustomAuthError) {
+      console.error(err?.message ?? err);
+      return new Response(String(err?.message ?? err), { status: 500 });
+    } else {
+      console.error(err?.message ?? err);
+      return new Response(String(err?.message ?? err), { status: 400 });
+    }
   }
 });
 
