@@ -7,6 +7,7 @@ import type { Database } from '$lib/db/database.types';
 export const supabaseServiceClient = createClient<Database>(PUBLIC_SUPABASE_URL, SERVICE_ROLE_KEY, {
 	auth: {
 		autoRefreshToken: false,
-		persistSession: false
+		persistSession: false,
+		detectSessionInUrl: false
 	}
 });
