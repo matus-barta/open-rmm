@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
 
       console.log(`Registered ${computer.uuid}`);
 
-      return new Response(JSON.stringify(computer.uuid), {
+      return new Response(JSON.stringify({ uuid: computer.uuid }), {
         headers: { "Content-Type": "application/json" },
         status: 200,
       });
