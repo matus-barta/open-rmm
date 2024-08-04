@@ -17,14 +17,25 @@ pub struct Client {
     pub config: Config,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct UuidResponse {
+    uuid: String,
+}
+
 impl Client {
     pub async fn register_computer(&self, otk: String) -> Result<(), Box<dyn std::error::Error>> {
-        let uuid = Uuid::new_v4();
-        device_uuid::save_uuid(uuid.to_string()).await?;
+        let mut map = HashMap::new();
+        map.insert("one_time_key", otk);
 
-        let client = Postgrest::new(self.config.supabase_url.clone());
+        let res_json = send_post_req_to_api(
+            &map,
+            self.config.supabase_url.clone() + "/functions/v1/register-computer",
+        )
+        .await?;
 
-        println!("Sent Computer registration - Response:\n{:#?}", uuid);
+        device_uuid::save_uuid(res_json.uuid.to_string()).await?;
+
+        println!("Got UUID: {:#?}", res_json.uuid);
 
         Ok(())
     }
@@ -34,14 +45,9 @@ impl Client {
 
         build_system_info(&mut map).await;
 
-        let res_json = send_post_req_with_uuid_res(
-            &map,
-            self.config.supabase_url.clone() + "/systeminfo",
-            true,
-        )
-        .await?;
+        let client = Postgrest::new(self.config.supabase_url.clone());
 
-        println!("Sent System info report - Response:\n{:#?}", res_json);
+        // println!("Sent System info report - Response:\n{:#?}", res_json);
 
         Ok(())
     }
@@ -88,31 +94,18 @@ async fn build_system_info(map: &mut HashMap<&str, String>) {
     map.insert("Type", detect_system_type::detect_system_type().to_string());
 }
 
-async fn send_post_req_with_uuid_res(
+async fn send_post_req_to_api(
     map: &HashMap<&str, String>,
     url: String,
-    send_uuid_header: bool,
 ) -> Result<UuidResponse, reqwest::Error> {
-    let client = reqwest::Client::new();
+    let api_client = reqwest::Client::new();
 
-    if send_uuid_header {
-        let res_json = client
-            .post(url)
-            .json(&map)
-            .header("Device-UUID", map.get("UUID").expect("Missing UUID in map"))
-            .send()
-            .await?
-            .json::<UuidResponse>()
-            .await?;
-        Ok(res_json)
-    } else {
-        let res_json = client
-            .post(url)
-            .json(&map)
-            .send()
-            .await?
-            .json::<UuidResponse>()
-            .await?;
-        Ok(res_json)
-    }
+    let res_json = api_client
+        .post(url)
+        .json(&map)
+        .send()
+        .await?
+        .json::<UuidResponse>()
+        .await?;
+    Ok(res_json)
 }
