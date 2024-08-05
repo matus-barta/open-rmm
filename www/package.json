@@ -13,7 +13,6 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"gen-types": "supabase gen types typescript --local | tee ./src/lib/db/database.types.ts > ../supabase/functions/_shared/database.types.ts",
 		"ncu": "pnpx npm-check-updates",
 		"ncu-u": "pnpx npm-check-updates -u"
 	},

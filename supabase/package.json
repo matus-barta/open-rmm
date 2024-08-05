@@ -1,0 +1,10 @@
+{
+  "name": "supabase",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "gen-types": "supabase gen types typescript --local | tee ../www/src/lib/db/database.types.ts > ./functions/_shared/database.types.ts",
+    "gen-seed": "supabase db dump --local --data-only > seed.sql",
+    "gen-migration": "supabase db diff | supabase migration new"
+  }
+}
