@@ -13,7 +13,10 @@ pub fn process_os_name(long_os_version: Option<String>, os_version: Option<Strin
 }
 
 fn get_macos_version_name(major: u64, minor: u64) -> String {
+    //https://en.wikipedia.org/wiki/MacOS_version_history#Releases
     match major {
+        15 => "Sequoia".to_string(),
+        14 => "Sonoma".to_string(),
         13 => "Ventura".to_string(),
         12 => "Monterey".to_string(),
         11 => "Big Sur".to_string(),
