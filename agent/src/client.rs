@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use sysinfo::System;
-use uuid::Uuid;
 
 use postgrest::Postgrest;
 
@@ -20,6 +19,19 @@ pub struct Client {
 #[derive(Debug, Serialize, Deserialize)]
 struct UuidResponse {
     uuid: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SystemInfo {
+    computer_uuid: String,
+    pending_reboot: bool,
+    computer_name: String,
+    last_bootup_time: String,
+    //uptime: String,
+    os_version: String,
+    os_name: String,
+    kernel_version: String,
+    machine_type: String,
 }
 
 impl Client {
@@ -41,57 +53,52 @@ impl Client {
     }
 
     pub async fn report_system_info(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let mut map = HashMap::new();
+        let system_info = build_system_info().await;
 
-        build_system_info(&mut map).await;
+        let json = format!("[{}]", serde_json::to_string(&system_info)?);
+        //println!("{}", json);
 
-        let client = Postgrest::new(self.config.supabase_url.clone());
+        let supabase_client = Postgrest::new(self.config.supabase_url.clone() + "/rest/v1")
+        .insert_header("user-agent", "postgrest-rs")
+        .insert_header("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0")
+        .insert_header("Device-UUID", &system_info.computer_uuid);
 
-        // println!("Sent System info report - Response:\n{:#?}", res_json);
+        let res = supabase_client
+            .from("system_info")
+            .upsert(json)
+            .execute()
+            .await?;
+
+        if !res.status().is_client_error() {
+            println!("Sent System info report")
+        } else {
+            println!("LOG this error somewhere: {}", res.text().await?)
+        }
 
         Ok(())
     }
 }
 
-async fn build_system_info(map: &mut HashMap<&str, String>) {
+async fn build_system_info() -> SystemInfo {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    map.insert(
-        "UUID",
-        device_uuid::load_uuid()
+    return SystemInfo {
+        computer_uuid: device_uuid::load_uuid()
             .await
             .expect("UUID is missing, did you register this device?"),
-    );
-    map.insert(
-        "PendingReboot",
-        pending_reboot::is_reboot_pending().to_string(),
-    );
-    map.insert(
-        "ComputerName",
-        sysinfo::System::host_name().unwrap_or_else(|| "<unknown>".to_owned()),
-    );
-    map.insert(
-        "LastBootUpTime",
-        utils::convert_unix_timestamp_to_iso(sysinfo::System::boot_time()),
-    );
-    map.insert("Uptime", sysinfo::System::uptime().to_string());
-    map.insert(
-        "OsVersion",
-        sysinfo::System::os_version().unwrap_or_else(|| "<unknown>".to_owned()),
-    );
-    map.insert(
-        "OsName",
-        os_version_name::process_os_name(
+        pending_reboot: pending_reboot::is_reboot_pending(),
+        computer_name: sysinfo::System::host_name().unwrap_or_else(|| "<unknown>".to_owned()),
+        last_bootup_time: utils::convert_unix_timestamp_to_iso(sysinfo::System::boot_time()),
+        //uptime: sysinfo::System::uptime().to_string(), TODO: add this value in future
+        os_version: sysinfo::System::os_version().unwrap_or_else(|| "<unknown>".to_owned()),
+        os_name: os_version_name::process_os_name(
             sysinfo::System::long_os_version(),
             sysinfo::System::os_version(),
         ),
-    );
-    map.insert(
-        "KernelVersion",
-        sysinfo::System::kernel_version().unwrap_or_else(|| "<unknown>".to_owned()),
-    );
-    map.insert("Type", detect_system_type::detect_system_type().to_string());
+        kernel_version: sysinfo::System::kernel_version().unwrap_or_else(|| "<unknown>".to_owned()),
+        machine_type: detect_system_type::detect_system_type().to_string(),
+    };
 }
 
 async fn send_post_req_to_api(
