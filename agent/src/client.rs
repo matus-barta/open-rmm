@@ -116,3 +116,31 @@ async fn send_post_req_to_api(
         .await?;
     Ok(res_json)
 }
+
+#[cfg(test)]
+mod tests {
+    use device_uuid::load_uuid;
+
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[tokio::test]
+    async fn test_add() -> Result<(), Box<dyn std::error::Error>> {
+        let mut cleanup = false;
+
+        match load_uuid().await {
+            Ok(_) => {}
+            Err(_) => {
+                device_uuid::save_uuid(uuid::Uuid::new_v4().to_string()).await?;
+                cleanup = true
+            }
+        }
+
+        build_system_info().await;
+        if cleanup {
+            async_fs::remove_file("uuid".to_string()).await?;
+        }
+
+        Ok(())
+    }
+}
