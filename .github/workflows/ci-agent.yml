@@ -21,9 +21,9 @@ jobs:
         platform:
           - os_name: Linux-x86_64
             os: ubuntu-20.04
-            target: x86_64-unknown-linux-musl
+            target: x86_64-unknown-linux-gnu
             bin: open_rmm_agent
-            name: open_rmm_agent-Linux-x86_64-musl.tar.gz
+            name: open_rmm_agent-Linux-x86_64-gnu.tar.gz
           - os_name: Linux-aarch64
             os: ubuntu-20.04
             target: aarch64-unknown-linux-musl
@@ -57,10 +57,10 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - name: Configure Git
         run: |
-          git config --global user.email "matus.barta64@gmail.com"
-          git config --global user.name "Matus Barta"
+          git config --global user.email "jdoe@example.com"
+          git config --global user.name "J. Doe"
       - name: Install dev dependencies on Linux
-        run: sudo apt-get update --yes && sudo apt-get install --yes musl-tools pkg-config libssl-dev
+        run: sudo apt-get update --yes && sudo apt-get install --yes musl-tools pkg-config openssl libssl-dev
         if: contains(matrix.platform.target, 'linux')
       - name: Build binary
         uses: houseabsolute/actions-rust-cross@v0
