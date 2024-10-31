@@ -60,9 +60,6 @@ jobs:
         run: |
           git config --global user.email "jdoe@example.com"
           git config --global user.name "J. Doe"
-      - name: Install ARM64 dev dependencies on Linux
-        run: sudo dpkg --add-architecture arm64 && sudo apt-get update --yes && sudo apt-get install --yes libssl-dev:arm64
-        if: contains(matrix.platform.target, 'aarch64-unknown-linux')
       - name: Build binary
         uses: houseabsolute/actions-rust-cross@v0
         with:
