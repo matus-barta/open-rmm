@@ -57,7 +57,7 @@ jobs:
         working-directory: ./supabase
         run: supabase start
       - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
         working-directory: ./www
       - name: Run integration tests
         working-directory: ./www
