@@ -38,7 +38,7 @@ pub fn detect_system_type() -> SystemType {
 
     #[cfg(target_os = "windows")]
     {
-        let detect_vm_pwsh = include_str!("../scripts/pwsh/detect_vm.ps1");
+        let detect_vm_pwsh = include_str!("../../scripts/pwsh/detect_vm.ps1");
         match powershell_script::run(detect_vm_pwsh) {
             Ok(output) => {
                 let clean_out: String = output

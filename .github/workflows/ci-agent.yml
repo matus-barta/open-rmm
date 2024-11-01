@@ -2,9 +2,15 @@ name: Tests Agent and release
 
 on:
   push:
+    paths:
+      - "agent/**"
+      - ".github/**"
     branches:
       - "master"
   pull_request:
+    paths:
+      - "agent/**"
+      - ".github/**"
 
 env:
   CRATE_NAME: open_rmm_agent
