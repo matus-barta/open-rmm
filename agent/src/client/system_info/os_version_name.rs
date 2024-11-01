@@ -56,3 +56,22 @@ fn parse_version(s: &str) -> Option<(u64, u64, u64)> {
 
     Some((major, minor, patch))
 }
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn test_os_name() {
+        let mut sys = sysinfo::System::new_all();
+        sys.refresh_all();
+
+        let os_name = process_os_name(
+            sysinfo::System::long_os_version(),
+            sysinfo::System::os_version(),
+        );
+
+        assert!(!os_name.contains("<unknown>"))
+    }
+}

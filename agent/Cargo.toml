@@ -17,6 +17,7 @@ async-fs = "2.1"
 sysinfo = "0.32"
 chrono = "0.4"
 postgrest = "1.6"
+anyhow = "1.0.92"
 
 [target.'cfg(windows)'.dependencies]
 powershell_script = "1.1"

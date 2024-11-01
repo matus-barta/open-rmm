@@ -25,6 +25,7 @@ mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
+    /// Test that we can save an load UUID correctly, check if they are matching.
     #[tokio::test]
     async fn test_save_and_load_uuid() -> Result<(), Box<dyn std::error::Error>> {
         let uuid = uuid::Uuid::new_v4().to_string();
