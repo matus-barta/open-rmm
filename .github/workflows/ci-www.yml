@@ -57,9 +57,7 @@ jobs:
           version: latest
       - name: Start local supabase
         working-directory: ./supabase
-        run: |
-          supabase start
-          supabase functions serve
+        run: supabase start
       - name: Run integration tests
         working-directory: ./www
         run: pnpm run test:integration
