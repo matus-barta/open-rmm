@@ -29,8 +29,6 @@ jobs:
         node-version: [23]
     steps:
       - uses: actions/checkout@v4
-      - name: Go to www folder
-        run: cd www
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -39,24 +37,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache-dependency-path: ./www/pnpm-lock.yaml
           cache: "pnpm"
       - name: Install dependencies
+        working-directory: ./www
         run: pnpm install
       - name: Build WWW
+        working-directory: ./www
         run: pnpm build
       - name: Run unit tests
+        working-directory: ./www
         run: pnpm run test:unit
+
+      - name: Install Playwright Browsers
+        run: pnpx playwright install --with-deps
       - name: Setup supabase
         uses: supabase/setup-cli@v1
         with:
           version: latest
       - name: Start local supabase
+        working-directory: ./supabase
         run: |
-          cd ../supabase
           supabase start
           supabase functions serve
-          cd ../www
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
       - name: Run integration tests
+        working-directory: ./www
         run: pnpm run test:integration
