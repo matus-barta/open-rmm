@@ -1,0 +1,60 @@
+name: Tests WWW
+
+on:
+  push:
+    paths:
+      - "www/**"
+      - ".github/**"
+    branches:
+      - "master"
+  pull_request:
+    paths:
+      - "www/**"
+      - ".github/**"
+
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+  PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+  SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+
+jobs:
+  test:
+    name: Run unit test for WWW
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [23]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: |
+          cd www
+          pnpm install
+      - name: Build WWW
+        run: pnpm build
+      - name: Run unit tests
+        run: pnpm run test:unit
+      - name: Setup supabase
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local supabase
+        run: |
+          cd ../supabase
+          supabase start
+          supabase functions serve
+          cd ../www
+      - name: Install Playwright Browsers
+        run: pnpx playwright install --with-deps
+      - name: Run integration tests
+        run: pnpm run test:integration

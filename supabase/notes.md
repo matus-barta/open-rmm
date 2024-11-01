@@ -1,5 +1,28 @@
 # Notes for supabase (no clue where to put this)
 
+## supabase dev workflow
+
+for the time I forget, after 6 months of nothing
+
+### start supabase
+
+- run docker desktop if not running
+- `cd to supabase folder`
+- `supabase start`
+- `supabase functions serve` - if need to run edge fn
+
+### reset supabase
+
+- `supabase reset`
+
+### stop supabase
+
+- `supabase stop`
+
+### troubleshooting supabase
+
+- remove all supabase docker volumes
+
 ## add updated_at timestamp
 
 <https://dev.to/paullaros/updating-timestamps-automatically-in-supabase-5f5o>
