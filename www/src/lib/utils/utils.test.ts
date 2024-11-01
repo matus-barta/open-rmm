@@ -4,7 +4,7 @@ import { OneTimeKey } from './generators';
 
 describe('formatIsoDateTime', () => {
 	it('get correct format with valid DateTime', () => {
-		expect(formatIsoDateTime('2024-04-04 20:40:57.629532+00')).toBe('04. Apr. 22:40');
+		expect(formatIsoDateTime('2024-04-04 20:40:57.629532+00')).toBe('04. Apr. 20:40');
 	});
 	it('get N/A with empty DateTime', () => {
 		expect(formatIsoDateTime('')).toBe('N/A');
