@@ -49,8 +49,6 @@ jobs:
         working-directory: ./www
         run: pnpm run test:unit
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
       - name: Setup supabase
         uses: supabase/setup-cli@v1
         with:
@@ -58,6 +56,9 @@ jobs:
       - name: Start local supabase
         working-directory: ./supabase
         run: supabase start
+      - name: Install Playwright Browsers
+        run: pnpx playwright install --with-deps
+        working-directory: ./www
       - name: Run integration tests
         working-directory: ./www
         run: pnpm run test:integration
