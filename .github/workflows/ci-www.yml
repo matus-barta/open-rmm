@@ -4,13 +4,15 @@ on:
   push:
     paths:
       - "www/**"
-      - ".github/**"
+      - "supabase/**"
+      - ".github/workflows/ci-www.yml"
     branches:
       - "master"
   pull_request:
     paths:
       - "www/**"
-      - ".github/**"
+      - "supabase/**"
+      - ".github/workflows/ci-www.yml"
 
 env:
   GITHUB_TOKEN: ${{ github.token }}
@@ -27,6 +29,8 @@ jobs:
         node-version: [23]
     steps:
       - uses: actions/checkout@v4
+      - name: Go to www folder
+        run: cd www
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -37,9 +41,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
       - name: Install dependencies
-        run: |
-          cd www
-          pnpm install
+        run: pnpm install
       - name: Build WWW
         run: pnpm build
       - name: Run unit tests
