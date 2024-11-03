@@ -1,39 +1,70 @@
-use std::env;
+use clap::{Parser, Subcommand};
+use config::Config;
 
 mod client;
 mod config;
+mod installer;
+
+#[derive(Parser, Debug)]
+#[command(version, about="Open-RMM Agent", long_about = None, after_help="No arguments will run Agent to collect data.")]
+struct Cli {
+    /// Generated One Time Key to register computer in Open-RMM (64 characters)
+    #[arg(short, long)]
+    otk: Option<String>,
+
+    /// Url to server
+    #[arg(short, long, default_value = "http://127.0.0.1:54321")]
+    url: Option<String>,
+
+    #[command(subcommand)]
+    command: Option<Commands>,
+}
+
+#[derive(Subcommand, Debug)]
+enum Commands {
+    /// Install as daemon/service, run together or after registering the computer
+    Install,
+    /// Remove as daemon/service, to remove from Open-RMM use dashboard
+    Remove,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cli = Cli::parse();
+
+    if let Some(url) = cli.url.as_deref() {
+        config::save_config(Config {
+            supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
+        }) //but instead we should be saving Server url from where we would download config including supabase url.
+        .await?;
+    }
+
     let client = client::Client {
         config: config::load_config()
             .await
-            .expect("Can't load config file!"),
+            .expect("Can't load config file! Should be provided with executable."),
     };
 
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 1 {
-        if args[1].contains("--otk=") {
-            let otk: Vec<_> = args[1].split('=').collect();
-            if otk[1].len() == 64 {
-                client.register_computer(otk[1].to_string()).await?;
-            } else {
-                println!("One Time key has to be 64 characters long!")
-            }
+    if let Some(otk) = cli.otk.as_deref() {
+        if otk.len() == 64 {
+            client.register_computer(otk.to_string()).await?;
         } else {
-            usage_message()
+            panic!("One Time key has to be 64 characters long!");
         }
-    } else if args.len() == 1 {
-        client.report_system_info().await?;
-    } else {
-        usage_message()
+    }
+
+    match &cli.command {
+        Some(Commands::Install) => {
+            println!("install")
+        }
+        Some(Commands::Remove) => {
+            println!("remove")
+        }
+        None => {
+            println!("Running report system info.");
+            client.report_system_info().await?;
+        }
     }
 
     Ok(())
-}
-
-fn usage_message() {
-    println!("Usage:\n
-            - no arguments: run agent to collect data\n
-            - \"--otk=<64 characters of generated One Time Key>: (without <>) will add computer to RMM\"");
 }

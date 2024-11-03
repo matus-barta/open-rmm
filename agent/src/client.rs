@@ -40,7 +40,6 @@ impl Client {
         let system_info = build_system_info().await;
 
         let json = format!("[{}]", serde_json::to_string(&system_info)?);
-        //println!("{}", json);
 
         let supabase_client = Postgrest::new(self.config.supabase_url.clone() + "/rest/v1")
         .insert_header("user-agent", "postgrest-rs")
