@@ -26,7 +26,7 @@ pub fn is_reboot_pending() -> bool {
 
     #[cfg(target_os = "windows")]
     {
-        let pending_reboot_pwsh = include_str!("../../scripts/pwsh/pending_reboot.ps1");
+        let pending_reboot_pwsh = include_str!("./scripts/pwsh/pending_reboot.ps1");
         match powershell_script::run(pending_reboot_pwsh) {
             Ok(output) => {
                 let result = match &output.to_string().to_lowercase() as &str {
@@ -46,7 +46,7 @@ pub fn is_reboot_pending() -> bool {
 
     #[cfg(target_os = "linux")]
     {
-        let pending_reboot_sh = include_str!("../../scripts/bash/pending_reboot.sh");
+        let pending_reboot_sh = include_str!("./scripts/bash/pending_reboot.sh");
 
         let (_code, output, _error) = run_script::run_script!(pending_reboot_sh).unwrap();
 
