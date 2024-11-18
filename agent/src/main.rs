@@ -1,9 +1,10 @@
 use clap::{Parser, Subcommand};
-use config::Config;
+use config::{config_exists, Config};
 
 mod client;
 mod config;
 mod installer;
+mod utils;
 
 #[derive(Parser, Debug)]
 #[command(version, about="Open-RMM Agent", long_about = None, after_help="No arguments will run Agent to collect data.")]
@@ -12,7 +13,7 @@ struct Cli {
     #[arg(short, long)]
     otk: Option<String>,
 
-    /// Url to server
+    /// URL to server (from where it will download config) - if config exists, will ignore this value (won't override url in config)
     #[arg(short, long, default_value = "http://127.0.0.1:54321")]
     url: Option<String>,
 
@@ -24,7 +25,7 @@ struct Cli {
 enum Commands {
     /// Install as daemon/service, run together or after registering the computer
     Install,
-    /// Remove as daemon/service, to remove from Open-RMM use dashboard
+    /// Remove as daemon/service, to remove from Open-RMM use Dashboard
     Remove,
 }
 
@@ -32,11 +33,14 @@ enum Commands {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
-    if let Some(url) = cli.url.as_deref() {
-        config::save_config(Config {
-            supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
-        }) //but instead we should be saving Server url from where we would download config including supabase url.
-        .await?;
+    if !config_exists() {
+        //TODO: move to instal????
+        if let Some(url) = cli.url.as_deref() {
+            config::save_config(Config {
+                supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
+            }) //but instead we should be saving Server url from where we would download config including supabase url.
+            .await?;
+        }
     }
 
     let client = client::Client {
@@ -54,9 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     match &cli.command {
-        Some(Commands::Install) => {
-            println!("install")
-        }
+        Some(Commands::Install) => todo!(), //installer::self_installer()?,
         Some(Commands::Remove) => {
             println!("remove")
         }

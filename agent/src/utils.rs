@@ -1,4 +1,5 @@
 use chrono::{DateTime, SecondsFormat, Utc};
+use nix::unistd::Uid;
 use std::time::{Duration, UNIX_EPOCH};
 
 pub fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
@@ -6,6 +7,17 @@ pub fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
 
     let date_time = DateTime::<Utc>::from(d);
     return date_time.to_rfc3339_opts(SecondsFormat::Millis, true);
+}
+
+/// Returns `true` if root/admin
+pub fn check_for_admin_rights() -> bool {
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    return Uid::effective().is_root();
+
+    #[cfg(target_os = "windows")]
+    {
+        todo!("TODO: check for admin rights")
+    }
 }
 
 #[cfg(test)]

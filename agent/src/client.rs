@@ -7,7 +7,6 @@ use crate::config::Config;
 
 mod device_uuid;
 mod system_info;
-mod utils;
 
 pub struct Client {
     pub config: Config,

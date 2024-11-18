@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 use sysinfo::System;
 
+use crate::utils;
+
 use super::device_uuid;
-use super::utils;
 
 mod detect_system_type;
 mod os_version_name;
