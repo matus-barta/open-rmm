@@ -41,10 +41,8 @@
 					disabled
 					bind:value={otk}
 				/>
-				<button
-					class="button-ish bg-dark-color disabled:bg-darkest-color rounded-lg px-4 py-2"
-					disabled={otk == ''}
-					use:copy={otk}>Copy</button
+				<button class="button-ish rounded-lg px-4 py-2" disabled={otk == ''} use:copy={otk}
+					>Copy</button
 				>
 				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label>{info}</label>

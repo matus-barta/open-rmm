@@ -31,9 +31,6 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	.option {
-		@apply mx-2 my-1 flex flex-row items-center justify-between rounded-md px-2 py-1 text-sm font-normal tracking-normal text-gray-500;
-	}
-	:hover.option {
-		@apply bg-gray-600;
+		@apply mx-2 my-1 flex flex-row items-center justify-between rounded-md px-2 py-1 text-sm font-normal tracking-normal;
 	}
 </style>
