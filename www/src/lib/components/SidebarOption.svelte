@@ -11,14 +11,7 @@
 		count: Promise<number>;
 	}
 
-	let {
-		title,
-		uuid,
-		path,
-		icon,
-		color,
-		count
-	}: Props = $props();
+	let { title, uuid, path, icon, color, count }: Props = $props();
 
 	let selected = $derived($page.url.pathname.includes(uuid));
 </script>
@@ -36,6 +29,7 @@
 </a>
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	.option {
 		@apply flex flex-row items-center justify-between px-2 py-1 mx-2 my-1 rounded-md font-normal tracking-normal text-sm text-grey-color-more-lighter;
 	}

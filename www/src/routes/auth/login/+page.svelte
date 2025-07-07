@@ -19,6 +19,7 @@
 </main>
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	input {
 		@apply bg-black;
 	}

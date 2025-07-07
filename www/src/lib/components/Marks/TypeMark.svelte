@@ -62,6 +62,7 @@
 {/if}
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	.checkmark {
 		@apply flex justify-center p-[1px]  text-grey-color;
 	}

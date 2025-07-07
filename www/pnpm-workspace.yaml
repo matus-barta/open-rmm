@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
   - '@sveltejs/kit'
+  - '@tailwindcss/oxide'
   - esbuild
   - svelte-preprocess

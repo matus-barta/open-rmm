@@ -29,6 +29,7 @@
 {/if}
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	.navButton {
 		@apply p-4 border-l-2 border-transparent;
 	}
