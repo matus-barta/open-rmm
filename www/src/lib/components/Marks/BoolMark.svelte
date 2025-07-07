@@ -39,7 +39,7 @@
 		</svg>
 	</div>
 {:else}
-	<div class="checkmark text-grey-color">
+	<div class="checkmark text-gray-color">
 		<IconQuestion {size} />
 	</div>
 {/if}

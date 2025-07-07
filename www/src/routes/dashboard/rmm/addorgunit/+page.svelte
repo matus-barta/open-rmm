@@ -10,7 +10,7 @@
 	<title>Open RMM - Add Org Unit</title>
 </svelte:head>
 
-<div class="flex justify-center items-center flex-col">
+<div class="flex flex-col items-center justify-center">
 	<h1>Add Organization</h1>
 
 	<form
@@ -37,7 +37,7 @@
 			/>
 		</label>
 		<input
-			class="button-ish border-[1px] rounded-lg border-grey-color py-2 hover:bg-dark-color-more-lighter"
+			class="button-ish rounded-lg border-[1px] border-gray-700 py-2 hover:bg-gray-200"
 			type="submit"
 			value="Create"
 		/>

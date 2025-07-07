@@ -61,7 +61,7 @@
 	<title>Open RMM - {orgUnitName}</title>
 </svelte:head>
 
-<div class="flex flex-col w-full pt-1 relative h-full">
+<div class="relative flex h-full w-full flex-col pt-1">
 	{#if _configEnabled}
 		<!--TODO: implement this to the component itself-->
 		<ConfigBar
@@ -79,7 +79,7 @@
 		</ConfigBar>
 	{/if}
 
-	<div class="w-full h-8 flex flex-row gap-5 px-2">
+	<div class="flex h-8 w-full flex-row gap-5 px-2">
 		<button
 			class="button-ish"
 			onclick={() => {
@@ -89,9 +89,9 @@
 		<button class="button-ish" onclick={invalidateAll}>Refresh</button>
 		<button class="button-ish">...</button>
 	</div>
-	<div class="w-full flex flex-col pt-5">
+	<div class="flex w-full flex-col pt-5">
 		<table>
-			<thead class="text-sm bg-dark-color-more-lighter">
+			<thead class="bg-slate text-sm">
 				<tr>
 					<th class="font-normal"> OS </th>
 					<th class="font-normal"> Type </th>
@@ -106,7 +106,7 @@
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="w-5 h-5"
+							class="h-5 w-5"
 						>
 							<path
 								stroke-linecap="round"
@@ -125,7 +125,7 @@
 				{#await get_computers_in_org_unit(data.supabase, $page.params.slug) then computers}
 					{#each computers as computer}
 						<tr
-							class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
+							class="border-b border-gray-500 font-light hover:bg-gray-200"
 							onclick={() => {
 								showConfigBar(ConfigBarOptions.ComputerInfo, {
 									Uuid: computer.uuid,
@@ -147,7 +147,7 @@
 							<td>
 								<TypeMark type={computer.system_info?.machine_type} />
 							</td>
-							<td class="flex justify-center items-center">
+							<td class="flex items-center justify-center">
 								{computer.system_info?.computer_name}
 							</td>
 							<td>
@@ -171,7 +171,7 @@
 							<td>
 								<BoolMark is={computer.system_info?.pending_reboot} />
 							</td>
-							<td class="flex justify-center items-center">
+							<td class="flex items-center justify-center">
 								{formatIsoDateTime(computer.system_info?.last_bootup_time)}
 							</td>
 						</tr>

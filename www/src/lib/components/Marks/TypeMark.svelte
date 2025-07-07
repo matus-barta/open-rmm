@@ -56,7 +56,7 @@
 		>
 	</div>
 {:else}
-	<div class="checkmark text-grey-color">
+	<div class="checkmark text-gray-color">
 		<IconQuestion {size} />
 	</div>
 {/if}
@@ -64,6 +64,6 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	.checkmark {
-		@apply flex justify-center p-[1px]  text-grey-color;
+		@apply flex justify-center p-[1px] text-gray-500;
 	}
 </style>

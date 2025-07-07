@@ -12,8 +12,8 @@
 	let { data, children }: Props = $props();
 </script>
 
-<div class="flex flex-row mb-auto w-full mx-auto h-full">
-	<div class="flex flex-col justify-between w-64 bg-dark-color">
+<div class="mx-auto mb-auto flex h-full w-full flex-row">
+	<div class="flex w-64 flex-col justify-between bg-gray-800">
 		<div class="flex flex-col">
 			{#await get_org_units(data.supabase) then org_units}
 				{#each org_units as org_unit}
@@ -31,7 +31,7 @@
 		<div class="bg-darker-color h-11">
 			<a
 				href={'/dashboard/rmm/addorgunit'}
-				class="flex flex-row button-ish font-light hover:bg-transparent justify-center items-center space-x-2 h-full hover:text-accent-color hover:stroke-accent-color"
+				class="button-ish flex h-full flex-row items-center justify-center space-x-2 font-light hover:bg-transparent hover:stroke-green-600 hover:text-green-600"
 			>
 				<IconAdd size="25" />
 				<span class="text-sm font-light">{'Add Org unit'}</span>
