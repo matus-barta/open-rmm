@@ -31,4 +31,10 @@ mod tests {
 
         assert_eq!(timedate, "2024-11-01T13:30:44.000Z")
     }
+
+    #[test]
+    /// May be return false-positive errors, depends on environment
+    fn test_check_for_admin_rights() {
+        assert_eq!(check_for_admin_rights(), false)
+    }
 }

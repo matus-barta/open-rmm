@@ -33,20 +33,34 @@ enum Commands {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
-    if !config_exists() {
-        //TODO: move to instal????
+    let mut config_data: Option<Config> = None;
+
+    // Move all this config handling to Config
+    // check for local copy then check if online is newer
+    // if newer - download - if unable to save just return downloaded
+    // if not local - download
+    // if local newest load local
+    // return config
+
+    if config_exists() {
+        config_data = Some(config::load_config().await.expect("Unable to load config"))
+    } else {
         if let Some(url) = cli.url.as_deref() {
-            config::save_config(Config {
+            // "Download" config - we have server URL
+            config_data = Some(Config {
                 supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
-            }) //but instead we should be saving Server url from where we would download config including supabase url.
-            .await?;
+            }); //but instead we should be saving Server url from where we would download config including supabase url.
+
+            // Try save config
+            match config::save_config(config_data.clone().expect("Tried to download config and we don't have local one, exiting.")).await {
+                Ok(_) => (),
+                Err(_) => eprintln!("Can't save config file (are you root?), continuing running with config in memory."),
+            };
         }
     }
 
     let client = client::Client {
-        config: config::load_config()
-            .await
-            .expect("Can't load config file! Should be provided with executable."),
+        config: config_data.expect("don't have valid config"),
     };
 
     if let Some(otk) = cli.otk.as_deref() {
@@ -58,7 +72,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     match &cli.command {
-        Some(Commands::Install) => todo!(), //installer::self_installer()?,
+        Some(Commands::Install) => installer::self_installer()?,
         Some(Commands::Remove) => {
             println!("remove")
         }
