@@ -5,13 +5,17 @@
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { copy } from 'svelte-copy';
 
-	export let supabaseClient: SupabaseClient<Database>;
+	interface Props {
+		supabaseClient: SupabaseClient<Database>;
+	}
 
-	let otk: string = '';
-	let isAllowed: boolean = true;
-	let selectedOrgUnitUuid: string;
+	let { supabaseClient }: Props = $props();
 
-	let info: string = '';
+	let otk: string = $state('');
+	let isAllowed: boolean = $state(true);
+	let selectedOrgUnitUuid: string = $state('');
+
+	let info: string = $state('');
 	function copiedInfo() {
 		info = 'Copied!';
 		setTimeout(() => {
@@ -40,10 +44,9 @@
 				<button
 					class="button-ish py-2 rounded-lg bg-dark-color px-4 disabled:bg-darkest-color"
 					disabled={otk == ''}
-					use:copy={otk}
-					on:svelte-copy={() => copiedInfo()}>Copy</button
+					use:copy={otk}>Copy</button
 				>
-				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<!-- svelte-ignore a11y_label_has_associated_control -->
 				<label>{info}</label>
 			</label>
 			<label>
@@ -63,6 +66,6 @@
 				<input type="checkbox" bind:checked={isAllowed} />
 			</label>
 		</div>
-		<button on:click={addComputer} class="button-ish py-2 rounded-lg bg-dark-color">Create</button>
+		<button onclick={addComputer} class="button-ish py-2 rounded-lg bg-dark-color">Create</button>
 	{/await}
 </div>

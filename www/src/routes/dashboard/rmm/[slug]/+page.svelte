@@ -14,13 +14,17 @@
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { get_computers_in_org_unit, get_org_unit_name } from '$lib/db/orgUnit';
 
-	export let data: PageData;
-	$: orgUnitName = '';
-
-	enum ConfigBarOptions {
-		AddComputer = 'Add Computer',
-		ComputerInfo = 'Computer Info'
+	interface Props {
+		data: PageData;
 	}
+
+	let { data }: Props = $props();
+	let orgUnitName = $state('');
+
+	const ConfigBarOptions = {
+		AddComputer: 'Add Computer',
+		ComputerInfo: 'Computer Info'
+	};
 
 	type Computer = {
 		IsAllowed: boolean | null;
@@ -38,11 +42,11 @@
 			| undefined;
 	};
 
-	let _configEnabled = false;
-	let _configBarOption: ConfigBarOptions;
-	let _computer: Computer | undefined;
+	let _configEnabled = $state(false);
+	let _configBarOption: string = $state('');
+	let _computer: Computer | undefined = $state();
 
-	function showConfigBar(configBarOption: ConfigBarOptions, computer?: Computer) {
+	function showConfigBar(configBarOption: string, computer?: Computer) {
 		_configEnabled = true;
 		_configBarOption = configBarOption;
 		_computer = computer;
@@ -78,11 +82,11 @@
 	<div class="w-full h-8 flex flex-row gap-5 px-2">
 		<button
 			class="button-ish"
-			on:click={() => {
+			onclick={() => {
 				showConfigBar(ConfigBarOptions.AddComputer);
 			}}>Add Computer</button
 		>
-		<button class="button-ish" on:click={invalidateAll}>Refresh</button>
+		<button class="button-ish" onclick={invalidateAll}>Refresh</button>
 		<button class="button-ish">...</button>
 	</div>
 	<div class="w-full flex flex-col pt-5">
@@ -122,7 +126,7 @@
 					{#each computers as computer}
 						<tr
 							class="border-b border-dark-color-more-lighter font-light hover:bg-dark-color-more-lighter"
-							on:click={() => {
+							onclick={() => {
 								showConfigBar(ConfigBarOptions.ComputerInfo, {
 									Uuid: computer.uuid,
 									IsAdded: computer.is_added,

@@ -17,7 +17,11 @@
 			| undefined;
 	};
 
-	export let computer: Computer | undefined;
+	interface Props {
+		computer: Computer | undefined;
+	}
+
+	let { computer }: Props = $props();
 </script>
 
 <div class="w-full h-full px-2 py-4 flex flex-col justify-between">

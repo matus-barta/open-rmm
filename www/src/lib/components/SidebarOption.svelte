@@ -2,14 +2,25 @@
 	import { page } from '$app/stores';
 	import IconHome from '$lib/icons/IconHome.svelte';
 
-	export let title: string;
-	export let uuid: string;
-	export let path: string;
-	export let icon: number; //TODO: impl icons selection
-	export let color: string | null; //TODO: impl color selection
-	export let count: Promise<number>;
+	interface Props {
+		title: string;
+		uuid: string;
+		path: string;
+		icon: number; //TODO: impl icons selection
+		color: string | null; //TODO: impl color selection
+		count: Promise<number>;
+	}
 
-	$: selected = $page.url.pathname.includes(uuid);
+	let {
+		title,
+		uuid,
+		path,
+		icon,
+		color,
+		count
+	}: Props = $props();
+
+	let selected = $derived($page.url.pathname.includes(uuid));
 </script>
 
 <a class="option {selected ? 'bg-dark-color-more-lighter' : 'bg-transparent'}" href="{path}{uuid}">

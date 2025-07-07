@@ -3,7 +3,11 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import { registrationEnabled } from '$lib/config';
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const submitLogout: SubmitFunction = async ({ cancel }) => {
 		const { error } = await data.supabase.auth.signOut();

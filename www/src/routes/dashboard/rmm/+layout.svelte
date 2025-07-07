@@ -4,7 +4,12 @@
 	import IconAdd from '$lib/icons/IconAdd.svelte';
 	import type { LayoutData } from './$types';
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
 </script>
 
 <div class="flex flex-row mb-auto w-full mx-auto h-full">
@@ -34,6 +39,6 @@
 		</div>
 	</div>
 	<div class="w-full">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

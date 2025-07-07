@@ -1,6 +1,10 @@
 <script lang="ts">
 	import IconQuestion from '$lib/icons/IconQuestion.svelte';
-	export let is: boolean | null | undefined;
+	interface Props {
+		is: boolean | null | undefined;
+	}
+
+	let { is }: Props = $props();
 
 	const size = 20;
 	const stroke = 2.5;

@@ -1,9 +1,13 @@
 <script lang="ts">
 	import IconUser from '$lib/icons/IconUser.svelte';
 
-	export let full_name: string;
-	export let photo_url: string | null;
-	export let email: string | undefined;
+	interface Props {
+		full_name: string;
+		photo_url: string | null;
+		email: string | undefined;
+	}
+
+	let { full_name, photo_url, email }: Props = $props();
 </script>
 
 <div class="flex flex-row w-fit h-full font-light text-sm pl-1 pr-2 items-center button-ish">

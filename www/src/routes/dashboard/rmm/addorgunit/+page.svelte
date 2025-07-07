@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 
-	export let form;
+	let { form } = $props();
 
-	let creating = false;
+	let creating = $state(false);
 </script>
 
 <svelte:head>

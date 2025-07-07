@@ -12,7 +12,12 @@
 	import { get_tenant } from '$lib/db/tenant';
 	import { get_profile } from '$lib/db/user';
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
 	const user = data.session?.user;
 
 	const size = 30;
@@ -54,7 +59,7 @@
 				<IconSettings {size} />
 			</NavPanelButton>
 		</div>
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

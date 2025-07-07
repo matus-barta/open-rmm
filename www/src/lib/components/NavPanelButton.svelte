@@ -1,19 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	export let link: string;
-	export let tooltip: string;
+	interface Props {
+		link: string;
+		tooltip: string;
+		children?: import('svelte').Snippet;
+	}
 
-	$: selected = $page.url.pathname.includes(link);
+	let { link, tooltip, children }: Props = $props();
+
+	let selected = $derived($page.url.pathname.includes(link));
 </script>
 
 {#if selected}
 	<a href={link} class="navButton selected button-ish">
-		<slot />
+		{@render children?.()}
 	</a>
 {:else}
 	<div class="group flex relative">
 		<a href={link} class="navButton button-ish">
-			<slot />
+			{@render children?.()}
 			<!--TODO: replace with icon selector-->
 		</a>
 		<span
