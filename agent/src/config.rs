@@ -2,8 +2,6 @@ use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
-use crate::utils::check_for_admin_rights;
-
 /// Dynamic config for storing Agent's configuration
 ///
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -16,8 +14,6 @@ pub struct Config {
 const CONFIG_PATH: &str = "/etc/openrmm-agent/config.json";
 #[cfg(target_os = "windows")]
 const CONFIG_PATH: &str = "/openrmm-agent/config.json";
-
-const FALLBACK_PATH: &str = "./config.json";
 
 fn get_config_path() -> PathBuf {
     #[cfg(target_os = "windows")]
