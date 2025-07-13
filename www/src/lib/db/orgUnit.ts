@@ -37,7 +37,7 @@ export const get_org_units = async (supabaseClient: SupabaseClient<Database>) =>
 		.select('uuid, name, color, icon_id');
 	if (!org_units) {
 		console.log(db_error);
-		throw error(404, db_error);
+		throw error(500, db_error);
 	} // TODO: log error and show some client friendly msg
 	return org_units;
 };
