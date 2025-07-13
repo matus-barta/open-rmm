@@ -19,7 +19,7 @@
 	onclick={() => {
 		open = true;
 	}}
-	class="flex h-10 w-96 flex-row items-center justify-between rounded-2xl "
+	class="flex h-8 w-72 flex-row items-center justify-between rounded-2xl "
 >
 	<p class="text-muted-foreground text-sm">Type a command or search...</p>
 	<kbd
@@ -34,9 +34,7 @@
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
 		<Command.Group heading="Suggestions">
-			<Command.Item>Calendar</Command.Item>
-			<Command.Item>Search Emoji</Command.Item>
-			<Command.Item>Calculator</Command.Item>
+			<Command.Item>THIS IS NOT WORKING - JUST PLACEHOLDER</Command.Item>
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>
