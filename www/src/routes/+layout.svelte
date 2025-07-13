@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { ModeWatcher } from 'mode-watcher';
 
 	let { data, children } = $props();
 	let { session, supabase } = $derived(data);
@@ -17,4 +18,5 @@
 	});
 </script>
 
+<ModeWatcher />
 {@render children?.()}
