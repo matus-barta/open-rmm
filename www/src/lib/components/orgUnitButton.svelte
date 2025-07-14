@@ -13,9 +13,13 @@
 		count: number;
 	}
 
+	const btnColors = ['bg-blue-900', 'bg-red-900', 'bg-green-900', 'bg-yellow-500'];
+
 	let { orgUnit, count }: Props = $props();
 
 	let selected = $derived($page.url.pathname.includes(orgUnit.uuid));
+
+	console.log(orgUnit.color);
 </script>
 
 <Button
@@ -25,8 +29,11 @@
 >
 	<div class="flex flex-row items-center gap-4">
 		<IconHome
-			class="stroke-background dark:stroke-foreground size-[30px] rounded-md bg-blue-900 p-1.5"
+			class="stroke-background dark:stroke-foreground size-[30px] rounded-md {orgUnit.color != null
+				? orgUnit.color
+				: 'bg-blue-800'} p-1.5"
 		/>
+		<!--FIXME:Styles are not imported-->
 		<span class="m-0 p-0 font-light">{orgUnit.name}</span>
 	</div>
 	<span>{count}</span>
