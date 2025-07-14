@@ -16,7 +16,7 @@ export const add_computer = async (
 	org_unit_uuid: string,
 	is_allowed?: boolean
 ) => {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	 
 	const { data: db_req_data, error: db_error } = await supabaseClient
 		.from('computers')
 		.insert([{ one_time_key: OneTimeKey(), is_allowed, org_unit_uuid }])

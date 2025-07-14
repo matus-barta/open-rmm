@@ -12,7 +12,7 @@ export const actions: Actions = {
 			const body = Object.fromEntries(await request.formData());
 
 			//-----------REGISTERING USER----------//
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			 
 			const { data: user_data, error: err } = await locals.supabase.auth.signUp({
 				email: body.email as string,
 				password: body.password as string

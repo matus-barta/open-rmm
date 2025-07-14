@@ -151,7 +151,7 @@
 								{computer.system_info?.computer_name}
 							</td>
 							<td>
-								{'description'}
+								description
 							</td>
 							<td>
 								<BoolMark is={computer.is_added} />
@@ -160,10 +160,10 @@
 								<BoolMark is={computer.is_allowed} />
 							</td>
 							<td>
-								{'AV'}
+								AV
 							</td>
 							<td>
-								{'disk'}
+								disk
 							</td>
 							<td>
 								<BoolMark is={false} />

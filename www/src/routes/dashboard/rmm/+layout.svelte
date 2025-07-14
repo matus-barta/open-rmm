@@ -20,11 +20,11 @@
 		</div>
 		<div class="h-11">
 			<a
-				href={'/dashboard/rmm/addorgunit'}
+				href="/dashboard/rmm/addorgunit"
 				class="flex h-full flex-row items-center justify-center space-x-2 font-light hover:bg-transparent hover:stroke-green-600 hover:text-green-600"
 			>
 				<IconAdd size="25" />
-				<span class="text-sm font-light">{'Add Org unit'}</span>
+				<span class="text-sm font-light">Add Org unit</span>
 			</a>
 		</div>
 	</div>
