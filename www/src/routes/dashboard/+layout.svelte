@@ -13,7 +13,7 @@
 	const user = data.session?.user;
 </script>
 
-<root class="flex h-dvh w-dvw flex-col">
+<root class="flex h-screen flex-col">
 	<TopBar tenantName={data.tenant?.name} stars={data.ghStars} />
 	<AppSidebar
 		user={{ name: data.profile?.full_name, email: data.user?.email, avatar: data.profile?.photo }}

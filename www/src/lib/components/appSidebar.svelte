@@ -51,9 +51,9 @@
 	let { children, user }: Props = $props();
 </script>
 
-<appSidebar class="flex h-dvh flex-row">
+<appSidebar class="flex h-full flex-row">
 	<apps
-		class="bg-sidebar border-sidebar-border flex h-full w-16 flex-col justify-between border-r-1 py-2"
+		class="bg-sidebar border-sidebar-border border-r-1 flex h-full w-16 flex-col justify-between py-2"
 	>
 		<content class="flex flex-col items-center gap-2">
 			{#each data.navMain as app}
@@ -61,8 +61,9 @@
 					<Tooltip.Root>
 						<Tooltip.Trigger>
 							<div
-								class={`border-l-2 border-transparent transition delay-150 duration-300 ease-in-out
-								${isApp(app.url) && selectedTypeToggle ? 'border-my-primary dark:border-my-primary' : ''}`}
+								class={isApp(app.url) && selectedTypeToggle
+									? 'border-my-primary dark:border-my-primary delay-50 border-l-2 transition duration-150 ease-in-out'
+									: 'delay-50  border-l-2 border-transparent transition duration-150 ease-in-out'}
 							>
 								<Button href={app.url} variant="ghost" class="size-12">
 									<app.icon
@@ -88,8 +89,8 @@
 					<Tooltip.Trigger>
 						<div
 							class={isApp('/dashboard/settings') && selectedTypeToggle
-								? 'border-my-primary dark:border-my-primary border-l-2 transition delay-50 duration-150 ease-in-out'
-								: 'border-l-2  border-transparent transition delay-50 duration-150 ease-in-out'}
+								? 'border-my-primary dark:border-my-primary delay-50 border-l-2 transition duration-150 ease-in-out'
+								: 'delay-50  border-l-2 border-transparent transition duration-150 ease-in-out'}
 						>
 							<Button href="/dashboard/settings" variant="ghost" class="size-12">
 								<SettingsIcon
