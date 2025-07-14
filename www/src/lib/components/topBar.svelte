@@ -22,7 +22,7 @@
 >
 	<a
 		href="/dashboard"
-		class="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 delay-50 flex flex-row items-center space-x-4 rounded-xl p-2 transition duration-150 ease-in-out"
+		class="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 flex flex-row items-center space-x-4 rounded-xl p-2 transition delay-50 duration-150 ease-in-out"
 	>
 		<IconLogo size="32" />
 		<div class="grid flex-1 text-left text-sm leading-tight">
@@ -41,10 +41,10 @@
 		<Separator orientation="vertical" />
 		<Button onclick={toggleMode} variant="outline" size="sm">
 			<SunIcon
-				class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 !transition-all dark:-rotate-90 dark:scale-0"
+				class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
 			/>
 			<MoonIcon
-				class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 !transition-all dark:rotate-0 dark:scale-100"
+				class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
 			/>
 			<span class="sr-only">Toggle theme</span>
 		</Button>
