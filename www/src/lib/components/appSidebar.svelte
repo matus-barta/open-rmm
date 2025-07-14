@@ -61,15 +61,16 @@
 					<Tooltip.Root>
 						<Tooltip.Trigger>
 							<div
-								class={isApp(app.url) && selectedTypeToggle
-									? 'border-my-primary dark:border-my-primary delay-50 border-l-2 transition duration-150 ease-in-out'
-									: 'border-l-2 border-transparent transition delay-150 duration-300 ease-in-out'}
+								class={`border-l-2 border-transparent transition delay-150 duration-300 ease-in-out
+								${isApp(app.url) && selectedTypeToggle ? 'border-my-primary dark:border-my-primary' : ''}`}
 							>
 								<Button href={app.url} variant="ghost" class="size-12">
 									<app.icon
-										class={isApp(app.url) && !selectedTypeToggle
-											? 'stroke-my-primary size-8 stroke-1'
-											: 'size-8 stroke-1'}
+										class={`size-8 stroke-1 ${
+											isApp(app.url) && !selectedTypeToggle
+												? 'stroke-my-primary size-8 stroke-1'
+												: ''
+										}`}
 									/>
 								</Button>
 							</div>
@@ -92,9 +93,11 @@
 						>
 							<Button href="/dashboard/settings" variant="ghost" class="size-12">
 								<SettingsIcon
-									class={isApp('/dashboard/settings') && !selectedTypeToggle
-										? 'stroke-my-primary size-8 stroke-1'
-										: 'size-8 stroke-1'}
+									class={`size-8 stroke-1 ${
+										isApp('/dashboard/settings') && !selectedTypeToggle
+											? 'stroke-my-primary size-8 stroke-1'
+											: ''
+									}`}
 								/>
 							</Button>
 						</div>

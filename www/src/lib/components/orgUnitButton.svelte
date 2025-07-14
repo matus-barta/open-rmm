@@ -18,10 +18,16 @@
 	let selected = $derived($page.url.pathname.includes(orgUnit.uuid));
 </script>
 
-<Button href={`/dashboard/rmm/${orgUnit.uuid}`}>
-	<div class="flex flex-row items-center gap-2">
-		<IconHome size="20" />
-		<span class="m-0 p-0">{orgUnit.name}</span>
+<Button
+	variant="ghost"
+	href={`/dashboard/rmm/${orgUnit.uuid}`}
+	class={`flex h-10 flex-row justify-between ${selected ? 'bg-ring/25' : ''}`}
+>
+	<div class="flex flex-row items-center gap-4">
+		<IconHome
+			class="stroke-background dark:stroke-foreground size-[30px] rounded-md bg-blue-900 p-1.5"
+		/>
+		<span class="m-0 p-0 font-light">{orgUnit.name}</span>
 	</div>
 	<span>{count}</span>
 </Button>

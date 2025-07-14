@@ -14,17 +14,16 @@ export const load: LayoutLoad = async ({ parent }) => {
 		};
 	};
 
-	const data = get_org_units(supabase)
-		.then((data) => {
-			let orgUnits: OrgUnit[] = [];
-			data.forEach(async (orgUnit) => {
-				get_computer_count_in_org_unit(supabase, orgUnit.uuid).then((count) => {
-					orgUnits.push({ count, orgUnit });
-				});
-			});
-			return orgUnits;
-		})
-		.then((orgUnits) => orgUnits);
+	const data = await get_org_units(supabase);
 
-	console.log(await data);
+	const orgUnits: OrgUnit[] = await Promise.all(
+		data.map(async (orgUnit) => {
+			const count = await get_computer_count_in_org_unit(supabase, orgUnit.uuid);
+			return { count, orgUnit };
+		})
+	);
+
+	return {
+		orgUnits
+	};
 };
