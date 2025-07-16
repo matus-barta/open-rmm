@@ -11,8 +11,8 @@
 	let { data, children }: Props = $props();
 </script>
 
-<div class="mx-auto mb-auto flex h-full w-full flex-row">
-	<div class="bg-primary-foreground flex w-72 flex-col justify-between border-r-1">
+<div class="mx-auto mb-auto flex h-full flex-row">
+	<div class="bg-primary-foreground border-r-1 flex w-72 flex-none flex-col justify-between">
 		<div class="flex flex-col p-2">
 			{#each data.orgUnits as { orgUnit, count }}
 				<OrgUnitButton {orgUnit} {count} />
@@ -28,7 +28,7 @@
 			</a>
 		</div>
 	</div>
-	<div class="w-full">
+	<div class="flex-1">
 		{@render children?.()}
 	</div>
 </div>

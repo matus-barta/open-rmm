@@ -112,7 +112,7 @@
 			<NavUser {user} />
 		</footer>
 	</apps>
-	<content>
+	<content class="flex-1">
 		{@render children?.()}
 	</content>
 </appSidebar>
