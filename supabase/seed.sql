@@ -151,7 +151,7 @@ INSERT INTO "public"."tenants" ("uuid", "created_at", "name") VALUES
 --
 
 INSERT INTO "public"."org_units" ("uuid", "created_at", "name", "tenant_uuid", "color", "icon_id") VALUES
-	('497aeef2-edd7-4122-8d05-2edcc206a187', '2024-07-29 16:34:44.596277+00', 'Default', '33c665ab-513e-4847-a1e2-a564b1a654b5', NULL, 0);
+	('497aeef2-edd7-4122-8d05-2edcc206a187', '2024-07-29 16:34:44.596277+00', 'Default', '33c665ab-513e-4847-a1e2-a564b1a654b5', 0, 0);
 
 
 --
