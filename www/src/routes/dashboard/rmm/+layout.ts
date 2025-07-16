@@ -9,7 +9,7 @@ export const load: LayoutLoad = async ({ parent }) => {
 		orgUnit: {
 			uuid: string;
 			name: string;
-			color: string | null;
+			color: number;
 			icon_id: number;
 		};
 	};

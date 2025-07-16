@@ -111,7 +111,7 @@ export const add_org_unit = async (
 	supabaseClient: SupabaseClient<Database>,
 	org_unit_name: string,
 	tenant_id: string,
-	color?: string,
+	color = 0,
 	icon_id = 0
 ) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
