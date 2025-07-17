@@ -14,9 +14,7 @@ export const load: LayoutLoad = async ({ parent, fetch }) => {
 
 	if (user) {
 		const profile = await get_profile(supabase, user.id);
-		const tenant = async () => {
-			await get_tenant(supabase, profile.tenant_id);
-		};
+		const tenant = await get_tenant(supabase, profile.tenant_id);
 
 		return {
 			profile,
