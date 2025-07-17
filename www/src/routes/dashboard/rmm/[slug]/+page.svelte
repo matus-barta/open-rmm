@@ -1,183 +1,129 @@
 <script lang="ts">
-	import OsMark from '$lib/components/Marks/OsMark.svelte';
-	import TypeMark from '$lib/components/Marks/TypeMark.svelte';
-	import BoolMark from '$lib/components/Marks/BoolMark.svelte';
-
-	import ConfigBar from '$lib/components/ConfigBar.svelte';
-	import AddComputer from '$lib/components/ConfigBarOptions/AddComputer.svelte';
-	import ComputerInfo from '$lib/components/ConfigBarOptions/ComputerInfo.svelte';
-
+	import { invalidateAll } from '$app/navigation';
+	import DialogBtn from '$lib/components/dialogButton.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import * as Table from '$lib/components/ui/table/index.js';
 	import formatIsoDateTime from '$lib/utils/formatDateTime';
+	import type { PageProps } from './$types';
+	import Os from '$lib/components/Marks/os.svelte';
+	import MachineType from '$lib/components/Marks/machineType.svelte';
+	import Bool from '$lib/components/Marks/bool.svelte';
 
-	import type { PageData } from './$types';
-	import { page } from '$app/stores';
-	import { afterNavigate, invalidateAll } from '$app/navigation';
-	import { get_computers_in_org_unit, get_org_unit_name } from '$lib/db/orgUnit';
+	let { data }: PageProps = $props();
 
-	interface Props {
-		data: PageData;
-	}
-
-	let { data }: Props = $props();
-	let orgUnitName = $state('');
-
-	const ConfigBarOptions = {
-		AddComputer: 'Add Computer',
-		ComputerInfo: 'Computer Info'
-	};
-
-	type Computer = {
-		IsAllowed: boolean | null;
-		Uuid: string | null;
-		IsAdded: boolean | null;
-		SystemInfo:
-			| {
-					ComputerName: string | null | undefined;
-					PendingReboot: boolean | null | undefined;
-					LastBootupTime: string | null | undefined;
-					OsName: string | null | undefined;
-					Type: string | null | undefined;
-			  }
-			| null
-			| undefined;
-	};
-
-	let _configEnabled = $state(false);
-	let _configBarOption: string = $state('');
-	let _computer: Computer | undefined = $state();
-
-	function showConfigBar(configBarOption: string, computer?: Computer) {
-		_configEnabled = true;
-		_configBarOption = configBarOption;
-		_computer = computer;
-	}
-
-	afterNavigate(async () => {
-		orgUnitName = await get_org_unit_name(data.supabase, $page.params.slug);
-	});
+	const invoices = [
+		{
+			invoice: 'INV001',
+			paymentStatus: 'Paid',
+			totalAmount: '$250.00',
+			paymentMethod: 'Credit Card'
+		},
+		{
+			invoice: 'INV002',
+			paymentStatus: 'Pending',
+			totalAmount: '$150.00',
+			paymentMethod: 'PayPal'
+		},
+		{
+			invoice: 'INV003',
+			paymentStatus: 'Unpaid',
+			totalAmount: '$350.00',
+			paymentMethod: 'Bank Transfer'
+		},
+		{
+			invoice: 'INV004',
+			paymentStatus: 'Paid',
+			totalAmount: '$450.00',
+			paymentMethod: 'Credit Card'
+		},
+		{
+			invoice: 'INV005',
+			paymentStatus: 'Paid',
+			totalAmount: '$550.00',
+			paymentMethod: 'PayPal'
+		},
+		{
+			invoice: 'INV006',
+			paymentStatus: 'Pending',
+			totalAmount: '$200.00',
+			paymentMethod: 'Bank Transfer'
+		},
+		{
+			invoice: 'INV007',
+			paymentStatus: 'Unpaid',
+			totalAmount: '$300.00',
+			paymentMethod: 'Credit Card'
+		}
+	];
 </script>
 
 <svelte:head>
-	<title>Open RMM - {orgUnitName}</title>
+	<title>Open RMM - {data.orgUnitName}</title>
 </svelte:head>
 
-<div class="relative flex h-full w-full flex-col pt-1">
-	{#if _configEnabled}
-		<!--TODO: implement this to the component itself-->
-		<ConfigBar
-			title={_configBarOption}
-			on:close={() => {
-				_configEnabled = false;
-			}}
-		>
-			{#if _configBarOption == ConfigBarOptions.AddComputer}
-				<AddComputer supabaseClient={data.supabase} />
-			{:else if _configBarOption == ConfigBarOptions.ComputerInfo}
-				<ComputerInfo computer={_computer} />
-				<!--TODO: or just slap ID to it and load it in the component-->
-			{/if}
-		</ConfigBar>
-	{/if}
-
-	<div class="flex h-8 w-full flex-row gap-5 px-2">
-		<button
-			class="button-ish"
-			onclick={() => {
-				showConfigBar(ConfigBarOptions.AddComputer);
-			}}>Add Computer</button
-		>
-		<button class="button-ish" onclick={invalidateAll}>Refresh</button>
-		<button class="button-ish">...</button>
+{#snippet orgUnitDialog()}
+	<div class="grid gap-4 py-4">
+		<div class="grid grid-cols-4 items-center gap-4">
+			<Label for="name" class="text-right">Name</Label>
+			<Input id="name" value="Pedro Duarte" class="col-span-3" />
+		</div>
+		<div class="grid grid-cols-4 items-center gap-4">
+			<Label for="username" class="text-right">Username</Label>
+			<Input id="username" value="@peduarte" class="col-span-3" />
+		</div>
 	</div>
-	<div class="flex w-full flex-col pt-5">
-		<table>
-			<thead class="bg-slate text-sm">
-				<tr>
-					<th class="font-normal"> OS </th>
-					<th class="font-normal"> Type </th>
-					<th class="font-normal"> Name </th>
-					<th class="font-normal"> Description </th>
-					<th class="font-normal"> Is Added </th>
-					<th class="font-normal"> Is Allowed </th>
-					<th class="font-normal">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="h-5 w-5"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z"
-							/>
-						</svg>
-					</th>
-					<th class="font-normal"> Disk </th>
-					<th class="font-normal"> Pending Updates </th>
-					<th class="font-normal"> Pending Reboot </th>
-					<th class="font-normal"> Last Bootup Time </th>
-				</tr>
-			</thead>
-			<tbody class="text-xs">
-				{#await get_computers_in_org_unit(data.supabase, $page.params.slug) then computers}
-					{#each computers as computer}
-						<tr
-							class="border-b border-gray-500 font-light hover:bg-gray-200"
-							onclick={() => {
-								showConfigBar(ConfigBarOptions.ComputerInfo, {
-									Uuid: computer.uuid,
-									IsAdded: computer.is_added,
-									IsAllowed: computer.is_allowed,
-									SystemInfo: {
-										ComputerName: computer.system_info?.computer_name,
-										LastBootupTime: computer.system_info?.last_bootup_time,
-										OsName: computer.system_info?.os_name,
-										PendingReboot: computer.system_info?.pending_reboot,
-										Type: computer.system_info?.machine_type
-									}
-								});
-							}}
-						>
-							<td>
-								<OsMark os={computer.system_info?.os_name} />
-							</td>
-							<td>
-								<TypeMark type={computer.system_info?.machine_type} />
-							</td>
-							<td class="flex items-center justify-center">
-								{computer.system_info?.computer_name}
-							</td>
-							<td>
-								description
-							</td>
-							<td>
-								<BoolMark is={computer.is_added} />
-							</td>
-							<td>
-								<BoolMark is={computer.is_allowed} />
-							</td>
-							<td>
-								AV
-							</td>
-							<td>
-								disk
-							</td>
-							<td>
-								<BoolMark is={false} />
-							</td>
-							<td>
-								<BoolMark is={computer.system_info?.pending_reboot} />
-							</td>
-							<td class="flex items-center justify-center">
-								{formatIsoDateTime(computer.system_info?.last_bootup_time)}
-							</td>
-						</tr>
-					{/each}
-				{/await}
-			</tbody>
-		</table>
+{/snippet}
+
+<div class="flex h-full flex-col gap-2">
+	<menubar class="flex h-auto flex-row rounded-lg border-2 p-1">
+		<DialogBtn
+			variant="ghost"
+			size="sm"
+			title="Edit Org Unit"
+			description="Edit Org Unit properties."
+			content={orgUnitDialog}
+		></DialogBtn>
+		<Button variant="ghost" size="sm">Add Computer</Button>
+		<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
+		<Button size="sm" variant="ghost">...</Button>
+	</menubar>
+
+	<div class="flex-1 rounded-lg border-2">
+		<Table.Root>
+			<Table.Header class="bg-secondary/50">
+				<Table.Row>
+					<Table.Head>OS</Table.Head>
+					<Table.Head>Type</Table.Head>
+					<Table.Head>Name</Table.Head>
+					<Table.Head>Description</Table.Head>
+					<Table.Head>Is Added</Table.Head>
+					<Table.Head>Is Allowed</Table.Head>
+					<Table.Head>AV</Table.Head>
+					<Table.Head>Disk</Table.Head>
+					<Table.Head>Pending Updates</Table.Head>
+					<Table.Head>Pending Reboot</Table.Head>
+					<Table.Head>Last Bootup Time</Table.Head>
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{#each data.computers as computer}
+					<Table.Row>
+						<Table.Cell><Os os={computer.system_info?.os_name} /></Table.Cell>
+						<Table.Cell><MachineType type={computer.system_info?.machine_type} /></Table.Cell>
+						<Table.Cell>{computer.system_info?.computer_name}</Table.Cell>
+						<Table.Cell></Table.Cell>
+						<Table.Cell><Bool is={computer.is_added} /></Table.Cell>
+						<Table.Cell><Bool is={computer.is_allowed} /></Table.Cell>
+						<Table.Cell></Table.Cell>
+						<Table.Cell></Table.Cell>
+						<Table.Cell></Table.Cell>
+						<Table.Cell><Bool is={computer.system_info?.pending_reboot} /></Table.Cell>
+						<Table.Cell>{formatIsoDateTime(computer.system_info?.last_bootup_time)}</Table.Cell>
+					</Table.Row>
+				{/each}
+			</Table.Body>
+		</Table.Root>
 	</div>
 </div>

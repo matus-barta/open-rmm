@@ -97,26 +97,28 @@
 		<span class="w-38 m-0 overflow-clip p-0 font-light">{orgUnit.name}</span>
 	</div>
 
-	<Button
-		variant="ghost"
-		size="icon"
-		class="h-7 w-7 {selected && hover
-			? 'hover:bg-black/10 dark:hover:bg-white/10'
-			: 'hover:bg-transparent dark:hover:bg-transparent'}"
-	>
-		{#if hover && selected}
-			<Tooltip.Provider>
-				<Tooltip.Root>
-					<Tooltip.Trigger>
+	<!--{#if hover && selected}
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<Button
+						variant="ghost"
+						size="icon"
+						class="h-7 w-7 {selected && hover
+							? 'hover:bg-black/10 dark:hover:bg-white/10'
+							: 'hover:bg-transparent dark:hover:bg-transparent'}"
+					>
 						<DotsIcon size="16" class="m-0 p-0" />
-					</Tooltip.Trigger>
-					<Tooltip.Content side="right">
-						<p>Edit</p>
-					</Tooltip.Content>
-				</Tooltip.Root>
-			</Tooltip.Provider>
-		{:else}
-			<span class="w-4">{count}</span>
-		{/if}
-	</Button>
+					</Button>
+				</Tooltip.Trigger>
+				<Tooltip.Content side="right">
+					<p>Edit</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+	{:else}-->
+	<div class="flex h-7 w-7 items-center justify-center">
+		<span class="flex h-4 w-4 items-center justify-center">{count}</span>
+	</div>
+	<!--{/if}-->
 </Button>

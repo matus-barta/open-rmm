@@ -1,7 +1,7 @@
 <script lang="ts">
 	import OrgUnitButton from '$lib/components/orgUnitButton.svelte';
 	import type { LayoutData } from './$types';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import { Grid2X2Plus } from '@lucide/svelte';
 
 	interface Props {
@@ -22,10 +22,10 @@
 
 		<Button variant="default" href="/dashboard/rmm/addorgunit" class="mx-6 my-4 p-5">
 			<Grid2X2Plus />
-			<span class="text-sm font-light">Add Org unit</span></Button
+			<span class="text-sm font-light">Add Org Unit</span></Button
 		>
 	</div>
-	<div class="flex-1">
+	<div class="flex-1 p-2">
 		{@render children?.()}
 	</div>
 </div>
