@@ -1,7 +1,8 @@
 <script lang="ts">
 	import OrgUnitButton from '$lib/components/orgUnitButton.svelte';
-	import IconAdd from '$lib/icons/IconAdd.svelte';
 	import type { LayoutData } from './$types';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Grid2X2Plus } from '@lucide/svelte';
 
 	interface Props {
 		data: LayoutData;
@@ -12,21 +13,17 @@
 </script>
 
 <div class="mx-auto mb-auto flex h-full flex-row">
-	<div class="bg-primary-foreground border-r-1 flex w-72 flex-none flex-col justify-between">
-		<div class="flex flex-col p-2">
+	<div class="bg-primary-foreground border-r-1 flex w-72 flex-col justify-between">
+		<div class="flex flex-1 flex-col overflow-y-auto p-2">
 			{#each data.orgUnits as { orgUnit, count }}
 				<OrgUnitButton {orgUnit} {count} />
 			{/each}
 		</div>
-		<div class="h-11">
-			<a
-				href="/dashboard/rmm/addorgunit"
-				class="flex h-full flex-row items-center justify-center space-x-2 font-light hover:bg-transparent hover:stroke-green-600 hover:text-green-600"
-			>
-				<IconAdd size="25" />
-				<span class="text-sm font-light">Add Org unit</span>
-			</a>
-		</div>
+
+		<Button variant="default" href="/dashboard/rmm/addorgunit" class="mx-6 my-4 p-5">
+			<Grid2X2Plus />
+			<span class="text-sm font-light">Add Org unit</span></Button
+		>
 	</div>
 	<div class="flex-1">
 		{@render children?.()}

@@ -10,7 +10,6 @@
 	}
 
 	let { data, children }: Props = $props();
-	const user = data.session?.user;
 </script>
 
 <root class="flex h-screen flex-col">
