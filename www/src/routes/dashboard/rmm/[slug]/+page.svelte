@@ -12,51 +12,6 @@
 	import Bool from '$lib/components/Marks/bool.svelte';
 
 	let { data }: PageProps = $props();
-
-	const invoices = [
-		{
-			invoice: 'INV001',
-			paymentStatus: 'Paid',
-			totalAmount: '$250.00',
-			paymentMethod: 'Credit Card'
-		},
-		{
-			invoice: 'INV002',
-			paymentStatus: 'Pending',
-			totalAmount: '$150.00',
-			paymentMethod: 'PayPal'
-		},
-		{
-			invoice: 'INV003',
-			paymentStatus: 'Unpaid',
-			totalAmount: '$350.00',
-			paymentMethod: 'Bank Transfer'
-		},
-		{
-			invoice: 'INV004',
-			paymentStatus: 'Paid',
-			totalAmount: '$450.00',
-			paymentMethod: 'Credit Card'
-		},
-		{
-			invoice: 'INV005',
-			paymentStatus: 'Paid',
-			totalAmount: '$550.00',
-			paymentMethod: 'PayPal'
-		},
-		{
-			invoice: 'INV006',
-			paymentStatus: 'Pending',
-			totalAmount: '$200.00',
-			paymentMethod: 'Bank Transfer'
-		},
-		{
-			invoice: 'INV007',
-			paymentStatus: 'Unpaid',
-			totalAmount: '$300.00',
-			paymentMethod: 'Credit Card'
-		}
-	];
 </script>
 
 <svelte:head>
@@ -94,16 +49,16 @@
 		<Table.Root>
 			<Table.Header class="bg-secondary/50">
 				<Table.Row>
-					<Table.Head>OS</Table.Head>
-					<Table.Head>Type</Table.Head>
+					<Table.Head class="text-center">OS</Table.Head>
+					<Table.Head class="text-center">Type</Table.Head>
 					<Table.Head>Name</Table.Head>
 					<Table.Head>Description</Table.Head>
-					<Table.Head>Is Added</Table.Head>
-					<Table.Head>Is Allowed</Table.Head>
+					<Table.Head class="text-center">Is Added</Table.Head>
+					<Table.Head class="text-center">Is Allowed</Table.Head>
 					<Table.Head>AV</Table.Head>
 					<Table.Head>Disk</Table.Head>
-					<Table.Head>Pending Updates</Table.Head>
-					<Table.Head>Pending Reboot</Table.Head>
+					<Table.Head class="text-center">Pending Updates</Table.Head>
+					<Table.Head class="text-center">Pending Reboot</Table.Head>
 					<Table.Head>Last Bootup Time</Table.Head>
 				</Table.Row>
 			</Table.Header>
