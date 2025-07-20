@@ -10,6 +10,7 @@
 	import Os from '$lib/components/Marks/os.svelte';
 	import MachineType from '$lib/components/Marks/machineType.svelte';
 	import Bool from '$lib/components/Marks/bool.svelte';
+	import DrawerButton from '$lib/components/drawerButton.svelte';
 
 	let { data }: PageProps = $props();
 </script>
@@ -31,6 +32,19 @@
 	</div>
 {/snippet}
 
+{#snippet addComputerDialog()}
+	<div class="grid flex-1 auto-rows-min gap-6 px-4">
+		<div class="grid gap-3">
+			<Label for="name" class="text-right">Name</Label>
+			<Input id="name" value="Pedro Duarte" />
+		</div>
+		<div class="grid gap-3">
+			<Label for="username" class="text-right">Username</Label>
+			<Input id="username" value="@peduarte" />
+		</div>
+	</div>
+{/snippet}
+
 <div class="flex h-full flex-col gap-2">
 	<menubar class="flex h-auto flex-row rounded-lg border-2 p-1">
 		<DialogBtn
@@ -39,8 +53,14 @@
 			title="Edit Org Unit"
 			description="Edit Org Unit properties."
 			content={orgUnitDialog}
-		></DialogBtn>
-		<Button variant="ghost" size="sm">Add Computer</Button>
+		/>
+		<DrawerButton
+			variant="ghost"
+			size="sm"
+			title="Add Computer"
+			description="Add new computer."
+			content={addComputerDialog}
+		/>
 		<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
 		<Button size="sm" variant="ghost">...</Button>
 	</menubar>
