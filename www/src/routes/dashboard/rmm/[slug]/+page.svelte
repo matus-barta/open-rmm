@@ -11,6 +11,7 @@
 	import MachineType from '$lib/components/Marks/machineType.svelte';
 	import Bool from '$lib/components/Marks/bool.svelte';
 	import DrawerButton from '$lib/components/drawerButton.svelte';
+	import { SquarePen } from '@lucide/svelte';
 
 	let { data }: PageProps = $props();
 </script>
@@ -46,23 +47,27 @@
 {/snippet}
 
 <div class="flex h-full flex-col gap-2">
-	<menubar class="flex h-auto flex-row rounded-lg border-2 p-1">
+	<menubar class="flex h-auto flex-row justify-between rounded-lg border-2 p-1">
+		<leftbar class="flex flex-row">
+			<DrawerButton
+				variant="ghost"
+				size="sm"
+				title="Add Computer"
+				description="Add new computer."
+				content={addComputerDialog}
+			/>
+			<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
+			<Button size="sm" variant="ghost">...</Button>
+		</leftbar>
+
 		<DialogBtn
 			variant="ghost"
 			size="sm"
 			title="Edit Org Unit"
 			description="Edit Org Unit properties."
 			content={orgUnitDialog}
+			Icon={SquarePen}
 		/>
-		<DrawerButton
-			variant="ghost"
-			size="sm"
-			title="Add Computer"
-			description="Add new computer."
-			content={addComputerDialog}
-		/>
-		<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
-		<Button size="sm" variant="ghost">...</Button>
 	</menubar>
 
 	<div class="flex-1 rounded-lg border-2">
