@@ -3,6 +3,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { ModeWatcher } from 'mode-watcher';
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
 
 	let { data, children } = $props();
 	let { session, supabase } = $derived(data);
@@ -19,4 +20,5 @@
 </script>
 
 <ModeWatcher />
+<Toaster position="top-center" />
 {@render children?.()}

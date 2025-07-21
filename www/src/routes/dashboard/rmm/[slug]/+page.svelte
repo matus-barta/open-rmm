@@ -11,9 +11,50 @@
 	import MachineType from '$lib/components/Marks/machineType.svelte';
 	import Bool from '$lib/components/Marks/bool.svelte';
 	import DrawerButton from '$lib/components/drawerButton.svelte';
-	import { SquarePen } from '@lucide/svelte';
+	import { Check, ClipboardCopy, Ellipsis, SquarePen } from '@lucide/svelte';
+	import { add_computer } from '$lib/db/computer';
+	import { toast } from 'svelte-sonner';
+	import { copyText } from 'svelte-copy';
+	import * as Select from '$lib/components/ui/select/index.js';
+	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import log from '$lib/utils/logger';
 
 	let { data }: PageProps = $props();
+
+	let otk = $state('');
+	let selectedOrgUnitUuid = $state('');
+	let isAllowed = $state(true);
+
+	let copied = $state(false);
+	function copyOtk() {
+		copyText(otk);
+		copied = true;
+		toast.info('Coppied!');
+		setTimeout(() => {
+			copied = false;
+		}, 3000);
+	}
+
+	async function addComputer() {
+		if (selectedOrgUnitUuid == '') {
+			toast.error('You must select Org Unit!');
+			return;
+		}
+		otk = await add_computer(data.supabase, selectedOrgUnitUuid, isAllowed)
+			.catch((e) => {
+				log.error(e.body.message);
+			})
+			.then((value) => {
+				toast.info('Created computer!');
+				return value ?? '';
+			});
+	}
+
+	const triggerContent = $derived(
+		data.orgUnits.find((f) => f.orgUnit.uuid == selectedOrgUnitUuid)?.orgUnit.name ??
+			'Select an Org Unit'
+	);
 </script>
 
 <svelte:head>
@@ -36,29 +77,59 @@
 {#snippet addComputerDialog()}
 	<div class="grid flex-1 auto-rows-min gap-6 px-4">
 		<div class="grid gap-3">
-			<Label for="name" class="text-right">Name</Label>
-			<Input id="name" value="Pedro Duarte" />
+			<Label for="orgUnit" class="text-right">Org Unit</Label>
+			<Select.Root type="single" bind:value={selectedOrgUnitUuid}>
+				<Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
+				<Select.Content>
+					{#each data.orgUnits as { orgUnit } (orgUnit.uuid)}
+						<Select.Item value={orgUnit.uuid} label={orgUnit.name}>
+							{orgUnit.name}
+						</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
 		</div>
-		<div class="grid gap-3">
-			<Label for="username" class="text-right">Username</Label>
-			<Input id="username" value="@peduarte" />
+
+		<div class="flex flex-row gap-3">
+			<Label for="isAllowed" class="text-right">Is Allowed</Label>
+			<Checkbox id="isAllowed" bind:checked={isAllowed} />
+		</div>
+		<Separator />
+		<div class="flex flex-col gap-3">
+			<Label for="otk" class="text-right">One Time Key</Label>
+			<div class="flex flex-row gap-2">
+				<Input id="otk" bind:value={otk} disabled />
+				<Button onclick={copyOtk} id="copy" variant="outline" size="icon" disabled={otk == ''}>
+					<Check
+						class={`${copied ? '' : 'opacity-0'} transition-discrete absolute transition-all`}
+					/>
+
+					<ClipboardCopy
+						class={`${copied ? 'opacity-0' : ''} transition-discrete absolute transition-all`}
+					/>
+				</Button>
+			</div>
 		</div>
 	</div>
 {/snippet}
 
 <div class="flex h-full flex-col gap-2">
 	<menubar class="flex h-auto flex-row justify-between rounded-lg border-2 p-1">
-		<leftbar class="flex flex-row">
+		<left class="flex flex-row">
 			<DrawerButton
 				variant="ghost"
 				size="sm"
 				title="Add Computer"
-				description="Add new computer."
+				description="Add new computer to selected Org Unit. Don't forget to copy One Time Key!"
 				content={addComputerDialog}
+				actionName="Create computer"
+				action={addComputer}
 			/>
 			<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
-			<Button size="sm" variant="ghost">...</Button>
-		</leftbar>
+			<Button size="sm" variant="ghost">
+				<Ellipsis />
+			</Button>
+		</left>
 
 		<DialogBtn
 			variant="ghost"
@@ -67,6 +138,7 @@
 			description="Edit Org Unit properties."
 			content={orgUnitDialog}
 			Icon={SquarePen}
+			tooltipSide="left"
 		/>
 	</menubar>
 
