@@ -35,16 +35,21 @@
 		action,
 		actionName
 	}: Props = $props();
+
+	let open = $state(false);
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	{#if Icon}
 		<Tooltip.Provider>
 			<Tooltip.Root>
-				<Tooltip.Trigger>
-					<Dialog.Trigger class={buttonVariants({ variant, size })}>
-						<Icon size={iconSize} />
-					</Dialog.Trigger>
+				<Tooltip.Trigger
+					class={buttonVariants({ variant, size })}
+					onclick={() => {
+						open = true;
+					}}
+				>
+					<Icon size={iconSize} />
 				</Tooltip.Trigger>
 				<Tooltip.Content side={tooltipSide}>
 					<p>{title}</p>
