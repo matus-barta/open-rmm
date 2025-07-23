@@ -22,6 +22,7 @@
 		Icon?: import('svelte').Component<IconProps, {}, ''>;
 		iconSize?: IconProps['size'];
 		tooltipSide?: TooltipContentProps['side'];
+		disabled?: boolean;
 	};
 
 	let {
@@ -34,7 +35,8 @@
 		actionName,
 		Icon,
 		iconSize,
-		tooltipSide
+		tooltipSide,
+		disabled
 	}: Props = $props();
 </script>
 
@@ -43,7 +45,7 @@
 		<Tooltip.Provider>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<Sheet.Trigger class={buttonVariants({ variant, size })}>
+					<Sheet.Trigger {disabled} class={buttonVariants({ variant, size })}>
 						<Icon size={iconSize} />
 					</Sheet.Trigger>
 				</Tooltip.Trigger>
@@ -53,7 +55,7 @@
 			</Tooltip.Root>
 		</Tooltip.Provider>
 	{:else}
-		<Sheet.Trigger class={buttonVariants({ variant, size })}>
+		<Sheet.Trigger {disabled} class={buttonVariants({ variant, size })}>
 			{title}
 		</Sheet.Trigger>
 	{/if}
