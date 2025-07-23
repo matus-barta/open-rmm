@@ -51,6 +51,7 @@
 				toast.info('Created computer!');
 				return value ?? '';
 			});
+		invalidateAll();
 	}
 
 	const triggerContent = $derived(
