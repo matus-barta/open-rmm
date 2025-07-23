@@ -10,7 +10,13 @@ export const load: LayoutLoad = async ({ parent, fetch }) => {
 		watchers: number;
 	}
 
-	const watchers = (await fetch(ghUrl).then((res) => res.json() as Promise<ghApi>)).watchers;
+	const watchers = (
+		await fetch(ghUrl)
+			.catch((e) => {
+				return e.message; //FIXME: handle fetch error
+			})
+			.then((res) => res.json() as Promise<ghApi>)
+	).watchers;
 
 	if (user) {
 		const profile = await get_profile(supabase, user.id);

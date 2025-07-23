@@ -11,13 +11,14 @@
 	import MachineType from '$lib/components/Marks/machineType.svelte';
 	import Bool from '$lib/components/Marks/bool.svelte';
 	import DrawerButton from '$lib/components/drawerButton.svelte';
-	import { Check, ClipboardCopy, Ellipsis, SquarePen } from '@lucide/svelte';
+	import { Check, ClipboardCopy, RotateCw, SquarePen } from '@lucide/svelte';
 	import { add_computer } from '$lib/db/computer';
 	import { toast } from 'svelte-sonner';
 	import { copyText } from 'svelte-copy';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import log from '$lib/utils/logger';
 
 	let { data }: PageProps = $props();
@@ -25,6 +26,7 @@
 	let otk = $state('');
 	let selectedOrgUnitUuid = $state('');
 	let isAllowed = $state(true);
+	let selectedComputer = $state('');
 
 	let copied = $state(false);
 	function copyOtk() {
@@ -120,26 +122,37 @@
 				variant="ghost"
 				size="sm"
 				title="Add Computer"
-				description="Add new computer to selected Org Unit. Don't forget to copy One Time Key!"
+				description="Add new computer to selected Org Unit. Don't forget to copy the One Time Key!"
 				content={addComputerDialog}
 				actionName="Create computer"
 				action={addComputer}
 			/>
-			<Button size="sm" variant="ghost" onclick={invalidateAll}>Refresh</Button>
-			<Button size="sm" variant="ghost">
-				<Ellipsis />
-			</Button>
+			<Button size="sm" variant="ghost">AAAAA</Button>
 		</left>
+		<right class="flex flex-row">
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<Button size="sm" variant="ghost" onclick={invalidateAll}>
+							<RotateCw />
+						</Button>
+					</Tooltip.Trigger>
+					<Tooltip.Content side="bottom">
+						<p>Refresh</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 
-		<DialogBtn
-			variant="ghost"
-			size="sm"
-			title="Edit Org Unit"
-			description="Edit Org Unit properties."
-			content={orgUnitDialog}
-			Icon={SquarePen}
-			tooltipSide="left"
-		/>
+			<DialogBtn
+				variant="ghost"
+				size="sm"
+				title="Edit Org Unit"
+				description="Edit Org Unit properties."
+				content={orgUnitDialog}
+				Icon={SquarePen}
+				tooltipSide="bottom"
+			/>
+		</right>
 	</menubar>
 
 	<div class="flex-1 rounded-lg border-2">
@@ -161,7 +174,10 @@
 			</Table.Header>
 			<Table.Body>
 				{#each data.computers as computer}
-					<Table.Row>
+					<Table.Row
+						data-state={selectedComputer == computer.uuid ? 'selected' : ''}
+						onclick={() => (selectedComputer = computer.uuid)}
+					>
 						<Table.Cell><Os os={computer.system_info?.os_name} /></Table.Cell>
 						<Table.Cell><MachineType type={computer.system_info?.machine_type} /></Table.Cell>
 						<Table.Cell>{computer.system_info?.computer_name}</Table.Cell>
