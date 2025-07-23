@@ -1,27 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
+	import { btnColors, btnIcons } from '$lib/iconsList';
 	import Button from './ui/button/button.svelte';
-	import DotsIcon from '@lucide/svelte/icons/ellipsis-vertical';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-
-	import {
-		Home,
-		Building,
-		Building2,
-		School,
-		Blocks,
-		Wrench,
-		Server,
-		HardDrive,
-		Database,
-		Cloud,
-		Network,
-		Star,
-		Key,
-		Folder,
-		Zap,
-		Laptop
-	} from '@lucide/svelte/icons';
 
 	interface Props {
 		orgUnit: {
@@ -33,49 +13,10 @@
 		count: number;
 	}
 
-	const btnColors = [
-		'bg-blue-800',
-		'bg-red-600',
-		'bg-orange-600',
-		'bg-amber-600',
-		'bg-yellow-600',
-		'bg-lime-600',
-		'bg-green-600',
-		'bg-emerald-600',
-		'bg-teal-600',
-		'bg-cyan-600',
-		'bg-sky-600',
-		'bg-blue-600',
-		'bg-indigo-600',
-		'bg-violet-600',
-		'bg-fuchsia-600',
-		'bg-pink-600',
-		'bg-rose-600'
-	];
-
-	const btnIcons = [
-		Home,
-		Building,
-		Building2,
-		School,
-		Blocks,
-		Wrench,
-		Server,
-		HardDrive,
-		Database,
-		Cloud,
-		Network,
-		Star,
-		Key,
-		Folder,
-		Zap,
-		Laptop
-	];
-
 	let { orgUnit, count }: Props = $props();
 	const Component = btnIcons[orgUnit.icon_id];
 
-	let selected = $derived($page.url.pathname.includes(orgUnit.uuid));
+	let selected = $derived(page.url.pathname.includes(orgUnit.uuid));
 	let hover = $state(false);
 </script>
 
@@ -96,29 +37,7 @@
 		/>
 		<span class="w-38 m-0 overflow-clip p-0 font-light">{orgUnit.name}</span>
 	</div>
-
-	<!--{#if hover && selected}
-		<Tooltip.Provider>
-			<Tooltip.Root>
-				<Tooltip.Trigger>
-					<Button
-						variant="ghost"
-						size="icon"
-						class="h-7 w-7 {selected && hover
-							? 'hover:bg-black/10 dark:hover:bg-white/10'
-							: 'hover:bg-transparent dark:hover:bg-transparent'}"
-					>
-						<DotsIcon size="16" class="m-0 p-0" />
-					</Button>
-				</Tooltip.Trigger>
-				<Tooltip.Content side="right">
-					<p>Edit</p>
-				</Tooltip.Content>
-			</Tooltip.Root>
-		</Tooltip.Provider>
-	{:else}-->
 	<div class="flex h-7 w-7 items-center justify-center">
 		<span class="flex h-4 w-4 items-center justify-center">{count}</span>
 	</div>
-	<!--{/if}-->
 </Button>

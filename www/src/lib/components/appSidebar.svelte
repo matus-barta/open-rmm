@@ -8,7 +8,7 @@
 	import NavUser from './navUser.svelte';
 	import Separator from './ui/separator/separator.svelte';
 
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	//data driven stuff -- here add new "apps" to the sidebar
 	const data = {
@@ -32,7 +32,7 @@
 	};
 
 	function isApp(title: string) {
-		return $page.url.pathname.includes(title);
+		return page.url.pathname.includes(title);
 	}
 
 	let selectedTypeToggle = true;
