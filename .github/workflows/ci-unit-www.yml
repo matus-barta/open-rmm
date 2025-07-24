@@ -42,7 +42,7 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         working-directory: ./www
-        run: pwd
+        run: ls
       - name: Build WWW
         working-directory: ./www
         run: pnpm run build
