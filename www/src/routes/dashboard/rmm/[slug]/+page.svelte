@@ -62,6 +62,11 @@
 	onNavigate(() => {
 		selectedComputer = '';
 	});
+
+	function cleanup() {
+		otk = '';
+		selectedOrgUnitUuid = '';
+	}
 </script>
 
 <svelte:head>
@@ -185,6 +190,7 @@
 				content={addComputerDialog}
 				actionName="Create computer"
 				action={addComputer}
+				onClosed={cleanup}
 			/>
 			<showup class="flex flex-row">
 				<Separator orientation="vertical" class="mx-1" />

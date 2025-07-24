@@ -23,6 +23,7 @@
 		iconSize?: IconProps['size'];
 		tooltipSide?: TooltipContentProps['side'];
 		disabled?: boolean;
+		onClosed?: () => void;
 	};
 
 	let {
@@ -36,11 +37,19 @@
 		Icon,
 		iconSize,
 		tooltipSide,
-		disabled
+		disabled,
+		onClosed
 	}: Props = $props();
+
+	let open = $state(false);
 </script>
 
-<Sheet.Root>
+<Sheet.Root
+	bind:open
+	onOpenChangeComplete={() => {
+		if (!open && onClosed != undefined) onClosed();
+	}}
+>
 	{#if Icon}
 		<Tooltip.Provider>
 			<Tooltip.Root>
