@@ -40,6 +40,7 @@
 		"eslint-config-prettier": "10.1.5",
 		"eslint-plugin-svelte": "3.10.1",
 		"globals": "^16.0.0",
+		"jsdom": "^26.1.0",
 		"mode-watcher": "^1.1.0",
 		"nanoid": "^5.0.7",
 		"pino": "9.7.0",
