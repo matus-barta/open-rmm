@@ -9,7 +9,7 @@
 	import type { PageProps } from './$types';
 	import Os from '$lib/components/marks/os.svelte';
 	import MachineType from '$lib/components/marks/machineType.svelte';
-	import Bool from '$lib/components/marks/bool.svelte';
+	import Bool from '$lib/components/marks/bools.svelte';
 	import DrawerButton from '$lib/components/drawerButton.svelte';
 	import { Check, ClipboardCopy, RotateCw, SquarePen } from '@lucide/svelte';
 	import { add_computer } from '$lib/db/computer';
