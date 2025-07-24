@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import IconSelector from '$lib/components/iconSelector.svelte';
 
 	let { form } = $props();
 
@@ -49,4 +50,6 @@
 	{#if creating}
 		<span class="opacity-50">saving...</span>
 	{/if}
+
+	<IconSelector />
 </div>
