@@ -18,11 +18,11 @@ Some todo info [here](./docs/todo.md).
 
 #### Dashboard
 
-- SvelteKit (with all the related bells and whistles)
-- TailwindCSS
-- Shadcn svelte
-- Lucide icons
-- Supabase
+- [SvelteKit](https://svelte.dev/) (with all the related bells and whistles, read: all the default packages) - full stack framework
+- [TailwindCSS](https://tailwindcss.com/) - CSS library
+- [Shadcn svelte](https://shadcn-svelte.com/) - Component library
+- [Lucide icons](https://lucide.dev/) - Icons
+- [Supabase](https://supabase.com/) - Backend as a Service (open-source and self-hostable)
 
 #### Agent
 
