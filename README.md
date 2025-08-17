@@ -39,4 +39,7 @@ Some todo info [here](./docs/todo.md).
 ## Toolchain dependencies
 
 - **pnpm** (node stuff)
+  - [install node](https://nodejs.org/en/download/current)
+  - [install pnpm](https://pnpm.io/installation)
 - **cargo** (rust)
+  - [install rust toolchain with rustup](https://rustup.rs/)
