@@ -37,7 +37,7 @@ describe('Get correct initials', () => {
 	it('Only one name', () => {
 		expect(getInitials('Adele')).toBe('A');
 	});
-	it('Firstname, Middlename,  Lastname', () => {
+	it('Firstname, Middlename, Lastname', () => {
 		expect(getInitials('Jay Jonah Jameson')).toBe('JJJ');
 	});
 	it('null input', () => {

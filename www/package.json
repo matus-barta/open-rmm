@@ -14,7 +14,7 @@
 		"ncu-u": "pnpx npm-check-updates -u",
 		"preview": "vite preview",
 		"sort": "pnpx sort-package-json",
-		"test": "npm run test:integration && npm run test:unit",
+		"test": "pnpm run test:integration && pnpm run test:unit",
 		"test:integration": "playwright test",
 		"test:unit": "vitest"
 	},
