@@ -9,7 +9,9 @@ It's been **O** days since last rewrite
 ## About
 
 _I don't know what I am doing._
+
 "Simple" service for monitoring Windows, Mac and Linux computers.
+
 Some todo info [here](./docs/todo.md).
 
 ### Stack
