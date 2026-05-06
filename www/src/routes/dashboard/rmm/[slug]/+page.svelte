@@ -113,11 +113,11 @@
 				<Input id="otk" bind:value={otk} disabled />
 				<Button onclick={copyOtk} id="copy" variant="outline" size="icon" disabled={otk == ''}>
 					<Check
-						class={`${copied ? '' : 'opacity-0'} transition-discrete absolute transition-all`}
+						class={`${copied ? '' : 'opacity-0'} absolute transition-all transition-discrete`}
 					/>
 
 					<ClipboardCopy
-						class={`${copied ? 'opacity-0' : ''} transition-discrete absolute transition-all`}
+						class={`${copied ? 'opacity-0' : ''} absolute transition-all transition-discrete`}
 					/>
 				</Button>
 			</div>
@@ -245,7 +245,7 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each data.computers as computer}
+				{#each data.computers as computer (computer.uuid)}
 					<Table.Row
 						data-state={selectedComputer == computer.uuid ? 'selected' : ''}
 						onclick={() => (selectedComputer = computer.uuid)}

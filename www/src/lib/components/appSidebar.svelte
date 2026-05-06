@@ -53,17 +53,17 @@
 
 <appSidebar class="flex h-full flex-row">
 	<apps
-		class="bg-sidebar border-sidebar-border border-r-1 flex h-full w-16 flex-col justify-between py-2"
+		class="bg-sidebar border-sidebar-border flex h-full w-16 flex-col justify-between border-r-1 py-2"
 	>
 		<content class="flex flex-col items-center gap-2">
-			{#each data.navMain as app}
+			{#each data.navMain as app (app.title)}
 				<Tooltip.Provider>
 					<Tooltip.Root>
 						<Tooltip.Trigger>
 							<div
 								class={isApp(app.url) && selectedTypeToggle
-									? 'border-primary dark:border-primary delay-50 border-l-2 transition duration-150 ease-in-out'
-									: 'delay-50  border-l-2 border-transparent transition duration-150 ease-in-out'}
+									? 'border-primary dark:border-primary border-l-2 transition delay-50 duration-150 ease-in-out'
+									: 'border-l-2  border-transparent transition delay-50 duration-150 ease-in-out'}
 							>
 								<Button href={app.url} variant="ghost" class="size-12">
 									<app.icon
@@ -87,8 +87,8 @@
 					<Tooltip.Trigger>
 						<div
 							class={isApp('/dashboard/settings') && selectedTypeToggle
-								? 'border-primary dark:border-primary delay-50 border-l-2 transition duration-150 ease-in-out'
-								: 'delay-50  border-l-2 border-transparent transition duration-150 ease-in-out'}
+								? 'border-primary dark:border-primary border-l-2 transition delay-50 duration-150 ease-in-out'
+								: 'border-l-2  border-transparent transition delay-50 duration-150 ease-in-out'}
 						>
 							<Button href="/dashboard/settings" variant="ghost" class="size-12">
 								<SettingsIcon

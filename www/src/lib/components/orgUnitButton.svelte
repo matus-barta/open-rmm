@@ -35,7 +35,7 @@
 					: 'bg-blue-800'
 			} p-1.5 `}
 		/>
-		<span class="w-38 m-0 overflow-clip p-0 font-light">{orgUnit.name}</span>
+		<span class="m-0 w-38 overflow-clip p-0 font-light">{orgUnit.name}</span>
 	</div>
 	<div class="flex h-7 w-7 items-center justify-center">
 		<span class="flex h-4 w-4 items-center justify-center">{count}</span>

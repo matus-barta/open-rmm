@@ -2,7 +2,7 @@
 	import OrgUnitButton from '$lib/components/orgUnitButton.svelte';
 	import type { LayoutData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Grid2X2Plus } from '@lucide/svelte';
+	import { Grid2x2Plus } from '@lucide/svelte';
 
 	interface Props {
 		data: LayoutData;
@@ -13,15 +13,15 @@
 </script>
 
 <div class="mx-auto mb-auto flex h-full flex-row">
-	<div class="bg-primary-foreground border-r-1 flex w-72 flex-col justify-between">
+	<div class="bg-primary-foreground flex w-72 flex-col justify-between border-r-1">
 		<div class="flex flex-1 flex-col overflow-y-auto p-2">
-			{#each data.orgUnits as { orgUnit, count }}
+			{#each data.orgUnits as { orgUnit, count } (orgUnit.uuid)}
 				<OrgUnitButton {orgUnit} {count} />
 			{/each}
 		</div>
 
 		<Button variant="default" href="/dashboard/rmm/addorgunit" class="mx-6 my-4 p-5">
-			<Grid2X2Plus />
+			<Grid2x2Plus />
 			<span class="text-sm font-light">Add Org Unit</span></Button
 		>
 	</div>

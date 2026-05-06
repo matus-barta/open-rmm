@@ -16,10 +16,10 @@
 
 <button
 	onclick={callback}
-	class={`hover:border-3 border-1 border-background relative m-1 flex ${color} shadow-xs h-12 w-12 items-center justify-center rounded-md transition-all`}
+	class={`border-background relative m-1 flex border-1 hover:border-3 ${color} h-12 w-12 items-center justify-center rounded-md shadow-xs transition-all`}
 >
 	<div
-		class={`${selected ? '' : 'hidden'} bg-secondary absolute right-[-5px] top-[-5px] h-fit w-fit rounded-lg p-0.5`}
+		class={`${selected ? '' : 'hidden'} bg-secondary absolute top-[-5px] right-[-5px] h-fit w-fit rounded-lg p-0.5`}
 	>
 		<Check size="16" />
 	</div>

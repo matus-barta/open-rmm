@@ -63,7 +63,7 @@
 		<Select.Root type="single" bind:value={selectedOrgUnitUuid}>
 			<Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
 			<Select.Content>
-				{#each orgUnits as { uuid, name }}
+				{#each orgUnits as { uuid, name } (uuid)}
 					<Select.Item value={uuid} label={name}>
 						{name}
 					</Select.Item>
@@ -82,10 +82,10 @@
 		<div class="flex flex-row gap-2">
 			<Input id="otk" bind:value={otk} disabled />
 			<Button onclick={copyOtk} id="copy" variant="outline" size="icon" disabled={otk == ''}>
-				<Check class={`${copied ? '' : 'opacity-0'} transition-discrete absolute transition-all`} />
+				<Check class={`${copied ? '' : 'opacity-0'} absolute transition-all transition-discrete`} />
 
 				<ClipboardCopy
-					class={`${copied ? 'opacity-0' : ''} transition-discrete absolute transition-all`}
+					class={`${copied ? 'opacity-0' : ''} absolute transition-all transition-discrete`}
 				/>
 			</Button>
 		</div>

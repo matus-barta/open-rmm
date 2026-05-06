@@ -3,6 +3,7 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import { registrationEnabled } from '$lib/config';
+	import { resolve } from '$app/paths';
 	interface Props {
 		data: PageData;
 	}
@@ -32,9 +33,9 @@
 	{:else}
 		<p>Please login or register.</p>
 		<div class="flex flex-col">
-			<a class="button-ish" href="/auth/login">Login</a>
+			<a class="button-ish" href={resolve('/auth/login')}>Login</a>
 			{#if registrationEnabled}
-				<a class="buttlon-ish" href="/auth/register">Register</a>
+				<a class="buttlon-ish" href={resolve('/auth/register')}>Register</a>
 			{/if}
 		</div>
 	{/if}
