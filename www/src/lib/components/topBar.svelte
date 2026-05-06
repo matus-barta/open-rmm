@@ -1,9 +1,9 @@
 <script lang="ts">
 	import IconLogo from '$lib/icons/IconLogo.svelte';
+	import BootstrapIcon from './BootstrapIcon.svelte';
 	import SearchBox from './searchBox.svelte';
 	import Button from './ui/button/button.svelte';
 	import Separator from './ui/separator/separator.svelte';
-	import GithubIcon from '@lucide/svelte/icons/github';
 	import MoonIcon from '@lucide/svelte/icons/moon';
 	import SunIcon from '@lucide/svelte/icons/sun';
 	import { toggleMode } from 'mode-watcher';
@@ -35,7 +35,7 @@
 		<SearchBox />
 		<Separator orientation="vertical" />
 		<Button href="https://github.com/matus-barta/Open_RMM" variant="outline" size="sm">
-			<GithubIcon class="stroke-accent-foreground" />
+			<BootstrapIcon name="github" class="stroke-accent-foreground" />
 			<span class="text-muted-foreground truncate text-xs leading-tight">{stars}</span>
 		</Button>
 		<Separator orientation="vertical" />
