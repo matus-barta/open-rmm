@@ -7,7 +7,7 @@ const config: PlaywrightTestConfig = {
 		stdout: 'ignore',
 		stderr: 'ignore' //TODO: remove when fixed - reason to have it now: stop supabase getUser warning to spam everything
 	},
-	testDir: 'tests',
+	testDir: 'e2e',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/
 };
 
