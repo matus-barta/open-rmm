@@ -3,6 +3,7 @@
 	import type { LayoutData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Grid2x2Plus } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		data: LayoutData;
@@ -20,7 +21,7 @@
 			{/each}
 		</div>
 
-		<Button variant="default" href="/dashboard/rmm/addorgunit" class="mx-6 my-4 p-5">
+		<Button variant="default" href={resolve('/dashboard/rmm/addorgunit')} class="mx-6 my-4 p-5">
 			<Grid2x2Plus />
 			<span class="text-sm font-light">Add Org Unit</span></Button
 		>
