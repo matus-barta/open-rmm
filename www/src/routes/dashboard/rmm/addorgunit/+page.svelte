@@ -8,6 +8,6 @@
 	<title>Open RMM - Add Org Unit</title>
 </svelte:head>
 
-<div class="flex flex-col gap-2 p-4">
+<div class="flex h-full justify-center rounded-lg border-2 p-4">
 	<Form {data} />
 </div>

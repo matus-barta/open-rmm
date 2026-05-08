@@ -16,6 +16,7 @@
 
 <button
 	onclick={callback}
+	type="button"
 	class={`border-background relative m-1 flex border-1 hover:border-3 ${color} h-12 w-12 items-center justify-center rounded-md shadow-xs transition-all`}
 >
 	<div

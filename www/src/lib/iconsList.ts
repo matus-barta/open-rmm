@@ -1,5 +1,5 @@
 import {
-	Home,
+	House,
 	Building,
 	Building2,
 	School,
@@ -14,7 +14,8 @@ import {
 	Key,
 	Folder,
 	Zap,
-	Laptop
+	Laptop,
+	Gamepad2
 } from '@lucide/svelte/icons';
 
 export const btnColors = [
@@ -38,7 +39,7 @@ export const btnColors = [
 ];
 
 export const btnIcons = [
-	Home,
+	House,
 	Building,
 	Building2,
 	School,
@@ -53,5 +54,6 @@ export const btnIcons = [
 	Key,
 	Folder,
 	Zap,
-	Laptop
+	Laptop,
+	Gamepad2
 ];

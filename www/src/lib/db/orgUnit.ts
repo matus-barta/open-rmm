@@ -114,13 +114,15 @@ export const add_org_unit = async (
 	color = 0,
 	icon_id = 0
 ) => {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { data: db_req_data, error: db_error } = await supabaseClient
+	const { data, error } = await supabaseClient
 		.from('org_units')
 		.insert([{ name: org_unit_name, tenant_uuid: tenant_id, color: color, icon_id: icon_id }])
-		.select();
-	if (db_error) {
-		console.log(db_error);
-		throw error(404, db_error);
+		.select()
+		.single();
+	if (error) {
+		console.error('add_org_unit insert failed:', error);
+		throw new Error(error.message);
 	} //TODO: log error and show some client friendly msg
+
+	return data;
 };

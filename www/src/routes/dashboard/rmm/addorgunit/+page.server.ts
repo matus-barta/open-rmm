@@ -22,29 +22,26 @@ export const actions: Actions = {
 			});
 		}
 
+		if (!event.locals.user) {
+			return fail(401, { form, error: 'Not authenticated.' });
+		}
+
 		try {
-			if (event.locals.user) {
-				const tenant_id = await get_tenant_id_by_user_id(
-					event.locals.supabase,
-					event.locals.user.id
-				);
+			const tenant_id = await get_tenant_id_by_user_id(event.locals.supabase, event.locals.user.id);
+			const orgUnit = await add_org_unit(
+				event.locals.supabase,
+				form.data.name as string,
+				tenant_id,
+				form.data.color,
+				form.data.icon
+			);
 
-				add_org_unit(event.locals.supabase, form.data.name as string, tenant_id).catch(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					(error: any) => {
-						console.log(error);
-					}
-				);
-			} else {
-				//here failing when user is null
-				return fail(500, { error: 'Server error, please try again later.' });
-			}
-
+			return { form, uuid: orgUnit.uuid };
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			return fail(422, {
-				OrgUnitName: form.data.name,
-				error: error.message
+				form,
+				error: error?.message ?? 'Unknown error'
 			});
 		}
 	}
