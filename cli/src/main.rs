@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use config::{config_exists, Config};
+use config::{Config, config_exists};
 
 mod client;
 mod config;
@@ -52,9 +52,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }); //but instead we should be saving Server url from where we would download config including supabase url.
 
             // Try save config
-            match config::save_config(config_data.clone().expect("Tried to download config and we don't have local one, exiting.")).await {
+            match config::save_config(
+                config_data
+                    .clone()
+                    .expect("Tried to download config and we don't have local one, exiting."),
+            )
+            .await
+            {
                 Ok(_) => (),
-                Err(_) => eprintln!("Can't save config file (are you root?), continuing running with config in memory."),
+                Err(_) => eprintln!(
+                    "Can't save config file (are you root?), continuing running with config in memory."
+                ),
             };
         }
     }
