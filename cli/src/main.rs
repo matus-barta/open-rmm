@@ -7,12 +7,8 @@ mod installer;
 mod utils;
 
 #[derive(Parser, Debug)]
-#[command(version, about="Open-RMM Agent", long_about = None, after_help="No arguments will run Agent to collect data.")]
+#[command(version, about="Open-RMM CLI Agent", long_about = None, after_help="No arguments will run Agent to collect data.")]
 struct Cli {
-    /// Generated One Time Key to register computer in Open-RMM (64 characters)
-    #[arg(short, long)]
-    otk: Option<String>,
-
     /// URL to server (from where it will download config) - if config exists, will ignore this value (won't override url in config)
     #[arg(short, long, default_value = "http://127.0.0.1:54321")]
     url: Option<String>,
@@ -25,6 +21,12 @@ struct Cli {
 enum Commands {
     /// Install as daemon/service, run together or after registering the computer
     Install,
+    /// Register the computer with OTK
+    Register {
+        /// Generated One Time Key to register computer in Open-RMM (64 characters)
+        #[arg(short, long)]
+        otk: String,
+    },
     /// Remove as daemon/service, to remove from Open-RMM use Dashboard
     Remove,
 }
@@ -39,18 +41,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         config: config_data.expect("don't have valid config"),
     };
 
-    if let Some(otk) = cli.otk.as_deref() {
-        if otk.len() == 64 {
-            client.register_computer(otk.to_string()).await?;
-        } else {
-            panic!("One Time key has to be 64 characters long!");
-        }
-    }
-
     match &cli.command {
+        Some(Commands::Register { otk }) => {
+            if otk.len() == 64 {
+                client.register_computer(otk.to_string()).await?;
+            } else {
+                panic!("One Time key has to be 64 characters long!");
+            }
+        }
         Some(Commands::Install) => installer::self_installer()?,
         Some(Commands::Remove) => {
-            println!("remove")
+            todo!()
         }
         None => {
             println!("Running report system info.");
