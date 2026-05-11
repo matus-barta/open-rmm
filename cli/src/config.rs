@@ -10,11 +10,6 @@ pub struct Config {
     pub supabase_url: String,
 }
 
-#[cfg(any(target_os = "macos", target_os = "linux"))]
-const CONFIG_PATH: &str = "/etc/openrmm-agent/config.json";
-#[cfg(target_os = "windows")]
-const CONFIG_PATH: &str = "/openrmm-agent/config.json";
-
 pub async fn handle_config(url: Option<String>) -> Option<Config> {
     // Move all this config handling to Config
     // check for local copy then check if online is newer
@@ -38,7 +33,6 @@ pub async fn handle_config(url: Option<String>) -> Option<Config> {
                 supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
             }); //but instead we should be saving Server url from where we would download config including supabase url.
 
-            // Try save config
             match save_config(
                 config_data
                     .clone()
@@ -47,10 +41,8 @@ pub async fn handle_config(url: Option<String>) -> Option<Config> {
             .await
             {
                 Ok(_) => (),
-                Err(_) => eprintln!(
-                    "Can't save config file (are you root?), continuing running with config in memory."
-                ),
-            };
+                Err(_) => eprintln!("Can't save config. Continuing in memory config"),
+            }
         }
     }
 
@@ -58,6 +50,11 @@ pub async fn handle_config(url: Option<String>) -> Option<Config> {
 }
 
 fn get_config_path() -> PathBuf {
+    #[cfg(any(target_os = "macos", target_os = "linux"))]
+    const CONFIG_PATH: &str = "/etc/openrmm-agent/config.json";
+    #[cfg(target_os = "windows")]
+    const CONFIG_PATH: &str = "/openrmm-agent/config.json";
+
     #[cfg(target_os = "windows")]
     Ok(Path::new(
         &std::env::var("PROGRAMDATA").expect("No PROGRAM DATA directory") + CONFIG_PATH,
@@ -68,7 +65,7 @@ fn get_config_path() -> PathBuf {
 
 async fn load_config() -> std::io::Result<Config> {
     println!("Loading config.");
-    let config_b = async_fs::read(get_config_path()).await?; //TODO:do not store config with binary
+    let config_b = async_fs::read(get_config_path()).await?;
     let config: Config = serde_json::from_slice(&config_b)?;
 
     Ok(config)
@@ -80,9 +77,14 @@ async fn save_config(config: Config) -> std::io::Result<Config> {
     println!("Saving config.");
     let config_json = serde_json::to_string(&config)?;
 
-    async_fs::create_dir_all(&path).await?;
-    async_fs::write(path, config_json).await?; //TODO:do not store config with binary
-    Ok(config)
+    match &path.parent() {
+        Some(parent) => {
+            async_fs::create_dir_all(parent).await?;
+            async_fs::write(path, config_json).await?;
+            Ok(config)
+        }
+        None => panic!("Wrong config path, can't get parent path"),
+    }
 }
 
 fn config_exists() -> bool {
