@@ -15,6 +15,48 @@ const CONFIG_PATH: &str = "/etc/openrmm-agent/config.json";
 #[cfg(target_os = "windows")]
 const CONFIG_PATH: &str = "/openrmm-agent/config.json";
 
+pub async fn handle_config(url: Option<String>) -> Option<Config> {
+    // Move all this config handling to Config
+    // check for local copy then check if online is newer
+    // if newer - download - if unable to save just return downloaded
+    // if not local - download
+    // if local newest load local
+    // return config
+
+    let mut config_data = None;
+
+    if config_exists() {
+        config_data = Some(
+            load_config()
+                .await
+                .expect("Unable to load local config file."),
+        );
+    } else {
+        if let Some(url) = url.as_deref() {
+            // "Download" config - we have server URL
+            config_data = Some(Config {
+                supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
+            }); //but instead we should be saving Server url from where we would download config including supabase url.
+
+            // Try save config
+            match save_config(
+                config_data
+                    .clone()
+                    .expect("Tried to download config and we don't have local one, exiting."),
+            )
+            .await
+            {
+                Ok(_) => (),
+                Err(_) => eprintln!(
+                    "Can't save config file (are you root?), continuing running with config in memory."
+                ),
+            };
+        }
+    }
+
+    config_data
+}
+
 fn get_config_path() -> PathBuf {
     #[cfg(target_os = "windows")]
     Ok(Path::new(
@@ -24,7 +66,7 @@ fn get_config_path() -> PathBuf {
     Path::new(CONFIG_PATH).to_path_buf()
 }
 
-pub async fn load_config() -> std::io::Result<Config> {
+async fn load_config() -> std::io::Result<Config> {
     println!("Loading config.");
     let config_b = async_fs::read(get_config_path()).await?; //TODO:do not store config with binary
     let config: Config = serde_json::from_slice(&config_b)?;
@@ -32,7 +74,7 @@ pub async fn load_config() -> std::io::Result<Config> {
     Ok(config)
 }
 
-pub async fn save_config(config: Config) -> std::io::Result<Config> {
+async fn save_config(config: Config) -> std::io::Result<Config> {
     let path = get_config_path();
 
     println!("Saving config.");
@@ -43,7 +85,7 @@ pub async fn save_config(config: Config) -> std::io::Result<Config> {
     Ok(config)
 }
 
-pub fn config_exists() -> bool {
+fn config_exists() -> bool {
     get_config_path()
         .try_exists()
         .expect("File IO error checking config")
