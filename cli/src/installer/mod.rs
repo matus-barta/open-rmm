@@ -13,12 +13,12 @@ pub fn self_installer() -> Result<(), anyhow::Error> {
     println!("Executable path -> {:?}", current_executable);
 
     #[cfg(any(target_os = "macos", target_os = "linux"))]
-    let install_path = Path::new("/usr/local/bin/OpenRMM-Agent");
+    let install_path = Path::new("/usr/local/bin/openrmm-agent");
 
     #[cfg(target_os = "windows")]
     let install_path = Path::new(
         &std::env::var("PROGRAMFILES").expect("No PROGRAM FILES directory")
-            + "/Open-RMM Agent/OpenRMM-Agent.exe",
+            + "/openrmm-agent/openrmm-agent.exe",
     );
     println!("Install path -> {:?}", install_path);
 
