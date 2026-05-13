@@ -5,14 +5,14 @@ on:
     paths:
       - "www/**"
       - "supabase/**"
-      - ".github/workflows/**"
+      - ".github/workflows/ci-unit-www.yml"
     branches:
       - "master"
   pull_request:
     paths:
       - "www/**"
       - "supabase/**"
-      - ".github/workflows/**"
+      - ".github/workflows/ci-unit-www.yml"
 
 env:
   GITHUB_TOKEN: ${{ github.token }}

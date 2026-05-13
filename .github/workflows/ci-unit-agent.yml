@@ -4,13 +4,13 @@ on:
   push:
     paths:
       - "cli/**"
-      - ".github/workflows/ci-agent.yml"
+      - ".github/workflows/ci-unit-agent.yml"
     branches:
       - "master"
   pull_request:
     paths:
       - "cli/**"
-      - ".github/workflows/ci-agent.yml"
+      - ".github/workflows/ci-unit-agent.yml"
 
 env:
   CRATE_NAME: openrmm-agent
