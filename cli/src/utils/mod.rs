@@ -1,6 +1,8 @@
 use chrono::{DateTime, SecondsFormat, Utc};
-use nix::unistd::Uid;
 use std::time::{Duration, UNIX_EPOCH};
+
+#[cfg(any(target_os = "macos", target_os = "linux"))]
+use nix::unistd::Uid;
 
 pub mod paths;
 

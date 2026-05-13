@@ -31,7 +31,7 @@ jobs:
             bin: openrmm-agent
             name: openrmm-agent-Linux-x86_64-gnu.tar.gz
           - os_name: Linux-aarch64
-            os: ubuntu-20.04
+            os: ubuntu-24.04
             target: aarch64-unknown-linux-gnu
             bin: openrmm-agent
             name: openrmm-agent-Linux-aarch64-gnu.tar.gz
