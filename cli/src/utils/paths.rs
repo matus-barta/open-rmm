@@ -3,6 +3,7 @@ use std::{ffi::OsString, path::PathBuf};
 #[derive(Copy, Clone)]
 enum Root {
     /// A Unix absolute directory path like "/etc/openrmm-agent"
+    #[allow(dead_code)]
     UnixAbs(&'static str),
     /// A Windows-relative directory path under an environment variable
     #[allow(dead_code)]

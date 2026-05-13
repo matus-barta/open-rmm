@@ -18,9 +18,40 @@ pub fn check_for_admin_rights() -> bool {
     #[cfg(any(target_os = "macos", target_os = "linux"))]
     return Uid::effective().is_root();
 
-    #[cfg(target_os = "windows")]
-    {
-        todo!("TODO: check for admin rights")
+    #[cfg(windows)]
+    return is_elevated();
+}
+
+#[cfg(windows)]
+fn is_elevated() -> bool {
+    use windows::Win32::Foundation::{CloseHandle, HANDLE};
+    use windows::Win32::Security::{
+        GetTokenInformation, TOKEN_ELEVATION, TOKEN_QUERY, TokenElevation,
+    };
+    use windows::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
+
+    unsafe {
+        let mut token: HANDLE = HANDLE::default();
+
+        if !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &mut token).as_bool() {
+            return false;
+        }
+
+        let mut elevation = TOKEN_ELEVATION::default();
+        let mut returned = 0u32;
+
+        let ok = GetTokenInformation(
+            token,
+            TokenElevation,
+            Some(&mut elevation as *mut _ as *mut _),
+            std::mem::size_of::<TOKEN_ELEVATION>() as u32,
+            &mut returned,
+        )
+        .as_bool();
+
+        CloseHandle(token);
+
+        ok && elevation.TokenIsElevated != 0
     }
 }
 

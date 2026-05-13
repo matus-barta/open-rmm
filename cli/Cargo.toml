@@ -29,6 +29,7 @@ clap = { version = "4.6", features = ["derive"] }
 
 [target.'cfg(windows)'.dependencies]
 powershell_script = "1.1"
+windows = "0.62"
 
 [target.'cfg(unix)'.dependencies]
 run_script = "0.11"
