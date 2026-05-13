@@ -5,6 +5,7 @@ enum Root {
     /// A Unix absolute directory path like "/etc/openrmm-agent"
     UnixAbs(&'static str),
     /// A Windows-relative directory path under an environment variable
+    #[allow(dead_code)]
     WinEnv {
         env: &'static str,
         rel: &'static str,
@@ -70,10 +71,12 @@ pub fn get_install_file_path() -> PathBuf {
     resolve(INSTALL_ROOT, EXECUTABLE_FILE)
 }
 
+#[allow(dead_code)]
 pub fn get_config_dir() -> PathBuf {
     resolve_dir(CONFIG_ROOT)
 }
 
+#[allow(dead_code)]
 pub fn get_install_dir() -> PathBuf {
     resolve_dir(INSTALL_ROOT)
 }
