@@ -23,7 +23,7 @@ pub fn check_for_admin_rights() -> bool {
 }
 
 #[cfg(windows)]
-fn is_elevated() -> bool {
+pub fn is_elevated() -> bool {
     use windows::Win32::Foundation::{CloseHandle, HANDLE};
     use windows::Win32::Security::{
         GetTokenInformation, TOKEN_ELEVATION, TOKEN_QUERY, TokenElevation,
@@ -31,9 +31,9 @@ fn is_elevated() -> bool {
     use windows::Win32::System::Threading::{GetCurrentProcess, OpenProcessToken};
 
     unsafe {
-        let mut token: HANDLE = HANDLE::default();
+        let mut token = HANDLE::default();
 
-        if !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &mut token).as_bool() {
+        if OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &mut token).is_err() {
             return false;
         }
 
@@ -47,9 +47,9 @@ fn is_elevated() -> bool {
             std::mem::size_of::<TOKEN_ELEVATION>() as u32,
             &mut returned,
         )
-        .as_bool();
+        .is_ok();
 
-        CloseHandle(token);
+        let _ = CloseHandle(token);
 
         ok && elevation.TokenIsElevated != 0
     }
