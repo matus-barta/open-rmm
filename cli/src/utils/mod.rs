@@ -2,7 +2,7 @@ use chrono::{DateTime, SecondsFormat, Utc};
 use nix::unistd::Uid;
 use std::time::{Duration, UNIX_EPOCH};
 
-mod paths;
+pub mod paths;
 
 pub fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
     let d = UNIX_EPOCH + Duration::from_secs(timestamp);

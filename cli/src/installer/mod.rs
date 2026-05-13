@@ -1,9 +1,9 @@
-use std::path::Path;
-use std::{env, fs};
+use std::env;
 
 use crate::utils::check_for_admin_rights;
+use crate::utils::paths::get_install_file_path;
 
-pub fn self_installer() -> Result<(), anyhow::Error> {
+pub async fn self_installer() -> Result<(), anyhow::Error> {
     if !check_for_admin_rights() {
         panic!("Install needs run as root/admin")
     }
@@ -12,20 +12,19 @@ pub fn self_installer() -> Result<(), anyhow::Error> {
     let current_executable = env::current_exe().expect("failed to get current exe path");
     println!("Executable path -> {:?}", current_executable);
 
-    #[cfg(any(target_os = "macos", target_os = "linux"))]
-    let install_path = Path::new("/usr/local/bin/openrmm-agent");
-
-    #[cfg(target_os = "windows")]
-    let install_path = Path::new(
-        &std::env::var("PROGRAMFILES").expect("No PROGRAM FILES directory")
-            + "/openrmm-agent/openrmm-agent.exe",
-    );
+    let install_path = get_install_file_path();
     println!("Install path -> {:?}", install_path);
 
     // create folders if needed
-    fs::create_dir_all(&install_path)?;
+    match &install_path.parent() {
+        Some(parent) => {
+            async_fs::create_dir_all(parent).await?;
+        }
+        None => panic!("Wrong config path, can't get parent path"),
+    }
+
     // copy itself to bin folder depending on os
-    fs::copy(current_executable, install_path)?; //FIXME: Maybe handle overwriting?
+    async_fs::copy(current_executable, install_path).await?; //FIXME: Maybe handle overwriting?
 
     // setup path - not now
 

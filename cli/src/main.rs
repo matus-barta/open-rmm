@@ -49,7 +49,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 panic!("One Time key has to be 64 characters long!");
             }
         }
-        Some(Commands::Install) => installer::self_installer()?,
+        Some(Commands::Install) => installer::self_installer().await?,
         Some(Commands::Remove) => {
             todo!()
         }

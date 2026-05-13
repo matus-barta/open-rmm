@@ -1,41 +1,48 @@
 use async_fs;
-use std::str;
+use std::{path::PathBuf, str};
+use uuid::Uuid;
 
-pub async fn save_uuid(uuid: String) -> std::io::Result<()> {
-    Ok(save_uuid_with_name(uuid, "uuid".to_string()).await?)
+use crate::utils::paths;
+
+pub async fn save_uuid(uuid: Uuid) -> std::io::Result<()> {
+    Ok(save_uuid_with_path(uuid, paths::get_uuid_file_path()).await?)
 }
 
-async fn save_uuid_with_name(uuid: String, name: String) -> std::io::Result<()> {
-    async_fs::write(name, uuid).await?;
+pub async fn save_uuid_with_path(uuid: Uuid, path: PathBuf) -> std::io::Result<()> {
+    async_fs::write(path, uuid.to_string()).await?;
     Ok(())
 }
 
-pub async fn load_uuid() -> Result<String, Box<dyn std::error::Error>> {
-    Ok(load_uuid_with_name("uuid".to_string()).await?)
+pub async fn load_uuid() -> anyhow::Result<Uuid> {
+    Ok(load_uuid_with_path(paths::get_uuid_file_path()).await?)
 }
 
-async fn load_uuid_with_name(name: String) -> Result<String, Box<dyn std::error::Error>> {
-    let uuid_b = async_fs::read(name).await?;
-    let uuid = str::from_utf8(&uuid_b)?.to_string();
+pub async fn load_uuid_with_path(path: PathBuf) -> anyhow::Result<Uuid> {
+    let uuid_b = async_fs::read(path).await?;
+    let uuid_s = str::from_utf8(&uuid_b)?.to_string();
+
+    let uuid = Uuid::parse_str(&uuid_s)?;
     Ok(uuid)
 }
 
 #[cfg(test)]
 mod tests {
+    use std::path::Path;
+
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
     /// Test that we can save an load UUID correctly, check if they are matching.
     #[tokio::test]
-    async fn test_save_and_load_uuid() -> Result<(), Box<dyn std::error::Error>> {
-        let uuid = uuid::Uuid::new_v4().to_string();
+    async fn test_save_and_load_uuid() -> anyhow::Result<()> {
+        let uuid = uuid::Uuid::new_v4();
 
-        let test_name = "uuid.test".to_string();
+        let path = Path::new("save_load_uuid.test").to_path_buf();
 
-        save_uuid_with_name(uuid.clone(), test_name.clone()).await?;
-        let loaded_uuid = load_uuid_with_name(test_name.clone()).await?;
+        save_uuid_with_path(uuid.clone(), path.clone()).await?;
+        let loaded_uuid = load_uuid_with_path(path.clone()).await?;
 
-        async_fs::remove_file(test_name).await?;
+        async_fs::remove_file(path).await?;
 
         assert_eq!(uuid, loaded_uuid);
         Ok(())

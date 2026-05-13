@@ -28,7 +28,7 @@ impl Client {
         )
         .await?;
 
-        device_uuid::save_uuid(res_json.uuid.to_string()).await?;
+        device_uuid::save_uuid(uuid::Uuid::parse_str(&res_json.uuid)?).await?;
 
         println!("Got UUID: {:#?}", res_json.uuid);
 

@@ -1,6 +1,6 @@
-use std::path::{Path, PathBuf};
-
 use serde::{Deserialize, Serialize};
+
+use crate::utils::paths::get_config_file_path;
 
 /// Dynamic config for storing Agent's configuration
 ///
@@ -53,14 +53,14 @@ pub async fn handle_config(url: Option<String>) -> Option<Config> {
 
 async fn load_config() -> std::io::Result<Config> {
     println!("Loading config.");
-    let config_b = async_fs::read(get_config_path()).await?;
+    let config_b = async_fs::read(get_config_file_path()).await?;
     let config: Config = serde_json::from_slice(&config_b)?;
 
     Ok(config)
 }
 
 async fn save_config(config: Config) -> std::io::Result<Config> {
-    let path = get_config_path();
+    let path = get_config_file_path();
 
     println!("Saving config.");
     let config_json = serde_json::to_string(&config)?;
@@ -76,7 +76,7 @@ async fn save_config(config: Config) -> std::io::Result<Config> {
 }
 
 fn config_exists() -> bool {
-    get_config_path()
+    get_config_file_path()
         .try_exists()
         .expect("File IO error checking config")
 }
