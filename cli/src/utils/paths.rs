@@ -18,7 +18,7 @@ fn resolve(root: Root, file: &'static str) -> PathBuf {
 }
 
 fn resolve_dir(root: Root) -> PathBuf {
-    if cfg!(debug_assertions) {
+    if cfg!(debug_assertions) && !cfg!(test) {
         PathBuf::new()
     } else {
         resolve_dir_with(root, |k| std::env::var_os(k))
