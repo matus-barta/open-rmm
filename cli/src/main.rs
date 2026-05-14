@@ -19,13 +19,14 @@ async fn main() -> ExitCode {
     let cli = Cli::parse();
 
     // Initialize tracing/logging early
-    match log::init_tracing(cli.verbose, cli.quiet, cli.no_file_log, cli.log_dir.clone()) {
-        Ok(g) => g,
-        Err(e) => {
-            eprintln!("Failed to initialize logging: {e:?}");
-            return ExitCode::from(1);
-        }
-    };
+    let _log_guard =
+        match log::init_tracing(cli.verbose, cli.quiet, cli.no_file_log, cli.log_dir.clone()) {
+            Ok(g) => g,
+            Err(e) => {
+                eprintln!("Failed to initialize logging: {e:?}");
+                return ExitCode::from(1);
+            }
+        };
 
     install_panic_hook();
 
