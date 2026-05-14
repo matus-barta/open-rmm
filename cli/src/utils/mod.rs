@@ -5,6 +5,7 @@ use std::time::{Duration, UNIX_EPOCH};
 use nix::unistd::Uid;
 
 pub mod paths;
+pub mod uuid;
 
 pub fn convert_unix_timestamp_to_iso(timestamp: u64) -> String {
     let d = UNIX_EPOCH + Duration::from_secs(timestamp);

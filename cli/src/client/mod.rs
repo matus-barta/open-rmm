@@ -4,6 +4,8 @@ use std::collections::HashMap;
 
 use crate::client::system_info::build_system_info;
 use crate::config::Config;
+use crate::error::AppError;
+use crate::utils::uuid::parse_from_str;
 
 mod device_uuid;
 mod system_info;
@@ -18,27 +20,44 @@ struct UuidResponse {
 }
 
 impl Client {
-    pub async fn register_computer(&self, otk: String) -> Result<(), Box<dyn std::error::Error>> {
-        let mut map = HashMap::new();
-        map.insert("one_time_key", otk);
+    pub async fn register_computer(&self, otk: String) -> Result<(), AppError> {
+        if otk.len() == 64 {
+            //TODO: move to request builder
+            let mut map = HashMap::new();
+            map.insert("one_time_key", otk);
 
-        let res_json = Self::send_post_req_to_api(
-            &map,
-            self.config.supabase_url.clone() + "/functions/v1/register-computer",
-        )
-        .await?;
+            let res_json = Self::send_post_req_to_api(
+                &map,
+                self.config.supabase_url.clone() + "/functions/v1/register-computer",
+            )
+            .await
+            .map_err(|e| AppError::Network {
+                context: "Error while registering computer".into(),
+                source: Box::new(e),
+            })?;
+            //---
 
-        device_uuid::save_uuid(uuid::Uuid::parse_str(&res_json.uuid)?).await?;
+            device_uuid::save_uuid(parse_from_str(&res_json.uuid)?).await?;
 
-        println!("Got UUID: {:#?}", res_json.uuid);
-
-        Ok(())
+            tracing::info!("Got UUID: {:#?}", res_json.uuid);
+            Ok(())
+        } else {
+            Err(AppError::Input(
+                "One Time key has to be 64 characters long!".into(),
+            ))
+        }
     }
 
-    pub async fn report_system_info(&self) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn report_system_info(&self) -> Result<(), AppError> {
         let system_info = build_system_info().await;
 
-        let json = format!("[{}]", serde_json::to_string(&system_info)?);
+        let json = format!(
+            "[{}]",
+            serde_json::to_string(&system_info).map_err(|e| AppError::ParseJson {
+                context: "Cant parse system_info to json",
+                source: e
+            })?
+        );
 
         let supabase_client = Postgrest::new(self.config.supabase_url.clone() + "/rest/v1")
         .insert_header("user-agent", "postgrest-rs")
@@ -49,12 +68,22 @@ impl Client {
             .from("system_info")
             .upsert(json)
             .execute()
-            .await?;
+            .await
+            .map_err(|e| AppError::Network {
+                context: "Cant send system info update",
+                source: Box::new(e),
+            })?;
 
         if !res.status().is_client_error() {
-            println!("Sent System info report")
+            tracing::info!("Sent System info report")
         } else {
-            println!("LOG this error somewhere: {}", res.text().await?)
+            tracing::error!(
+                "Sending system info error: {}",
+                res.text().await.map_err(|e| AppError::Network {
+                    context: "Malformed response body??",
+                    source: Box::new(e)
+                })?
+            )
         }
 
         Ok(())

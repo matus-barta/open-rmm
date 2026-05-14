@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::utils::paths::get_config_file_path;
+use crate::{error::AppError, utils::paths::get_config_file_path};
 
 /// Dynamic config for storing Agent's configuration
 ///
@@ -10,7 +10,7 @@ pub struct Config {
     pub supabase_url: String,
 }
 
-pub async fn handle_config(url: Option<String>) -> Option<Config> {
+pub async fn handle_config(url: String) -> Result<Config, AppError> {
     // Move all this config handling to Config
     // check for local copy then check if online is newer
     // if newer - download - if unable to save just return downloaded
@@ -18,65 +18,64 @@ pub async fn handle_config(url: Option<String>) -> Option<Config> {
     // if local newest load local
     // return config
 
-    let mut config_data = None;
+    let config_exists = get_config_file_path()
+        .try_exists()
+        .map_err(|e| AppError::Io {
+            context: "File IO error checking config",
+            source: e,
+        })?;
 
-    if config_exists() {
-        config_data = Some(
-            load_config()
-                .await
-                .expect("Unable to load local config file."),
-        );
+    if config_exists {
+        load_config().await
     } else {
-        if let Some(url) = url.as_deref() {
-            // "Download" config - we have server URL
-            config_data = Some(Config {
-                supabase_url: url.to_string(), //FIXME: this is incorrect, we are saving url to supabase
-            }); //but instead we should be saving Server url from where we would download config including supabase url.
+        // "Download" config - we have server URL
+        let config_data = Config {
+            supabase_url: url, //FIXME: this is incorrect, we are saving url to supabase
+        }; //but instead we should be saving Server url from where we would download config including supabase url.
 
-            match save_config(
-                config_data
-                    .clone()
-                    .expect("Tried to download config and we don't have local one, exiting."),
-            )
-            .await
-            {
-                Ok(_) => (),
-                Err(_) => {
-                    eprintln!("Can't save config (are you root?). Continuing with in memory config")
-                }
-            }
-        }
+        save_config(config_data.clone()).await
     }
-
-    config_data
 }
 
-async fn load_config() -> std::io::Result<Config> {
-    println!("Loading config.");
-    let config_b = async_fs::read(get_config_file_path()).await?;
-    let config: Config = serde_json::from_slice(&config_b)?;
+async fn load_config() -> Result<Config, AppError> {
+    tracing::info!("Loading config.");
+
+    let config_b = async_fs::read(get_config_file_path())
+        .await
+        .map_err(|e| AppError::Io {
+            context: "Cant read config file",
+            source: e,
+        })?;
+    let config: Config = serde_json::from_slice(&config_b)
+        .map_err(|_| AppError::Config("cant load stored config".into()))?;
 
     Ok(config)
 }
 
-async fn save_config(config: Config) -> std::io::Result<Config> {
+async fn save_config(config: Config) -> Result<Config, AppError> {
+    tracing::info!("Saving config.");
     let path = get_config_file_path();
 
-    println!("Saving config.");
-    let config_json = serde_json::to_string(&config)?;
+    let config_json = serde_json::to_string(&config)
+        .map_err(|_| AppError::Config("cant stringify provided config to save it".into()))?;
 
-    match &path.parent() {
-        Some(parent) => {
-            async_fs::create_dir_all(parent).await?;
-            async_fs::write(path, config_json).await?;
-            Ok(config)
-        }
-        None => panic!("Wrong config path, can't get parent path"),
-    }
-}
+    let parent = &path
+        .parent()
+        .ok_or_else(|| AppError::Input("Wrong config path, can't get parent path".into()))?;
 
-fn config_exists() -> bool {
-    get_config_file_path()
-        .try_exists()
-        .expect("File IO error checking config")
+    async_fs::create_dir_all(parent)
+        .await
+        .map_err(|e| AppError::Io {
+            context: "Cant create path to config. Are you root?",
+            source: e,
+        })?;
+
+    async_fs::write(path, config_json)
+        .await
+        .map_err(|e| AppError::Io {
+            context: "Cant save config file. Are you root?",
+            source: e,
+        })?;
+
+    Ok(config)
 }

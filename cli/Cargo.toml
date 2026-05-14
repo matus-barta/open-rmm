@@ -6,7 +6,7 @@ edition = "2024"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-uuid = { version = "1.23.1", features = [
+uuid = { version = "1", features = [
     "v4",                # Lets you generate random UUIDs
     "fast-rng",          # Use a faster (but still sufficiently random) RNG
     "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
@@ -16,19 +16,24 @@ reqwest = { version = "0.13", default-features = false, features = [
     "rustls",
     "http2",
 ] }
-tokio = { version = "1.52", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 async-fs = "2.2"
 sysinfo = "0.39"
 chrono = "0.4"
 postgrest = "1.6"
-anyhow = "1.0"
+anyhow = "1"
 clap = { version = "4.6", features = ["derive"] }
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+tracing-appender = "0.2"
+backoff = { version = "0.4", features = ["tokio"] }
 
 
 [target.'cfg(windows)'.dependencies]
-powershell_script = "1.1"
+powershell_script = "1"
 windows = "0.62"
 
 [target.'cfg(unix)'.dependencies]

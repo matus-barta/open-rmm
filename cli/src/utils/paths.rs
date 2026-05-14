@@ -44,8 +44,17 @@ const CONFIG_ROOT: Root = Root::WinEnv {
     rel: "openrmm-agent",
 };
 
+#[cfg(any(target_os = "macos", target_os = "linux"))]
+const LOG_ROOT: Root = Root::UnixAbs("/var/log");
+#[cfg(target_os = "windows")]
+const LOG_ROOT: Root = Root::WinEnv {
+    env: "LOCALAPPDATA",
+    rel: "openrmm-agent",
+};
+
 const CONFIG_FILE: &str = "config.json";
 const UUID_FILE: &str = "uuid";
+const LOG_FILE: &str = "openrmm-agent.log";
 
 #[cfg(any(target_os = "macos", target_os = "linux"))]
 const INSTALL_ROOT: Root = Root::UnixAbs("/usr/local/bin");
@@ -64,12 +73,24 @@ pub fn get_config_file_path() -> PathBuf {
     resolve(CONFIG_ROOT, CONFIG_FILE)
 }
 
+pub fn get_log_file_path() -> PathBuf {
+    resolve(LOG_ROOT, LOG_FILE)
+}
+
+pub fn get_log_file_name() -> String {
+    LOG_FILE.to_string()
+}
+
 pub fn get_uuid_file_path() -> PathBuf {
     resolve(CONFIG_ROOT, UUID_FILE)
 }
 
 pub fn get_install_file_path() -> PathBuf {
     resolve(INSTALL_ROOT, EXECUTABLE_FILE)
+}
+
+pub fn get_log_dir() -> PathBuf {
+    resolve_dir(LOG_ROOT)
 }
 
 #[allow(dead_code)]
