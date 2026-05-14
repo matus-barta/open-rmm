@@ -1,4 +1,7 @@
-use std::{ffi::OsString, path::PathBuf};
+use std::{
+    ffi::OsString,
+    path::{Path, PathBuf},
+};
 
 #[derive(Copy, Clone)]
 enum Root {
@@ -18,7 +21,11 @@ fn resolve(root: Root, file: &'static str) -> PathBuf {
 }
 
 fn resolve_dir(root: Root) -> PathBuf {
-    resolve_dir_with(root, |k| std::env::var_os(k))
+    if cfg!(debug_assertions) {
+        PathBuf::new()
+    } else {
+        resolve_dir_with(root, |k| std::env::var_os(k))
+    }
 }
 
 fn resolve_dir_with<F>(root: Root, get_env: F) -> PathBuf
@@ -73,6 +80,7 @@ pub fn get_config_file_path() -> PathBuf {
     resolve(CONFIG_ROOT, CONFIG_FILE)
 }
 
+#[allow(dead_code)]
 pub fn get_log_file_path() -> PathBuf {
     resolve(LOG_ROOT, LOG_FILE)
 }

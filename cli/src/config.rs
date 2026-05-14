@@ -37,7 +37,7 @@ pub async fn handle_config(url: String) -> Result<Config, AppError> {
     }
 }
 
-async fn load_config() -> Result<Config, AppError> {
+pub async fn load_config() -> Result<Config, AppError> {
     tracing::info!("Loading config.");
 
     let config_b = async_fs::read(get_config_file_path())

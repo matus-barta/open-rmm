@@ -19,14 +19,13 @@ async fn main() -> ExitCode {
     let cli = Cli::parse();
 
     // Initialize tracing/logging early
-    let _guards =
-        match log::init_tracing(cli.verbose, cli.quiet, cli.no_file_log, cli.log_dir.clone()) {
-            Ok(g) => g,
-            Err(e) => {
-                eprintln!("Failed to initialize logging: {e:?}");
-                return ExitCode::from(1);
-            }
-        };
+    match log::init_tracing(cli.verbose, cli.quiet, cli.no_file_log, cli.log_dir.clone()) {
+        Ok(g) => g,
+        Err(e) => {
+            eprintln!("Failed to initialize logging: {e:?}");
+            return ExitCode::from(1);
+        }
+    };
 
     install_panic_hook();
 
@@ -61,8 +60,8 @@ async fn run(cli: Cli) -> anyhow::Result<()> {
         Some(Commands::Remove) => {
             todo!()
         }
-        None => {
-            let interval_secs: u64 = 10;
+        Some(Commands::Background) => {
+            let interval_secs: u64 = 60 * 5;
 
             tokio::select! {
                 res = worker::background_worker(interval_secs) => res,
@@ -71,6 +70,9 @@ async fn run(cli: Cli) -> anyhow::Result<()> {
                     Ok(())
                 }
             }?;
+        }
+        None => {
+            worker::do_one_cycle().await?;
         }
     }
     Ok(())

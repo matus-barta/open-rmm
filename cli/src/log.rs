@@ -1,18 +1,14 @@
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::utils;
-
-pub struct LogGuards {
-    pub file_guard: Option<tracing_appender::non_blocking::WorkerGuard>,
-}
 
 pub fn init_tracing(
     verbose: u8,
     quiet: bool,
     no_file_log: bool,
     log_dir_override: Option<PathBuf>,
-) -> anyhow::Result<LogGuards> {
+) -> anyhow::Result<()> {
     let filter = match verbose {
         0 => "info",
         1 => "debug",
@@ -29,7 +25,7 @@ pub fn init_tracing(
             .with_writer(std::io::stderr)
     });
 
-    let (file_layer, guard) = if no_file_log {
+    let (file_layer, _guard) = if no_file_log {
         (None, None)
     } else {
         let log_dir = log_dir_override.unwrap_or_else(|| utils::paths::get_log_dir());
@@ -52,10 +48,5 @@ pub fn init_tracing(
         .with(file_layer)
         .init();
 
-    Ok(LogGuards { file_guard: guard })
-}
-
-/// Optional: simple helper to log where files are stored
-pub fn log_dir_hint(dir: &Path) {
-    tracing::info!(log_dir = %dir.display(), "logging initialized");
+    Ok(())
 }

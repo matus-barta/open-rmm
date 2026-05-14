@@ -41,4 +41,6 @@ pub enum Commands {
     },
     /// Remove as daemon/service, to remove from Open-RMM use Dashboard
     Remove,
+    /// Don't exit run on internal timer
+    Background,
 }

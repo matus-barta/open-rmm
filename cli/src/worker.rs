@@ -1,4 +1,4 @@
-use crate::error::AppError;
+use crate::{client::Client, config::load_config, error::AppError};
 use backoff::{ExponentialBackoff, backoff::Backoff};
 use tokio::time::{self, Duration};
 
@@ -63,7 +63,11 @@ pub async fn background_worker(interval_secs: u64) -> anyhow::Result<()> {
     }
 }
 
-async fn do_one_cycle() -> Result<(), AppError> {
+pub async fn do_one_cycle() -> Result<(), AppError> {
+    let client = Client {
+        config: load_config().await?,
+    };
+
     tracing::info!("Running report system info.");
     client.report_system_info().await?;
     Ok(())
