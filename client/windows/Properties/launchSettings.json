@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Open-RMM Client (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Open-RMM Client (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
