@@ -1,42 +1,12 @@
-use adw::{Application, prelude::*};
-use gtk::{ApplicationWindow, Button, glib};
-
-const APP_ID: &str = "org.gtk_rs.HelloWorld1";
-
-fn main() -> glib::ExitCode {
-    // Create a new application
-    let app = Application::builder().application_id(APP_ID).build();
-
-    // Connect to "activate" signal of `app`
-    app.connect_activate(build_ui);
-
-    // Run the application
-    app.run()
+#[cfg(not(target_os = "linux"))]
+fn main() {
+    panic!("This crate only supports Linux");
 }
 
-fn build_ui(app: &Application) {
-    // Create a button with label and margins
-    let button = Button::builder()
-        .label("Press me!")
-        .margin_top(12)
-        .margin_bottom(12)
-        .margin_start(12)
-        .margin_end(12)
-        .build();
+#[cfg(target_os = "linux")]
+mod app;
 
-    // Connect to "clicked" signal of `button`
-    button.connect_clicked(|button| {
-        // Set the label to "Hello World!" after the button has been clicked on
-        button.set_label("Hello World!");
-    });
-
-    // Create a window
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("My GTK App")
-        .child(&button)
-        .build();
-
-    // Present window
-    window.present();
+#[cfg(target_os = "linux")]
+fn main() {
+    app::run();
 }
