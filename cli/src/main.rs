@@ -62,15 +62,7 @@ async fn run(cli: Cli) -> anyhow::Result<()> {
             todo!()
         }
         Some(Commands::Background) => {
-            let interval_secs: u64 = 60 * 5;
-
-            tokio::select! {
-                res = worker::background_worker(interval_secs) => res,
-                _ = shutdown::shutdown_signal() => {
-                    tracing::info!("shutdown requested; exiting background worker");
-                    Ok(())
-                }
-            }?;
+            worker::run_background_tasks().await?;
         }
         None => {
             worker::do_one_cycle().await?;
